@@ -19,7 +19,8 @@ def feature_list(request):
     row = Res_table.objects.all()
     context = {
         'pagename': 'Список объектов',
-        'object': 'Объект',
+        'alias_name': 'Название',
+        'alias_id': '#',
         'rows': row}
     return render(request, 'pages/feature_row.html', context)
 

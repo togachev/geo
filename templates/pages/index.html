@@ -5,17 +5,10 @@
 
 <div class="row">
     <div class="col">
-        <table class="table table-bordered">
-            <tbody>
-                <tr>
-                    <td><a href="{% url 'features' %}">{{all_object}}</a></td>
-                </tr>
-                <tr>
-                    <td><a href="{% url 'feature-list' %}">{{list_object}}</a></td>
-                </tr>
-            </tbody>
-        </table>
-
+        <ul>
+            <li><a href="{% url 'features' %}">{{all_object}}</a></li>
+            <li><a href="{% url 'feature-list' %}">{{list_object}}</a></li>
+        </ul>
     </div>
 </div>
 
