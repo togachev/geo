@@ -7,7 +7,7 @@ from django.core.serializers import serialize
 
 def index_page(request):
     row = Res_table.objects.all()
-    context = {'pagename': 'Django + Postgis', 'rows': row}
+    context = {'pagename': 'Записи из БД', 'rows': row}
     return render(request, 'pages/index.html', context)
 
 def feature_row(request, pk):

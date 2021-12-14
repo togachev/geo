@@ -16,11 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.conf import settings
 from django.urls import path
+from django.conf.urls.static import static
 
 from geores import views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', views.index_page, name="home"),
-    path('feature/<int:pk>',views.feature_row,name='feature-row'),
-]
+    path('geo/admin/', admin.site.urls),
+    path('geo/', views.index_page, name="home"),
+    path('geo/feature/<int:pk>',views.feature_row,name='feature-row'),
+]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
