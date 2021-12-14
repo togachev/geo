@@ -21,5 +21,6 @@ from geores import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.res_data, name="res-data"),
+    path('', views.index_page, name="home"),
+    path('data/<int:pk>',views.res_data,name='res-data'),
 ]

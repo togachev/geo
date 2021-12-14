@@ -1,19 +1,17 @@
-from django.http import Http404
+from django.http import HttpResponse
 from django.shortcuts import render
 from django.conf.urls.static import static
 from geores.models import Res_table
 from django.core.serializers import serialize
 
 
-# Create your views here.
-def res_data(request):
+def index_page(request):
     row = Res_table.objects.all()
-    row_geojson = serialize('geojson', Res_table.objects.all(),
-          geometry_field='mpoly',
-          fields=('name',))
-    context = {
-        'pagename': '',
-        "data": row,
-        "data_json": row_geojson,
-    }
+    context = {'pagename': 'Django + Postgis', 'rows': row}
     return render(request, 'pages/index.html', context)
+
+def res_data(request, pk):
+    locate = serialize('geojson',[Res_table.objects.get(id=pk)])
+    return HttpResponse(locate,content_type='application/json')
+
+

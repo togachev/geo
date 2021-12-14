@@ -10,19 +10,20 @@
             <tr>
                 <th scope="col">Номер</th>
                 <th scope="col">Название</th>
+                <th scope="col">Геометрия</th>
             </tr>
             </thead>
             <tbody>
-            {% for row in data %}
+            {% for row in rows %}
                 <tr>
                     <td>{{ row.id }}</td>
                     <td>{{ row.name }}</td>
-                    <td>{{ row.mpoly }}</td>
+                    <td><a href="{% url 'res-data' pk=row.id %}">geojson</a> </td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
-        {{ data_json }}
+
     </div>
 </div>
 
