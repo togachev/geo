@@ -18,7 +18,7 @@
                 <tr>
                     <td>{{ row.id }}</td>
                     <td>{{ row.name }}</td>
-                    <td><a href="{% url 'res-data' pk=row.id %}">geojson</a> </td>
+                    <td><a href="{% url 'feature-row' pk=row.id %}">geojson</a> </td>
                 </tr>
             {% endfor %}
             </tbody>

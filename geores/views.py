@@ -10,8 +10,8 @@ def index_page(request):
     context = {'pagename': 'Django + Postgis', 'rows': row}
     return render(request, 'pages/index.html', context)
 
-def res_data(request, pk):
-    locate = serialize('geojson',[Res_table.objects.get(id=pk)])
-    return HttpResponse(locate,content_type='application/json')
+def feature_row(request, pk):
+    feature = serialize('geojson',[Res_table.objects.get(id=pk)])
+    return HttpResponse(feature,content_type='application/json')
 
 
