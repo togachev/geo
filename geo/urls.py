@@ -21,7 +21,9 @@ from django.conf.urls.static import static
 from geores import views
 
 urlpatterns = [
-    path('geo/admin/', admin.site.urls),
-    path('geo/', views.index_page, name="home"),
-    path('geo/feature/<int:pk>',views.feature_row,name='feature-row'),
+    path('admin/', admin.site.urls),
+    path('', views.index_page, name="home"),
+    path('list', views.feature_list, name="feature-list"),
+    path('feature/<int:pk>',views.feature_row,name='feature-row'),
+    path('features',views.features,name='features'),
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

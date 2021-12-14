@@ -2,6 +2,21 @@
 {% load static %}
 {% block content %}
 
-{{locale}}
+<table class="table table-bordered">
+    <thead >
+    <tr>
+        <th scope="col">Название</th>
+        <th scope="col">Геометрия</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for row in rows %}
+        <tr>
+            <td>{{ row.name }}</td>
+            <td><a href="{% url 'feature-row' pk=row.id %}">{{ object }}: {{ row.id }}</a> </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
 
 {% endblock %}

@@ -6,21 +6,13 @@
 <div class="row">
     <div class="col">
         <table class="table table-bordered">
-            <thead >
-            <tr>
-                <th scope="col">Номер</th>
-                <th scope="col">Название</th>
-                <th scope="col">Геометрия</th>
-            </tr>
-            </thead>
             <tbody>
-            {% for row in rows %}
                 <tr>
-                    <td>{{ row.id }}</td>
-                    <td>{{ row.name }}</td>
-                    <td><a href="{% url 'feature-row' pk=row.id %}">geojson</a> </td>
+                    <td><a href="{% url 'features' %}">{{all_object}}</a></td>
                 </tr>
-            {% endfor %}
+                <tr>
+                    <td><a href="{% url 'feature-list' %}">{{list_object}}</a></td>
+                </tr>
             </tbody>
         </table>
 
