@@ -13,7 +13,7 @@
     {% for row in rows %}
         <tr>
             <td>{{ row.id }}</td>
-            <td><a href="{% url 'feature-row' pk=row.id %}">{{ row.name }}</a></td>
+            <td><a href="{% url 'feature-map' pk=row.id %}">{{ row.name }}</a></td>
         </tr>
     {% endfor %}
     </tbody>

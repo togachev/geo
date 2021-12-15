@@ -4,7 +4,16 @@
 {% block content %}
 
 <div id="map" style="height:500px;"></div>
-  <script src="{% static 'js/map.js' %}"></script>
+
+<script>
+var map = L.map('map').setView([61, 69], 12);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(map);
+
+L.geoJson({{ feature|safe }}).addTo(map);
 
 
+</script>
 {% endblock %}
