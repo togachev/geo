@@ -49,7 +49,8 @@ def features_map(request):
     feature = serialize('geojson', rows)
     context = {
         'pagename': 'Leaflet, объекты на карте',
-        'feature': feature}
+        'feature': feature,
+    }
     return render(request, 'pages/map.html', context)
 
 def maps_view(request):
