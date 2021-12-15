@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+
 {% block content %}
 
 
@@ -8,8 +9,11 @@
         <ul>
             <li><a href="{% url 'features' %}">{{all_object}}</a></li>
             <li><a href="{% url 'feature-list' %}">{{list_object}}</a></li>
+            <li><a href="{% url 'maps-view' %}">{{maps}}</a></li>
         </ul>
     </div>
 </div>
+
+
 
 {% endblock %}

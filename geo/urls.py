@@ -23,6 +23,7 @@ from geores import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index_page, name="home"),
+    path('maps', views.maps_view, name="maps-view"),
     path('list', views.feature_list, name="feature-list"),
     path('feature/<int:pk>',views.feature_row,name='feature-row'),
     path('features',views.features,name='features'),
