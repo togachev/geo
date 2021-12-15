@@ -9,9 +9,8 @@ import json
 def index_page(request):
     row = Res_table.objects.all()
     context = {
-        'pagename': 'Записи из БД',
         'all_object': 'Все объекты',
-        'list_object': 'Список объектов',
+        'list_object': 'Список',
         'maps': 'Leaflet',
         'rows': row
     }
@@ -20,27 +19,31 @@ def index_page(request):
 def feature_list(request):
     row = Res_table.objects.all()
     context = {
-        'pagename': 'Список объектов',
+        'all_object': 'Все объекты',
+        'list_object': 'Список',
+        'maps': 'Leaflet',
         'alias_name': 'Название',
         'alias_id': '#',
         'rows': row}
     return render(request, 'pages/feature_row.html', context)
 
-def feature_row(request, pk):
-    row = Res_table.objects.get(id=pk)
-    feature = serialize('geojson', [row])
-    return HttpResponse(feature,content_type='application/json')
-
-def feature_rows(request):
-    rows = Res_table.objects.all()
-    feature = serialize('geojson', rows)
-    return HttpResponse(feature,content_type='application/json')
+# def feature_row(request, pk):
+#     row = Res_table.objects.get(id=pk)
+#     feature = serialize('geojson', [row])
+#     return HttpResponse(feature,content_type='application/json')
+#
+# def feature_rows(request):
+#     rows = Res_table.objects.all()
+#     feature = serialize('geojson', rows)
+#     return HttpResponse(feature,content_type='application/json')
 
 def feature_map(request, pk):
     row = Res_table.objects.get(id=pk)
     feature = serialize('geojson', [row])
     context = {
-        'pagename': row.name,
+        'all_object': 'Все объекты',
+        'list_object': 'Список',
+        'maps': 'Leaflet',
         'feature': feature}
     return render(request, 'pages/map.html', context)
 
@@ -48,13 +51,17 @@ def features_map(request):
     rows = Res_table.objects.all()
     feature = serialize('geojson', rows)
     context = {
-        'pagename': 'Leaflet, объекты на карте',
+        'all_object': 'Все объекты',
+        'list_object': 'Список',
+        'maps': 'Leaflet',
         'feature': feature,
     }
     return render(request, 'pages/map.html', context)
 
 def maps_view(request):
     context = {
-        'pagename': 'Leaflet',
+        'all_object': 'Все объекты',
+        'list_object': 'Список',
+        'maps': 'Leaflet',
         }
     return render(request, 'pages/map.html', context)

@@ -1,8 +1,8 @@
 {% load static %}
 <header>
-    <nav class="navbar navbar-expand-md navbar-light fixed-top bg-light">
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
         <div class="container">
-            <a class="navbar-brand text-light" href="{% url 'home' %}">
+            <a class="navbar-brand" href="{% url 'home' %}">
                 <img src="{% static 'images/logo.svg' %}" width="32" height="32" alt=""> {{ pagename }}
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
@@ -11,6 +11,17 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarCollapse">
 
+                <ul class="navbar-nav mr-auto">
+                    <li class="form-inline" style="margin: 1px 5px !important;">
+                        <a class="btn btn-outline-info" href="{% url 'features-map' %}">{{all_object}}</a>
+                    </li>
+                    <li class="form-inline" style="margin: 1px 5px !important;">
+                        <a class="btn btn-outline-info" href="{% url 'feature-list' %}">{{list_object}}</a>
+                    </li>
+                    <li class="form-inline" style="margin: 1px 5px !important;">
+                        <a class="btn btn-outline-info" href="{% url 'maps-view' %}">{{maps}}</a>
+                    </li>
+                </ul>
             </div>
         </div>
     </nav>
