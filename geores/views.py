@@ -1,9 +1,8 @@
-from django.http import HttpResponse
+from django.http import Http404, HttpResponse
 from django.shortcuts import render
 from django.conf.urls.static import static
 from geores.models import Res_table
 from django.core.serializers import serialize
-import json
 
 
 def index_page(request):
