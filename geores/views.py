@@ -10,7 +10,7 @@ def index_page(request):
         'all_object': 'Все объекты',
         'list_object': 'Список',
         'maps': 'Leaflet',
-        'maps_mvt': 'Smoothed Surgut mvt ',
+        'maps_mvt': 'Границы освещённых участков',
         'rows': row
     }
     return render(request, 'pages/index.html', context)
@@ -21,7 +21,7 @@ def feature_list(request):
         'all_object': 'Все объекты',
         'list_object': 'Список',
         'maps': 'Leaflet',
-        'maps_mvt': 'Smoothed Surgut mvt ',
+        'maps_mvt': 'Границы освещённых участков',
         'alias_name': 'Название',
         'alias_id': '#',
         'rows': row}
@@ -44,7 +44,7 @@ def feature_map(request, pk):
         'all_object': 'Все объекты',
         'list_object': 'Список',
         'maps': 'Leaflet',
-        'maps_mvt': 'Smoothed Surgut mvt ',
+        'maps_mvt': 'Границы освещённых участков',
         'feature': feature}
     return render(request, 'pages/map.html', context)
 
@@ -65,7 +65,7 @@ def maps_view(request):
         'all_object': 'Все объекты',
         'list_object': 'Список',
         'maps': 'Leaflet',
-        'maps_mvt': 'Smoothed Surgut mvt ',
+        'maps_mvt': 'Границы освещённых участков',
         }
     return render(request, 'pages/map.html', context)
 
@@ -74,6 +74,6 @@ def mvt_smoothed(request):
         'all_object': 'Все объекты',
         'list_object': 'Список',
         'maps': 'Leaflet',
-        'maps_mvt': 'Smoothed Surgut mvt ',
+        'maps_mvt': 'Границы освещённых участков',
         }
     return render(request, 'pages/mapbox.html', context)
