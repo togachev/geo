@@ -4,7 +4,6 @@ from django.conf.urls.static import static
 from geores.models import Res_table
 from django.core.serializers import serialize
 
-
 def index_page(request):
     row = Res_table.objects.all()
     context = {
