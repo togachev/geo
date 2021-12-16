@@ -35,16 +35,16 @@
             'maxzoom': 22
         },{
             'id': 'postgis-tiles-layer',
-            'type': 'line',
+            'type': 'fill',
             'source': 'postgis-tiles',
             // ST_AsMVT() uses 'default' as layer name
             'source-layer': 'default',
             'minzoom': 0,
             'maxzoom': 22,
             'paint': {
-                'line-opacity': 0.5,
-                'line-color': '#E8FFFE',
-                'line-width': 1
+                'fill-opacity': 0.5,
+                'fill-color': '#E8FFFE',
+                'fill-outline-color': '#FFFFFF',
             }
         }]
     }
