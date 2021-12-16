@@ -20,7 +20,7 @@ from django.conf.urls.static import static
 
 from geores import views
 from rest_framework_mvt.views import mvt_view_factory
-from geores.models import Example
+from geores.models import Example, Res_table
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -30,4 +30,5 @@ urlpatterns = [
     path('feature/<int:pk>',views.feature_map,name='feature-map'),
     path('features',views.features_map,name='features-map'),
     path("api/v1/data/example.mvt", mvt_view_factory(Example)), # http://127.0.0.1:8000/api/v1/data/example.mvt?tile={z}/{x}/{y}
+    path("api/v1/data/res_table.mvt", mvt_view_factory(Res_table)),
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
