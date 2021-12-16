@@ -1,60 +1,106 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
+<style>
+.mapboxgl-popup {
+    max-width: 400px;
+    font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+}
+</style>
 <div>
-            <div id='map'></div>
-        </div>
-        <script>
+    <div id='map'></div>
+</div>
+    <script>
+        mapboxgl.accessToken = 'pk.eyJ1IjoidG9nYWNoZXYiLCJhIjoiY2pxdzkxNGppMDBqdTN4cjdneHZwMXYzYSJ9.dsqYTRrIFaX-d06mZlR1Cw';
 
-            var map = new mapboxgl.Map({
-    'container': 'map',
-    'zoom': 12,
-    'center': [73.420349, 61.263342], // New York
-    'style': {
-        'version': 8,
-        'sources': {
-            'carto-dark': {
-                'type': 'raster',
-                'tiles': [
-                    "http://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png"
-                ]
-            },
-            'postgis-tiles': {
-                'type': 'vector',
-                'tiles': [
-                    "http://192.168.14.142/geo/api/v1/data/smoothed_border.mvt?tile={z}/{x}/{y}"
+
+        var map = new mapboxgl.Map({
+            'container': 'map',
+
+            'zoom': 12,
+            'center': [73.420349, 61.263342], // New York
+            'style': {
+                'version': 8,
+                'sources': {
+                    'carto-dark': {
+                        'type': 'raster',
+                        'tiles': [
+                            "https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png",
+                            "https://b.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png",
+                            "https://c.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png",
+                        ]
+                    },
+                    'postgis-tiles': {
+                        'type': 'vector',
+                        'tiles': [
+                            "http://192.168.14.142/geo/api/v1/data/smoothed_border.mvt?tile={z}/{x}/{y}"
+                        ]
+                    }
+
+                },
+                'layers': [
+                    {
+                        'id': 'carto-dark-layer',
+                        'type': 'raster',
+                        'source': 'carto-dark',
+                        'minzoom': 0,
+                        'maxzoom': 22
+                    },
+                    {
+                        'id': 'postgis-tiles-layer',
+                        'type': 'fill',
+                        'source': 'postgis-tiles',
+                        'source-layer': 'default',
+                        'minzoom': 0,
+                        'maxzoom': 22,
+                        'paint': {
+                          'fill-color': '#FFFBD9',
+                          'fill-opacity': 0.2
+                      },
+                    },
+                    {
+                        'id': 'postgis-tiles-layer-stroke',
+                        'type': 'line',
+                        'source': 'postgis-tiles',
+                        'source-layer': 'default',
+                        'minzoom': 0,
+                        'maxzoom': 22,
+                        'paint': {
+                            'line-width': 0.5,
+                            'line-color': '#FFFBD9',
+                            'line-opacity': 1,
+                        },
+                    }
                 ]
             }
+        });
+        map.on('click', 'postgis-tiles-layer', (e) => {
+            new mapboxgl.Popup()
+            .setLngLat(e.lngLat)
+            .setHTML('Площадь: ' + e.features[0].properties.area + '<br>' + 'Координаты: ' + Number((e.lngLat.lng).toFixed(6)) + ', ' + Number((e.lngLat.lat).toFixed(6)))
+            .addTo(map);
+        });
 
-        },
-        'layers': [{
-            'id': 'carto-dark-layer',
-            'type': 'raster',
-            'source': 'carto-dark',
-            'minzoom': 0,
-            'maxzoom': 22
-        },{
-            'id': 'postgis-tiles-layer',
-            'type': 'fill',
-            'source': 'postgis-tiles',
-            // ST_AsMVT() uses 'default' as layer name
-            'source-layer': 'default',
-            'minzoom': 0,
-            'maxzoom': 22,
-            'paint': {
-                'fill-opacity': 0.5,
-                'fill-color': '#E8FFFE',
-                'fill-outline-color': '#FFFFFF',
-            }
-        }]
-    }
-});
+        // Change the cursor to a pointer when
+        // the mouse is over the states layer.
+        map.on('mouseenter', 'postgis-tiles-layer', () => {
+        map.getCanvas().style.cursor = 'pointer';
+        });
+
+        // Change the cursor back to a pointer
+        // when it leaves the states layer.
+        map.on('mouseleave', 'postgis-tiles-layer', () => {
+        map.getCanvas().style.cursor = '';
+        });
+        map.addControl(new mapboxgl.NavigationControl());
+        const scale = new mapboxgl.ScaleControl({
+        maxWidth: 100,
+        unit: 'imperial'
+        });
+        map.addControl(scale);
+
+        scale.setUnit('metric');
 
 
-map.addControl(new mapboxgl.NavigationControl());
-
-        </script>
+    </script>
 {% endblock %}
-
-
-
