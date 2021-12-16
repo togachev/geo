@@ -1,7 +1,7 @@
 from django.http import Http404, HttpResponse
 from django.shortcuts import render
 from django.conf.urls.static import static
-from geores.models import Res_table
+from geores.models import Res_table, smoothed_border
 from django.core.serializers import serialize
 
 def index_page(request):
@@ -10,6 +10,7 @@ def index_page(request):
         'all_object': 'Все объекты',
         'list_object': 'Список',
         'maps': 'Leaflet',
+        'maps_mvt': 'Smoothed Surgut mvt ',
         'rows': row
     }
     return render(request, 'pages/index.html', context)
@@ -20,6 +21,7 @@ def feature_list(request):
         'all_object': 'Все объекты',
         'list_object': 'Список',
         'maps': 'Leaflet',
+        'maps_mvt': 'Smoothed Surgut mvt ',
         'alias_name': 'Название',
         'alias_id': '#',
         'rows': row}
@@ -42,6 +44,7 @@ def feature_map(request, pk):
         'all_object': 'Все объекты',
         'list_object': 'Список',
         'maps': 'Leaflet',
+        'maps_mvt': 'Smoothed Surgut mvt ',
         'feature': feature}
     return render(request, 'pages/map.html', context)
 
@@ -52,6 +55,7 @@ def features_map(request):
         'all_object': 'Все объекты',
         'list_object': 'Список',
         'maps': 'Leaflet',
+        'maps_mvt': 'Smoothed Surgut mvt ',
         'feature': feature,
     }
     return render(request, 'pages/map.html', context)
@@ -61,5 +65,15 @@ def maps_view(request):
         'all_object': 'Все объекты',
         'list_object': 'Список',
         'maps': 'Leaflet',
+        'maps_mvt': 'Smoothed Surgut mvt ',
         }
     return render(request, 'pages/map.html', context)
+
+def mvt_smoothed(request):
+    context = {
+        'all_object': 'Все объекты',
+        'list_object': 'Список',
+        'maps': 'Leaflet',
+        'maps_mvt': 'Smoothed Surgut mvt ',
+        }
+    return render(request, 'pages/mapbox.html', context)

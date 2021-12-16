@@ -13,3 +13,10 @@ class Example(models.Model):
     my_column = models.CharField(max_length=100, null=True)
     objects = models.Manager()
     vector_tiles = MVTManager()
+
+class smoothed_border(models.Model):
+    area = models.FloatField()
+    geom = models.MultiPolygonField()
+    objects = models.Manager()
+    vector_tiles = MVTManager()
+

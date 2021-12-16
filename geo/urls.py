@@ -20,15 +20,17 @@ from django.conf.urls.static import static
 
 from geores import views
 from rest_framework_mvt.views import mvt_view_factory
-from geores.models import Example, Res_table
+from geores.models import Example, Res_table, smoothed_border
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index_page, name="home"),
     path('maps', views.maps_view, name="maps-view"),
+    path('mvt_smoothed', views.mvt_smoothed, name="mvt-smoothed"),
     path('list', views.feature_list, name="feature-list"),
     path('feature/<int:pk>',views.feature_map,name='feature-map'),
     path('features',views.features_map,name='features-map'),
     path("api/v1/data/example.mvt", mvt_view_factory(Example)), # http://127.0.0.1:8000/api/v1/data/example.mvt?tile={z}/{x}/{y}
     path("api/v1/data/res_table.mvt", mvt_view_factory(Res_table)),
+    path("api/v1/data/smoothed_border.mvt", mvt_view_factory(smoothed_border)),
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

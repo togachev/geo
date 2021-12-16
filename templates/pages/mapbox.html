@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <div id="map"></div>
+    <script>
+
+var debug = {};
+
+var map = L.map('map').setView([61.2792725,73.3183191], 10); // University of Washington
+
+L.tileLayer('https://a.tiles.mapbox.com/v3/cugos.jolef8gc/{z}/{x}/{y}.png', {
+  maxZoom: 18
+}).addTo(map);
+
+
+var mvtSource = new L.TileLayer.MVTSource({
+
+  url: "http://192.168.14.142/geo/api/v1/data/smoothed_border.mvt?tile={z}/{x}/{y}",
+  debug: false,
+  clickableLayers: ['smoothed_border'],
+  getIDForLayerFeature: function(feature) {
+    return feature.id;
+  },
+
+  filter: function(feature, context) {
+    return true;
+  },
+
+  style: function (feature) {
+    var style = {};
+
+    var type = feature.type;
+    switch (type) {
+      case 1:
+        style.color = 'rgba(49,79,79,0.2)';
+        style.radius = 5;
+        style.selected = {
+          color: 'rgba(255,255,0,0.5)',
+          radius: 6
+        };
+        break;
+      case 2:
+        style.color = 'rgba(161,217,155,0.8)';
+        style.size = 3;
+        style.selected = {
+          color: 'rgba(255,25,0,0.5)',
+          size: 4
+        };
+        break;
+      case 3:
+        style.color = 'rgba(149,139,255,0.4)';
+        style.outline = {
+          color: 'rgb(20,20,20)',
+          size: 1
+        };
+        style.selected = {
+          color: 'rgba(255,140,0,0.3)',
+          outline: {
+            color: 'rgba(255,140,0,1)',
+            size: 2
+          }
+        };
+        break;
+    }
+
+    if (feature.layer.name === 'poi_label') {
+      style.staticLabel = function() {
+        var style = {
+          html: feature.properties.name,
+          iconSize: [125,30],
+          cssClass: 'label-icon-text'
+        };
+        return style;
+      };
+    }
+
+    return style;
+  },
+
+  layerLink: function(layerName) {
+    if (layerName.indexOf('_label') > -1) {
+      return layerName.replace('_label','');
+    }
+    return layerName + '_label';
+  },
+
+  onClick: function(evt) {
+    console.log('click');
+  }
+
+});
+debug.mvtSource = mvtSource;
+
+map.addLayer(mvtSource);
+
+    </script>
+{% endblock %}
