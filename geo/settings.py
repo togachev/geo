@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'geores',
+    'vectortiles',
     'django_extensions',
     'django.contrib.gis',
 ]

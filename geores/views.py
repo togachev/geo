@@ -1,17 +1,35 @@
 from django.http import Http404, HttpResponse
 from django.shortcuts import render
 from django.conf.urls.static import static
-from geores.models import Res_table, smoothed_border, Feature
+from geores.models import Res_table, smoothed_border, Feature, Layer
 from django.core.serializers import serialize
 from rest_framework_mvt.views import mvt_view_factory
 
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 from vectortiles.postgis.views import MVTView
+from vectortiles.mixins import BaseVectorTileView
+
 
 class FeatureTileView(MVTView, ListView):
     model = Feature
     vector_tile_layer_name = "features"
     vector_tile_fields = ('name','type_geometry','kvartal','lesnichestvo','uch_lesnichestvo','urochishe', )
+
+class LayerTileView(MVTView, DetailView):
+    model = Layer
+    vector_tile_fields = ('name','type_geometry','kvartal','lesnichestvo','uch_lesnichestvo','urochishe', )
+
+    def get_vector_tile_layer_name(self):
+        return self.get_object().name
+
+    def get_vector_tile_queryset(self):
+        return self.get_object().features.all()
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return BaseVectorTileView.get(self,request=request, z=kwargs.get('z'), x=kwargs.get('x'), y=kwargs.get('y'))
+
+
 
 count_res_table = Res_table.objects.count()
 all_object = 'Все объекты'
