@@ -1,13 +1,24 @@
 from django.http import Http404, HttpResponse
 from django.shortcuts import render
 from django.conf.urls.static import static
-from geores.models import Res_table, smoothed_border
+from geores.models import Res_table, smoothed_border, Feature
 from django.core.serializers import serialize
+from rest_framework_mvt.views import mvt_view_factory
+
+from django.views.generic import ListView
+from vectortiles.postgis.views import MVTView
+
+class FeatureTileView(MVTView, ListView):
+    model = Feature
+    vector_tile_layer_name = "features"
+    vector_tile_fields = ('name','type_geometry','kvartal','lesnichestvo','uch_lesnichestvo','urochishe', )
 
 count_res_table = Res_table.objects.count()
 all_object = 'Все объекты'
 list_object = 'Список'
+link_name = {'surgut': 'Границы освещённых участков', 'surgut_lf': 'Границы освещённых участков (Leaflet)', 'kvartal_les': 'Квартальная сеть'}
 surgut = 'Границы освещённых участков'
+surgut_lf = 'Границы освещённых участков (Leaflet)'
 maps = 'Leaflet'
 
 def index_page(request):
@@ -16,7 +27,7 @@ def index_page(request):
         'all_object': all_object,
         'list_object': 'Список',
         'maps': maps,
-        'maps_mvt': surgut,
+        'maps_mvt': link_name,
         'rows': row,
         'count_res_table': count_res_table,
     }
@@ -28,7 +39,7 @@ def feature_list(request):
         'all_object': all_object,
         'list_object': list_object,
         'maps': maps,
-        'maps_mvt': surgut,
+        'maps_mvt': link_name,
         'alias_name': 'Название',
         'alias_id': '#',
         'rows': row,
@@ -53,7 +64,7 @@ def feature_map(request, pk):
         'all_object': all_object,
         'list_object': list_object,
         'maps': maps,
-        'maps_mvt': surgut,
+        'maps_mvt': link_name,
         'feature': feature,
         'count_res_table': count_res_table,
         }
@@ -67,7 +78,7 @@ def features_map(request):
         'all_object': all_object,
         'list_object': list_object,
         'maps': maps,
-        'maps_mvt': surgut,
+        'maps_mvt': link_name,
         'feature': feature,
         'count_res_table': count_res_table,
     }
@@ -79,7 +90,7 @@ def maps_view(request):
         'all_object': all_object,
         'list_object': list_object,
         'maps': maps,
-        'maps_mvt': surgut,
+        'maps_mvt': link_name,
         'count_res_table': count_res_table,
         }
     return render(request, 'pages/map.html', context)
@@ -89,7 +100,16 @@ def mvt_smoothed(request):
         'all_object': all_object,
         'list_object': list_object,
         'maps': maps,
-        'maps_mvt': surgut,
+        'maps_mvt': link_name,
         'count_res_table': count_res_table,
         }
     return render(request, 'pages/mapbox.html', context)
+
+def mtv_les(request):
+    context = {
+        'all_object': all_object,
+        'list_object': list_object,
+        'maps': maps,
+        'maps_mvt': link_name,
+        }
+    return render(request, 'pages/mapbox_test.html', context)

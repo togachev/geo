@@ -2,40 +2,35 @@
 {% load static %}
 {% block content %}
 
+    <div id="map"></div>
 
-<style>
-.mapboxgl-popup {
-    max-width: 400px;
-    font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
-}
-</style>
-<div>
-    <div id='map'></div>
-</div>
+
     <script>
-        mapboxgl.accessToken = 'pk.eyJ1IjoidG9nYWNoZXYiLCJhIjoiY2pxdzkxNGppMDBqdTN4cjdneHZwMXYzYSJ9.dsqYTRrIFaX-d06mZlR1Cw';
+
+                mapboxgl.accessToken = 'pk.eyJ1IjoidG9nYWNoZXYiLCJhIjoiY2pxdzkxNGppMDBqdTN4cjdneHZwMXYzYSJ9.dsqYTRrIFaX-d06mZlR1Cw';
 
 
         var map = new mapboxgl.Map({
             'container': 'map',
 
-            'zoom': 12,
-            'center': [73.420349, 61.263342], // New York
+            'zoom': 5,
+            'center': [69, 61], // New York
             'style': {
                 'version': 8,
                 'sources': {
                     'carto-dark': {
                         'type': 'raster',
                         'tiles': [
-                            "https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png",
-                            "https://b.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png",
-                            "https://c.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png",
+                            "https://a.tile.openstreetmap.de/{z}/{x}/{y}.png",
+                            "https://b.tile.openstreetmap.de/{z}/{x}/{y}.png",
+                            "https://c.tile.openstreetmap.de/{z}/{x}/{y}.png",
+                            "https://d.tile.openstreetmap.de/{z}/{x}/{y}.png",
                         ]
                     },
                     'postgis-tiles': {
                         'type': 'vector',
                         'tiles': [
-                            "http://192.168.14.142/geo/api/v1/data/smoothed_border.mvt?tile={z}/{x}/{y}"
+                            "http://192.168.14.142/geo/api/v1/data/feature.mvt?tile={z}/{x}/{y}"
                         ]
                     }
 
@@ -56,8 +51,8 @@
                         'minzoom': 0,
                         'maxzoom': 22,
                         'paint': {
-                          'fill-color': '#FFFBD9',
-                          'fill-opacity': 0.2
+                          'fill-color': 'blue',
+                          'fill-opacity': 0.05
                       },
                     },
                     {
@@ -69,7 +64,7 @@
                         'maxzoom': 22,
                         'paint': {
                             'line-width': 0.5,
-                            'line-color': '#FFFBD9',
+                            'line-color': 'red',
                             'line-opacity': 1,
                         },
                     }
@@ -79,18 +74,18 @@
         map.on('click', 'postgis-tiles-layer', (e) => {
             new mapboxgl.Popup()
             .setLngLat(e.lngLat)
-            .setHTML('Площадь: ' + e.features[0].properties.area + '<br>' + 'Координаты: ' + Number((e.lngLat.lng).toFixed(6)) + ', ' + Number((e.lngLat.lat).toFixed(6)))
+            .setHTML('Квартал: ' + e.features[0].properties.kvartal + '<br>' +
+                    'Лесничество: ' + e.features[0].properties.lesnichestvo+ '<br>' +
+                    'Участковое лесничество: ' + e.features[0].properties.uch_lesnichestvo + '<br>' +
+                    'Урочище: ' + e.features[0].properties.urochishe + '<br>' +
+                    'Координаты: ' + Number((e.lngLat.lng).toFixed(6)) + ', ' + Number((e.lngLat.lat).toFixed(6)))
             .addTo(map);
         });
 
-        // Change the cursor to a pointer when
-        // the mouse is over the states layer.
         map.on('mouseenter', 'postgis-tiles-layer', () => {
         map.getCanvas().style.cursor = 'pointer';
         });
 
-        // Change the cursor back to a pointer
-        // when it leaves the states layer.
         map.on('mouseleave', 'postgis-tiles-layer', () => {
         map.getCanvas().style.cursor = '';
         });
