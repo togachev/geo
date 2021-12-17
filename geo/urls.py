@@ -34,6 +34,6 @@ urlpatterns = [
     path('api/v1/data/res_table.mvt', mvt_view_factory(Res_table)),
     path('api/v1/data/smoothed_border.mvt', mvt_view_factory(smoothed_border)),
     path('api/v1/data/feature.mvt', mvt_view_factory(Feature)),
-    path('mtv_les',views.mtv_les,name='mvt-les'),
+    path('mvt_les',views.mtv_les,name='mvt-les'),
     path('tiles/<int:z>/<int:x>/<int:y>', views.FeatureTileView.as_view(), name="feature-tile"),
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
