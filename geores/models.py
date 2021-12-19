@@ -26,12 +26,9 @@ class Layer(models.Model):
 
 class Feature(models.Model):
     geom = models.GeometryField(srid=4326)
-    name = models.CharField(null=True, max_length=250)
-    type_geometry = models.CharField(null=True, max_length=250)
-    lesnichestvo = models.CharField(null=True, max_length=250)
-    uch_lesnichestvo = models.CharField(null=True, max_length=250)
-    urochishe = models.CharField(null=True, max_length=250)
-    kvartal = models.IntegerField(blank=True, null=True)
+    name = models.CharField(max_length=250, null=True)
+    lesnichestvo = models.CharField(max_length=250, null=True)
+    uch_lesnichestvo = models.CharField(max_length=250, null=True)
+    urochishe = models.CharField(max_length=250, null=True)
+    kvartal = models.IntegerField(null=True)
     layer = models.ForeignKey(Layer, on_delete=models.CASCADE, related_name='features')
-    objects = models.Manager()
-    vector_tiles = MVTManager()
