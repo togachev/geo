@@ -1,5 +1,6 @@
 from django.http import Http404, HttpResponse
 from django.shortcuts import render
+from django.conf import settings
 from django.conf.urls.static import static
 from geores.models import Res_table, smoothed_border, Feature, Layer
 from django.core.serializers import serialize
@@ -19,6 +20,7 @@ link_name = {'surgut': 'Границы освещённых участков', '
 surgut = 'Границы освещённых участков'
 surgut_lf = 'Границы освещённых участков (Leaflet)'
 maps = 'Leaflet'
+mapboxgl_accessToken = 'pk.eyJ1IjoidG9nYWNoZXYiLCJhIjoiY2pxdzkxNGppMDBqdTN4cjdneHZwMXYzYSJ9.dsqYTRrIFaX-d06mZlR1Cw'
 
 def index_page(request):
     row = Res_table.objects.all()
@@ -92,6 +94,7 @@ def mvt_smoothed(request):
         'maps': maps,
         'maps_mvt': link_name,
         'count_res_table': count_res_table,
+        'token': mapboxgl_accessToken,
         }
     return render(request, 'pages/mapbox.html', context)
 
@@ -102,7 +105,7 @@ class FeatureTileView(MVTView, ListView):
 
 class LayerTileView(MVTView, DetailView):
     model = Layer
-    vector_tile_fields = ('name', 'lesnichestvo', 'uch_lesnichestvo', 'urochishe', 'kvartal', )
+    vector_tile_fields = ('id', 'name', 'lesnichestvo', 'uch_lesnichestvo', 'urochishe', 'kvartal', )
 
     def get_vector_tile_layer_name(self):
         return self.get_object().name
@@ -121,5 +124,19 @@ def mvt_kvartal(request):
         'maps': maps,
         'maps_mvt': link_name,
         'count_res_table': count_res_table,
+        'token': mapboxgl_accessToken,
         }
     return render(request, 'pages/mapbox_test.html', context)
+
+def mvt_view(request):
+    domain = request.build_absolute_uri('/')[:-1]
+    pk = Layer.objects.get(name='kvartal')
+    layer_ = domain + '/geo/layer/' + str(pk.id) + '/tile/{z}/{x}/{y}'
+    context = {
+        'layer_': layer_,
+        'token': mapboxgl_accessToken,
+        }
+    return render(request, 'pages/mapbox_mvt.html', context)
+
+
+

@@ -23,6 +23,10 @@ class smoothed_border(models.Model):
 class Layer(models.Model):
     name = models.CharField(max_length=250)
 
+    def __str__(self):
+        return self.name
+    def __unicode__(self):
+        return self.name
 
 class Feature(models.Model):
     geom = models.GeometryField(srid=4326)

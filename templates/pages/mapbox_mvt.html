@@ -7,7 +7,7 @@
 
     <script>
 
-        mapboxgl.accessToken = '{{token|safe}}';
+                mapboxgl.accessToken = '{{token|safe}}';
 
 
         var map = new mapboxgl.Map({
@@ -31,16 +31,9 @@
                     'kvartal-layer-tiles': {
                         'type': 'vector',
                         'tiles': [
-                            'http://192.168.14.142/geo/layer/2/tile/{z}/{x}/{y}'
+                            '{{layer_}}'
                         ],
                     },
-                    // 'features-tiles': {
-                    //     'type': 'vector',
-                    //     'tiles': [
-                    //         'http://192.168.14.142/geo/tiles/{z}/{x}/{y}'
-                    //     ],
-                    // }
-
                 },
                 'layers': [
                     {
@@ -74,30 +67,6 @@
                             'line-opacity': 1,
                         },
                     },
-                    // {
-                    //     'id': 'features-tiles-layer',
-                    //     'type': 'fill',
-                    //     'source': 'features-tiles',
-                    //     'source-layer': 'features',
-                    //     'minzoom': 0,
-                    //     'maxzoom': 22,
-                    //     'paint': {
-                    //       'fill-opacity': 0.05
-                    //   },
-                    // },
-                    // {
-                    //     'id': 'features-tiles-layer-stroke',
-                    //     'type': 'line',
-                    //     'source': 'kvartal-layer-tiles',
-                    //     'source-layer': 'kvartal',
-                    //     'minzoom': 0,
-                    //     'maxzoom': 22,
-                    //     'paint': {
-                    //         'line-width': 0.5,
-                    //         'line-color': 'red',
-                    //         'line-opacity': 1,
-                    //     },
-                    // },
                 ]
             }
         });

@@ -21,4 +21,5 @@ urlpatterns = [
     path('tiles/<int:z>/<int:x>/<int:y>', views.FeatureTileView.as_view(), name="feature-tile"),
     path('layer/<int:pk>/tile/<int:z>/<int:x>/<int:y>', views.LayerTileView.as_view(), name="layer-tile"),
     path('mvt_kvartal', views.mvt_kvartal, name="mvt-kvartal"),
+    path('mvt', views.mvt_view, name="mvt-view"),
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

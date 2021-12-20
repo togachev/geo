@@ -13,9 +13,8 @@
     <div id='map'></div>
 </div>
     <script>
-        mapboxgl.accessToken = 'pk.eyJ1IjoidG9nYWNoZXYiLCJhIjoiY2pxdzkxNGppMDBqdTN4cjdneHZwMXYzYSJ9.dsqYTRrIFaX-d06mZlR1Cw';
+        mapboxgl.accessToken = '{{token|safe}}';
 
-const wheelZoomRate = 1 / 100;
         var map = new mapboxgl.Map({
             'container': 'map',
 
