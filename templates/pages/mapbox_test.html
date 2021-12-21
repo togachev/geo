@@ -42,6 +42,7 @@
                     // }
 
                 },
+                "glyphs": "mapbox://fonts/mapbox/{fontstack}/{range}.pbf",
                 'layers': [
                     {
                         'id': 'carto-dark-layer',
@@ -74,30 +75,23 @@
                             'line-opacity': 1,
                         },
                     },
-                    // {
-                    //     'id': 'features-tiles-layer',
-                    //     'type': 'fill',
-                    //     'source': 'features-tiles',
-                    //     'source-layer': 'features',
-                    //     'minzoom': 0,
-                    //     'maxzoom': 22,
-                    //     'paint': {
-                    //       'fill-opacity': 0.05
-                    //   },
-                    // },
-                    // {
-                    //     'id': 'features-tiles-layer-stroke',
-                    //     'type': 'line',
-                    //     'source': 'kvartal-layer-tiles',
-                    //     'source-layer': 'kvartal',
-                    //     'minzoom': 0,
-                    //     'maxzoom': 22,
-                    //     'paint': {
-                    //         'line-width': 0.5,
-                    //         'line-color': 'red',
-                    //         'line-opacity': 1,
-                    //     },
-                    // },
+                    {
+                        'id': 'kvartal-tiles-label',
+                        'type': 'symbol',
+                        'source': 'kvartal-layer-tiles',
+                        "layout": {
+                            'text-field': '{lesnichestvo},\n {uch_lesnichestvo},\n {urochishe},\n {kvartal}',
+                        },
+                        "paint": {
+                            "text-color": "#666",
+                            "text-halo-color": "rgba(255,255,255,0.95)",
+                            "text-halo-width": 1.5,
+                            "text-halo-blur": 1,
+                        },
+                        'source-layer': 'kvartal',
+                        'minzoom': 10,
+                        'maxzoom': 22,
+                    }
                 ]
             }
         });
@@ -127,7 +121,6 @@
         map.addControl(scale);
         map.scrollZoom.setWheelZoomRate(1);
         scale.setUnit('metric');
-
 
     </script>
 {% endblock %}

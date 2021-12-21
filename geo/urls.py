@@ -15,11 +15,11 @@ urlpatterns = [
     path('list', views.feature_list, name="feature-list"),
     path('feature/<int:pk>',views.feature_map,name='feature-map'),
     path('features',views.features_map,name='features-map'),
-    path('api/v1/data/example.mvt', mvt_view_factory(Example)), # http://127.0.0.1:8000/api/v1/data/example.mvt?tile={z}/{x}/{y}
+    path('api/v1/data/example.mvt', mvt_view_factory(Example)),
     path('api/v1/data/res_table.mvt', mvt_view_factory(Res_table)),
     path('api/v1/data/smoothed_border.mvt', mvt_view_factory(smoothed_border)),
     path('tiles/<int:z>/<int:x>/<int:y>', views.FeatureTileView.as_view(), name="feature-tile"),
     path('layer/<int:pk>/tile/<int:z>/<int:x>/<int:y>', views.LayerTileView.as_view(), name="layer-tile"),
     path('mvt_kvartal', views.mvt_kvartal, name="mvt-kvartal"),
-    path('mvt', views.mvt_view, name="mvt-view"),
+    path('mvt', views.mvt_url, name="mvt-url"),
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

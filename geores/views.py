@@ -128,15 +128,19 @@ def mvt_kvartal(request):
         }
     return render(request, 'pages/mapbox_test.html', context)
 
-def mvt_view(request):
+def mvt_url(request):
     domain = request.build_absolute_uri('/')[:-1]
-    pk = Layer.objects.get(name='kvartal')
-    layer_ = domain + '/geo/layer/' + str(pk.id) + '/tile/{z}/{x}/{y}'
+    layer = Layer.objects.all()
+    # layers = domain + '/geo/layer/' + str(layer.id) + '/tile/{z}/{x}/{y}'
     context = {
-        'layer_': layer_,
+        'all_object': all_object,
+        'list_object': list_object,
+        'maps': maps,
+        'maps_mvt': link_name,
+        'count_res_table': count_res_table,
+        'layers': layer,
         'token': mapboxgl_accessToken,
         }
-    return render(request, 'pages/mapbox_mvt.html', context)
-
+    return render(request, 'pages/layer_detail.html', context)
 
 
