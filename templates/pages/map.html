@@ -1,11 +1,12 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-
-
-
-<script>
-
-</script>
-
+    <style>
+        .map {
+        height: 800px;
+        width: 100%;
+        }
+    </style>
+    <div id="map" class="map"></div>
+    <script type="text/javascript" src="{% static 'ol/js/index.js' %}"></script>
 {% endblock %}

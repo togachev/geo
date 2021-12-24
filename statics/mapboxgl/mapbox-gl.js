@@ -41,4 +41,4 @@ var mapboxgl$1 = mapboxgl;
 return mapboxgl$1;
 
 })));
-//# sourceMappingURL=mapbox-gl.js.map
+
