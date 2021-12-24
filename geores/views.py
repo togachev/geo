@@ -19,7 +19,7 @@ list_object = 'Список'
 link_name = {'surgut': 'Границы освещённых участков', 'surgut_lf': 'Границы освещённых участков (Leaflet)', 'kvartal_les': 'Квартальная сеть'}
 surgut = 'Границы освещённых участков'
 surgut_lf = 'Границы освещённых участков (Leaflet)'
-maps = 'Leaflet'
+maps = 'Openlayers'
 mapboxgl_accessToken = 'pk.eyJ1IjoidG9nYWNoZXYiLCJhIjoiY2pxdzkxNGppMDBqdTN4cjdneHZwMXYzYSJ9.dsqYTRrIFaX-d06mZlR1Cw'
 
 def index_page(request):
@@ -85,7 +85,7 @@ def maps_view(request):
         'maps_mvt': link_name,
         'count_res_table': count_res_table,
         }
-    return render(request, 'pages/map.html', context)
+    return render(request, 'pages/openlayers.html', context)
 
 def mvt_smoothed(request):
     context = {

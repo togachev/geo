@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.gis',
 ]
 
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
