@@ -1,0 +1,19 @@
+{
+  "name": "geo",
+  "version": "1.0.0",
+  "description": "test django from geodata",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/togachev/geo.git"
+  },
+  "author": "togachev",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/togachev/geo/issues"
+  },
+  "homepage": "https://github.com/togachev/geo#readme"
+}
