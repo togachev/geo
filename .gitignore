@@ -8,3 +8,4 @@ data/*
 *.pyc
 db.*
 geo.log
+dist/
