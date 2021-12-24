@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'vectortiles',
     'django_extensions',
     'django.contrib.gis',
+    'django_node_assets',
 ]
 
 MIDDLEWARE = [
@@ -131,9 +132,18 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'django_node_assets.finders.NodeModulesFinder',
+]
+
+NODE_PACKAGE_JSON = BASE_DIR / 'package.json'
+NODE_MODULES_ROOT = BASE_DIR / 'node_modules'
+
 STATIC_URL = '/statics/'
 STATICFILES_DIRS = [
-  BASE_DIR / "statics"
+  BASE_DIR / "statics",
 ]
 STATIC_ROOT = BASE_DIR / "staticsfiles"
 

@@ -2,6 +2,7 @@
 *env/
 *venv/
 staticsfiles/*
+node_modules/*
 data/*
 
 *.pyc
