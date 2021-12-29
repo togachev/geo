@@ -63,38 +63,90 @@
                       },
                     },
                     {
+                        'id': 'kvartal-tiles-layer-highlighted',
+                        'type': 'fill',
+                        'source': 'kvartal-layer-tiles',
+                        'source-layer': 'kvartal',
+                        'paint': {
+                        'fill-outline-color': 'rgba(255, 0, 0, 1)',
+                        'fill-color': 'rgba(255, 0, 0, 1)',
+                        'fill-opacity': 0.1
+                        },
+                        'filter': ['in', 'id', '']
+                    },
+                    {
                         'id': 'kvartal-tiles-layer-stroke',
                         'type': 'line',
                         'source': 'kvartal-layer-tiles',
                         'source-layer': 'kvartal',
-                        'minzoom': 0,
-                        'maxzoom': 22,
-                        'paint': {
-                            'line-width': 0.5,
-                            'line-color': 'red',
-                            'line-opacity': 1,
+                        "paint": {
+                          "line-color": "rgba(255, 0, 0, 1)",
+                          "line-opacity": 0.8,
+                          "line-width": 1,
+                          "line-dasharray": [4, 4],
+                          "line-gap-width": 0
                         },
+                        "layout": {
+                          "line-cap": "butt",
+                          "line-join": "bevel"
+                        },
+                        "minzoom": 0,
+                        "maxzoom": 22
                     },
                     {
                         'id': 'kvartal-tiles-label',
                         'type': 'symbol',
                         'source': 'kvartal-layer-tiles',
+                        'source-layer': 'kvartal',
                         "layout": {
-                            'text-field': '{lesnichestvo},\n {uch_lesnichestvo},\n {urochishe},\n {kvartal}',
+                          "text-font": [
+                            "Arial Unicode MS Regular"
+                          ],
+                          "text-size": {
+                            "stops": [[14, 12], [16, 14]]
+                          },
+                          "text-max-width": {
+                            "stops": [[14, 5], [16, 6]]
+                          },
+                          "text-field": "{lesnichestvo}\n{uch_lesnichestvo}\n{urochishe}\n{kvartal}",
+                          "text-padding": 10,
+                          "text-line-height": 1,
+                          "text-optional": true,
+                          "visibility": "visible"
                         },
                         "paint": {
-                            "text-color": "#666",
-                            "text-halo-color": "rgba(255,255,255,0.95)",
-                            "text-halo-width": 1.5,
-                            "text-halo-blur": 1,
+                          "text-color": "rgba(0, 0, 0, 1)",
+                          "text-halo-color": "rgba(255,255,255,0.8)",
+                          "text-halo-width": 1
                         },
-                        'source-layer': 'kvartal',
-                        'minzoom': 10,
-                        'maxzoom': 22,
+                        "filter": [
+                          "all",
+                          ["==", "name", "kvartal-point"]
+                        ],
+                        "minzoom": 9
                     }
                 ]
             }
         });
+
+        map.on('click', (e) => {
+            // Set `bbox` as 5px reactangle area around clicked point.
+            const bbox = [
+            [e.point.x - 5, e.point.y - 5],
+            [e.point.x + 5, e.point.y + 5]
+            ];
+            // Find features intersecting the bounding box.
+            const selectedFeatures = map.queryRenderedFeatures(bbox, {
+            layers: ['kvartal-tiles-layer']
+            });
+            const fips = selectedFeatures.map(
+            (feature) => feature.properties.id
+            );
+            // Set a filter matching selected features by FIPS codes
+            // to activate the 'counties-highlighted' layer.
+            map.setFilter('kvartal-tiles-layer-highlighted', ['in', 'id', ...fips]);
+        });
+
         map.on('click', 'kvartal-tiles-layer', (e) => {
             new mapboxgl.Popup()
             .setLngLat(e.lngLat)
