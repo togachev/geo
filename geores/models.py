@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.gis.db import models
 from rest_framework_mvt.managers import MVTManager
+from django.db.models import JSONField
 
 class Res_table(models.Model):
     name = models.CharField(max_length=100, null=True)
@@ -31,8 +32,9 @@ class Layer(models.Model):
 class Feature(models.Model):
     geom = models.GeometryField(srid=4326)
     name = models.CharField(max_length=250, null=True)
-    lesnichestvo = models.CharField(max_length=250, null=True)
-    uch_lesnichestvo = models.CharField(max_length=250, null=True)
-    urochishe = models.CharField(max_length=250, null=True)
-    kvartal = models.IntegerField(null=True)
+    les_name = models.CharField(max_length=250, null=True)
+    uch_les_name = models.CharField(max_length=250, null=True)
+    uroch_name = models.CharField(max_length=250, null=True)
+    type_les = models.IntegerField(null=True)
+    # preferences = JSONField(default=dict)
     layer = models.ForeignKey(Layer, on_delete=models.CASCADE, related_name='features')

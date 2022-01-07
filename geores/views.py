@@ -105,7 +105,7 @@ class FeatureTileView(MVTView, ListView):
 
 class LayerTileView(MVTView, DetailView):
     model = Layer
-    vector_tile_fields = ('id', 'name', 'lesnichestvo', 'uch_lesnichestvo', 'urochishe', 'kvartal', )
+    vector_tile_fields = ('id', 'name', 'type_les', 'les_name', 'uch_les_name', 'uroch_name' )
 
     def get_vector_tile_layer_name(self):
         return self.get_object().name
@@ -142,5 +142,3 @@ def mvt_url(request):
         'token': mapboxgl_accessToken,
         }
     return render(request, 'pages/layer_detail.html', context)
-
-

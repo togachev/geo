@@ -13,34 +13,24 @@
         var map = new mapboxgl.Map({
             'container': 'map',
 
-            'zoom': 5,
-            'center': [71.460937, 61.804528], // New York
+            'zoom': 6,
+            'center': [69, 61],
             'style': {
                 'version': 8,
                 'sources': {
                     'carto-dark': {
                         'type': 'raster',
                         'tiles': [
-                            "https://a.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png",
-                            "https://b.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png",
-                            "https://c.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png",
-                            "https://d.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png",
+                            "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
                         ],
                         'tileSize': 256,
                     },
-                    'kvartal-layer-tiles': {
+                    'forest-data': {
                         'type': 'vector',
                         'tiles': [
-                            'http://192.168.14.142/geo/layer/2/tile/{z}/{x}/{y}'
-                        ],
-                    },
-                    // 'features-tiles': {
-                    //     'type': 'vector',
-                    //     'tiles': [
-                    //         'http://192.168.14.142/geo/tiles/{z}/{x}/{y}'
-                    //     ],
-                    // }
-
+                            'http://192.168.14.142/geo/layer/1/tile/{z}/{x}/{y}'
+                        ]
+                    }
                 },
                 "glyphs": "mapbox://fonts/mapbox/{fontstack}/{range}.pbf",
                 'layers': [
@@ -52,35 +42,41 @@
                         'maxzoom': 22
                     },
                     {
-                        'id': 'kvartal-tiles-layer',
+                        'id': 'contour-les',
                         'type': 'fill',
-                        'source': 'kvartal-layer-tiles',
-                        'source-layer': 'kvartal',
+                        'source': 'forest-data',
+                        'source-layer': 'les_data',
                         'minzoom': 0,
                         'maxzoom': 22,
                         'paint': {
-                          'fill-opacity': 0
-                      },
+                            'fill-outline-color': 'black',
+                            'fill-color': 'black',
+                            'fill-opacity': 0.1
+                        },
+                        "filter": [
+                          "all",
+                          ["==", "type_les", 1]
+                        ]
                     },
                     {
-                        'id': 'kvartal-tiles-layer-highlighted',
+                        'id': 'contour-data-highlighted',
                         'type': 'fill',
-                        'source': 'kvartal-layer-tiles',
-                        'source-layer': 'kvartal',
+                        'source': 'forest-data',
+                        'source-layer': 'les_data',
                         'paint': {
-                        'fill-outline-color': 'rgba(255, 0, 0, 1)',
-                        'fill-color': 'rgba(255, 0, 0, 1)',
+                        'fill-outline-color': 'red',
+                        'fill-color': 'red',
                         'fill-opacity': 0.1
                         },
                         'filter': ['in', 'id', '']
                     },
                     {
-                        'id': 'kvartal-tiles-layer-stroke',
+                        'id': 'contour-data-stroke',
                         'type': 'line',
-                        'source': 'kvartal-layer-tiles',
-                        'source-layer': 'kvartal',
+                        'source': 'forest-data',
+                        'source-layer': 'les_data',
                         "paint": {
-                          "line-color": "rgba(255, 0, 0, 1)",
+                          "line-color": "blue",
                           "line-opacity": 0.8,
                           "line-width": 1,
                           "line-dasharray": [4, 4],
@@ -91,13 +87,17 @@
                           "line-join": "bevel"
                         },
                         "minzoom": 0,
-                        "maxzoom": 22
+                        "maxzoom": 22,
+                        "filter": [
+                          "all",
+                          ["==", "type_les", 1]
+                        ]
                     },
                     {
-                        'id': 'kvartal-tiles-label',
+                        'id': 'contour-data-label',
                         'type': 'symbol',
-                        'source': 'kvartal-layer-tiles',
-                        'source-layer': 'kvartal',
+                        'source': 'forest-data',
+                        'source-layer': 'les_data',
                         "layout": {
                           "text-font": [
                             "Arial Unicode MS Regular"
@@ -108,7 +108,7 @@
                           "text-max-width": {
                             "stops": [[14, 5], [16, 6]]
                           },
-                          "text-field": "{lesnichestvo}\n{uch_lesnichestvo}\n{urochishe}\n{kvartal}",
+                          "text-field": "{les_name}\n{uch_les_name}\n{uroch_name}",
                           "text-padding": 10,
                           "text-line-height": 1,
                           "text-optional": true,
@@ -121,7 +121,8 @@
                         },
                         "filter": [
                           "all",
-                          ["==", "name", "kvartal-point"]
+                          ["==", "name", "Лесничество"],
+                          ["==", "type_les", 1]
                         ],
                         "minzoom": 9
                     }
@@ -137,32 +138,34 @@
             ];
             // Find features intersecting the bounding box.
             const selectedFeatures = map.queryRenderedFeatures(bbox, {
-            layers: ['kvartal-tiles-layer']
+            layers: ['contour-les'] // 'id'
             });
             const fips = selectedFeatures.map(
             (feature) => feature.properties.id
             );
             // Set a filter matching selected features by FIPS codes
             // to activate the 'counties-highlighted' layer.
-            map.setFilter('kvartal-tiles-layer-highlighted', ['in', 'id', ...fips]);
+            map.setFilter('contour-data-highlighted', ['in', 'id', ...fips]);
         });
 
-        map.on('click', 'kvartal-tiles-layer', (e) => {
+        map.on('click', 'contour-les', (e) => {
             new mapboxgl.Popup()
             .setLngLat(e.lngLat)
-            .setHTML('Квартал: ' + e.features[0].properties.kvartal + '<br>' +
-                    'Лесничество: ' + e.features[0].properties.lesnichestvo+ '<br>' +
-                    'Участковое лесничество: ' + e.features[0].properties.uch_lesnichestvo + '<br>' +
-                    'Урочище: ' + e.features[0].properties.urochishe + '<br>' +
+            .setHTML(
+              // 'preferences: ' + e.features[0].properties.preferences + '<br>' +
+                    // 'Квартал: ' + e.features[0].properties.kvartal + '<br>' +
+                    'Лесничество: ' + e.features[0].properties.les_name+ '<br>' +
+                    'Участковое лесничество: ' + e.features[0].properties.uch_les_name + '<br>' +
+                    'Урочище: ' + e.features[0].properties.uroch_name + '<br>' +
                     'Координаты: ' + Number((e.lngLat.lng).toFixed(6)) + ', ' + Number((e.lngLat.lat).toFixed(6)))
             .addTo(map);
         });
 
-        map.on('mouseenter', 'kvartal-tiles-layer', () => {
+        map.on('mouseenter', 'contour-les', () => {
         map.getCanvas().style.cursor = 'pointer';
         });
 
-        map.on('mouseleave', 'kvartal-tiles-layer', () => {
+        map.on('mouseleave', 'contour-les', () => {
         map.getCanvas().style.cursor = '';
         });
         map.addControl(new mapboxgl.NavigationControl());
