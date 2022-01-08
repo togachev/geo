@@ -13,8 +13,8 @@
         var map = new mapboxgl.Map({
             'container': 'map',
 
-            'zoom': 6,
-            'center': [69, 61],
+            'zoom': 5,
+            'center': [70.538086, 62.201629],
             'style': {
                 'version': 8,
                 'sources': {
@@ -152,12 +152,9 @@
             new mapboxgl.Popup()
             .setLngLat(e.lngLat)
             .setHTML(
-              // 'preferences: ' + e.features[0].properties.preferences + '<br>' +
-                    // 'Квартал: ' + e.features[0].properties.kvartal + '<br>' +
-                    'Лесничество: ' + e.features[0].properties.les_name+ '<br>' +
-                    'Участковое лесничество: ' + e.features[0].properties.uch_les_name + '<br>' +
-                    'Урочище: ' + e.features[0].properties.uroch_name + '<br>' +
-                    'Координаты: ' + Number((e.lngLat.lng).toFixed(6)) + ', ' + Number((e.lngLat.lat).toFixed(6)))
+                e.features[0].properties.preferences_hstore + '<br>' +
+                e.features[0].properties.preferences_jsonb + '<br>' +
+                'Координаты: ' + Number((e.lngLat.lng).toFixed(6)) + ', ' + Number((e.lngLat.lat).toFixed(6)))
             .addTo(map);
         });
 

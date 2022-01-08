@@ -43,3 +43,30 @@ CREATE INDEX sidx_geores_feature_geom
   ON public.geores_feature
   USING gist
   (geom);
+ 
+ 
+ UPDATE public.geores_feature
+SET preferences_jsonb=subquery.preferences
+FROM (select row_to_json(x)::jsonb as preferences, x.id as id from (select id, les_name, uch_les_name, uroch_name from public.geores_feature) x) AS subquery
+WHERE geores_feature.id=subquery.id;
+ 
+ 
+ UPDATE public.geores_feature
+SET preferences_hstore=subquery.preferences
+FROM (select simple_jsonb_to_hstore(row_to_json(x)::jsonb) as preferences, x.id as id from (select id, les_name, uch_les_name, uroch_name from public.geores_feature) x) AS subquery
+WHERE geores_feature.id=subquery.id;
+
+
+
+
+
+create or replace function simple_jsonb_to_hstore(jdata jsonb)
+returns hstore language sql immutable
+as $$
+    select hstore(array_agg(key), array_agg(value))
+    from jsonb_each_text(jdata)
+$$;
+ALTER TABLE users ALTER COLUMN details TYPE hstore USING simple_jsonb_to_hstore(details);
+
+
+
