@@ -49,8 +49,19 @@ FROM public.geores_feature;
 
  
 UPDATE public.geores_feature
-SET jsonb_data=subquery.preferences
-FROM (select row_to_json(x)::jsonb as preferences, x.id as id from (select id, les_name, uch_les_name, uroch_name from public.geores_feature) x) AS subquery
+SET jsonb_data=subquery.data
+FROM (select * from (
+  select id,
+    (
+      select row_to_json(d)
+      from (
+        select les_name as les, uch_les_name as uch_les, uroch_name as uroch
+        from public.geores_feature d
+        where d.id=s.id
+      ) d
+    ) as data
+  from public.geores_feature s
+) a) AS subquery
 WHERE geores_feature.id=subquery.id;
  
  
@@ -60,7 +71,18 @@ FROM (select simple_jsonb_to_hstore(row_to_json(x)::jsonb) as preferences, x.id 
 WHERE geores_feature.id=subquery.id;
 
 
-
+select * from (
+  select id,
+    (
+      select row_to_json(d)
+      from (
+        select les_name, uch_les_name, uroch_name
+        from public.geores_feature d
+        where d.id=s.id
+      ) d
+    ) as data
+  from public.geores_feature s
+) a
 
 
 create or replace function simple_jsonb_to_hstore(jdata jsonb)

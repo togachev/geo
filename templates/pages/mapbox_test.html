@@ -302,7 +302,11 @@
             new mapboxgl.Popup()
             .setLngLat(e.lngLat)
             .setHTML(
-                JSON.stringify(feature.properties) + '<br>' +
+                JSON.stringify(feature.properties).replace(/([^\n]{1,32})/g, '$1\n') + '<br>' +
+                // JSON.parse(JSON.stringify(feature.properties))['name'] + '<br>' +
+                // JSON.parse(JSON.stringify(feature.properties))['les_name'] + '<br>' +
+                // JSON.parse(JSON.stringify(feature.properties))['uch_les_name'] + '<br>' +
+                // JSON.parse(JSON.stringify(feature.properties))['uroch_name'] + '<br>' +
                 'Координаты: ' + Number((e.lngLat.lng).toFixed(6)) + ', ' + Number((e.lngLat.lat).toFixed(6)))
             .addTo(map);
         });
