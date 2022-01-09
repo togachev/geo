@@ -38,8 +38,8 @@
                         'id': 'carto-dark-layer',
                         'type': 'raster',
                         'source': 'carto-dark',
-                        'minzoom': 0,
-                        'maxzoom': 22
+                        'minResolution': 0,
+                        'maxResolution': 22
                     },
                     {
                         'id': 'contour-les',
@@ -47,15 +47,49 @@
                         'source': 'forest-data',
                         'source-layer': 'les_data',
                         'minzoom': 0,
-                        'maxzoom': 22,
+                        'maxzoom': 7,
                         'paint': {
-                            'fill-outline-color': 'black',
-                            'fill-color': 'black',
+                            'fill-outline-color': 'red',
+                            'fill-color': 'red',
                             'fill-opacity': 0.1
                         },
                         "filter": [
                           "all",
                           ["==", "type_les", 1]
+                        ]
+                    },
+                    {
+                        'id': 'contour-uch-les',
+                        'type': 'fill',
+                        'source': 'forest-data',
+                        'source-layer': 'les_data',
+                        'minzoom': 7,
+                        'maxzoom': 9,
+                        'paint': {
+                            'fill-outline-color': 'blue',
+                            'fill-color': 'blue',
+                            'fill-opacity': 0.1
+                        },
+                        "filter": [
+                          "all",
+                          ["==", "type_les", 2]
+                        ]
+                    },
+                    {
+                        'id': 'contour-uroch',
+                        'type': 'fill',
+                        'source': 'forest-data',
+                        'source-layer': 'les_data',
+                        'minzoom': 9,
+                        'maxzoom': 22,
+                        'paint': {
+                            'fill-outline-color': 'green',
+                            'fill-color': 'green',
+                            'fill-opacity': 0.1
+                        },
+                        "filter": [
+                          "all",
+                          ["==", "type_les", 3]
                         ]
                     },
                     {
@@ -71,7 +105,30 @@
                         'filter': ['in', 'id', '']
                     },
                     {
-                        'id': 'contour-data-stroke',
+                        'id': 'contour-data-stroke-les',
+                        'type': 'line',
+                        'source': 'forest-data',
+                        'source-layer': 'les_data',
+                        "paint": {
+                          "line-color": "red",
+                          "line-opacity": 0.8,
+                          "line-width": 1,
+                          "line-dasharray": [4, 4],
+                          "line-gap-width": 0
+                        },
+                        "layout": {
+                          "line-cap": "butt",
+                          "line-join": "bevel"
+                        },
+                        "minzoom": 0,
+                        "maxzoom": 7,
+                        "filter": [
+                          "all",
+                          ["==", "type_les", 1]
+                        ]
+                    },
+                    {
+                        'id': 'contour-data-stroke-uch-les',
                         'type': 'line',
                         'source': 'forest-data',
                         'source-layer': 'les_data',
@@ -86,15 +143,38 @@
                           "line-cap": "butt",
                           "line-join": "bevel"
                         },
-                        "minzoom": 0,
-                        "maxzoom": 22,
+                        "minzoom": 7,
+                        "maxzoom": 9,
                         "filter": [
                           "all",
-                          ["==", "type_les", 1]
+                          ["==", "type_les", 2]
                         ]
                     },
                     {
-                        'id': 'contour-data-label',
+                        'id': 'contour-data-stroke-uroch',
+                        'type': 'line',
+                        'source': 'forest-data',
+                        'source-layer': 'les_data',
+                        "paint": {
+                          "line-color": "green",
+                          "line-opacity": 0.8,
+                          "line-width": 1,
+                          "line-dasharray": [4, 4],
+                          "line-gap-width": 0
+                        },
+                        "layout": {
+                          "line-cap": "butt",
+                          "line-join": "bevel"
+                        },
+                        "minzoom": 9,
+                        "maxzoom": 22,
+                        "filter": [
+                          "all",
+                          ["==", "type_les", 3]
+                        ]
+                    },
+                    {
+                        'id': 'contour-data-label-les',
                         'type': 'symbol',
                         'source': 'forest-data',
                         'source-layer': 'les_data',
@@ -115,7 +195,7 @@
                           "visibility": "visible"
                         },
                         "paint": {
-                          "text-color": "rgba(0, 0, 0, 1)",
+                          "text-color": "black",
                           "text-halo-color": "rgba(255,255,255,0.8)",
                           "text-halo-width": 1
                         },
@@ -124,45 +204,115 @@
                           ["==", "name", "Лесничество"],
                           ["==", "type_les", 1]
                         ],
-                        "minzoom": 9
+                        "minzoom": 5,
+                        "maxzoom": 7,
+                    },
+                    {
+                        'id': 'contour-data-label-uch-les',
+                        'type': 'symbol',
+                        'source': 'forest-data',
+                        'source-layer': 'les_data',
+                        "layout": {
+                          "text-font": [
+                            "Arial Unicode MS Regular"
+                          ],
+                          "text-size": {
+                            "stops": [[14, 12], [16, 14]]
+                          },
+                          "text-max-width": {
+                            "stops": [[14, 5], [16, 6]]
+                          },
+                          "text-field": "{les_name}\n{uch_les_name}\n{uroch_name}",
+                          "text-padding": 10,
+                          "text-line-height": 1,
+                          "text-optional": true,
+                          "visibility": "visible"
+                        },
+                        "paint": {
+                          "text-color": "black",
+                          "text-halo-color": "rgba(255,255,255,0.8)",
+                          "text-halo-width": 1
+                        },
+                        "filter": [
+                          "all",
+                          ["==", "name", "Лесничество"],
+                          ["==", "type_les", 2]
+                        ],
+                        "minzoom": 7,
+                        "maxzoom": 9,
+                    },
+                    {
+                        'id': 'contour-data-label-uroch',
+                        'type': 'symbol',
+                        'source': 'forest-data',
+                        'source-layer': 'les_data',
+                        "layout": {
+                          "text-font": [
+                            "Arial Unicode MS Regular"
+                          ],
+                          "text-size": {
+                            "stops": [[14, 12], [16, 14]]
+                          },
+                          "text-max-width": {
+                            "stops": [[14, 5], [16, 6]]
+                          },
+                          "text-field": "{les_name}\n{uch_les_name}\n{uroch_name}",
+                          "text-padding": 10,
+                          "text-line-height": 1,
+                          "text-optional": true,
+                          "visibility": "visible"
+                        },
+                        "paint": {
+                          "text-color": "black",
+                          "text-halo-color": "rgba(255,255,255,0.8)",
+                          "text-halo-width": 1
+                        },
+                        "filter": [
+                          "all",
+                          ["==", "name", "Лесничество"],
+                          ["==", "type_les", 3]
+                        ],
+                        "minzoom": 9,
+                        "maxzoom": 22,
                     }
                 ]
             }
         });
 
         map.on('click', (e) => {
-            // Set `bbox` as 5px reactangle area around clicked point.
+            // Установите `bbox` как область прямоугольника 5px вокруг точки, по которой щелкнули.
             const bbox = [
             [e.point.x - 5, e.point.y - 5],
             [e.point.x + 5, e.point.y + 5]
             ];
             // Find features intersecting the bounding box.
             const selectedFeatures = map.queryRenderedFeatures(bbox, {
-            layers: ['contour-les'] // 'id'
+            layers: ['contour-les', 'contour-uch-les', 'contour-uroch'] // 'id'
             });
             const fips = selectedFeatures.map(
             (feature) => feature.properties.id
             );
-            // Set a filter matching selected features by FIPS codes
-            // to activate the 'counties-highlighted' layer.
+            // Установить фильтр, соответствующий выбранным объектам по кодам FIPS
+            // чтобы активировать слой 'countries-highlighted'.
             map.setFilter('contour-data-highlighted', ['in', 'id', ...fips]);
         });
 
-        map.on('click', 'contour-les', (e) => {
+        map.on('click', ['contour-les', 'contour-uch-les', 'contour-uroch'], (e) => {
+            var feature = e.features[0];
             new mapboxgl.Popup()
             .setLngLat(e.lngLat)
             .setHTML(
-                e.features[0].properties.preferences_hstore + '<br>' +
-                e.features[0].properties.preferences_jsonb + '<br>' +
+                JSON.stringify(feature.properties) + '<br>' +
                 'Координаты: ' + Number((e.lngLat.lng).toFixed(6)) + ', ' + Number((e.lngLat.lat).toFixed(6)))
             .addTo(map);
         });
 
-        map.on('mouseenter', 'contour-les', () => {
+
+        map.on('mouseenter', ['contour-les', 'contour-uch-les', 'contour-uroch'], () => {
         map.getCanvas().style.cursor = 'pointer';
         });
 
-        map.on('mouseleave', 'contour-les', () => {
+        map.on('mouseleave', ['contour-les', 'contour-uch-les', 'contour-uroch'], () => {
         map.getCanvas().style.cursor = '';
         });
         map.addControl(new mapboxgl.NavigationControl());

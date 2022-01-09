@@ -12,7 +12,6 @@ from vectortiles.postgis.views import MVTView
 from vectortiles.mixins import BaseVectorTileView
 
 
-
 count_res_table = Res_table.objects.count()
 all_object = 'Все объекты'
 list_object = 'Список'
@@ -103,9 +102,10 @@ class FeatureTileView(MVTView, ListView):
     vector_tile_layer_name = "features"
     vector_tile_fields = ('name', )
 
+
 class LayerTileView(MVTView, DetailView):
     model = Layer
-    vector_tile_fields = ('id', 'name', 'type_les', 'les_name', 'uch_les_name', 'uroch_name', 'preferences_hstore' )
+    vector_tile_fields = ('id', 'name', 'type_les', 'les_name', 'uch_les_name', 'uroch_name', 'jsonb_data' )
 
     def get_vector_tile_layer_name(self):
         return self.get_object().name

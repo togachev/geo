@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.gis.db import models
 from rest_framework_mvt.managers import MVTManager
 from django.contrib.postgres.fields import HStoreField
-# from django.db.models import JSONField
+from django.db.models import JSONField
 
 class Res_table(models.Model):
     name = models.CharField(max_length=100, null=True)
@@ -37,6 +37,9 @@ class Feature(models.Model):
     uch_les_name = models.CharField(max_length=250, null=True)
     uroch_name = models.CharField(max_length=250, null=True)
     type_les = models.IntegerField(null=True)
-    preferences_hstore = HStoreField(null=True, blank=True)
-    preferences_jsonb = models.JSONField(null=True, blank=True, default=dict)
+    # hstore_data = HStoreField(null=True, blank=True)
+
     layer = models.ForeignKey(Layer, on_delete=models.CASCADE, related_name='features')
+    def net_default():
+        return {"None": "None"}
+    jsonb_data = models.JSONField(null=True, blank=True, default=dict, db_index=True)
