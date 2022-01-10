@@ -33,9 +33,9 @@ class Layer(models.Model):
 class Feature(models.Model):
     geom = models.GeometryField(srid=4326)
     name = models.CharField(max_length=250, null=True)
-    les_name = models.CharField(max_length=250, null=True)
-    uch_les_name = models.CharField(max_length=250, null=True)
-    uroch_name = models.CharField(max_length=250, null=True)
+    # les_name = models.CharField(max_length=250, null=True)
+    # uch_les_name = models.CharField(max_length=250, null=True)
+    # uroch_name = models.CharField(max_length=250, null=True)
     type_les = models.IntegerField(null=True)
     # hstore_data = HStoreField(null=True, blank=True)
 

@@ -188,7 +188,7 @@
                           "text-max-width": {
                             "stops": [[14, 5], [16, 6]]
                           },
-                          "text-field": "{les_name}\n{uch_les_name}\n{uroch_name}",
+                          "text-field": "{les}\n{uch_les}\n{uroch}",
                           "text-padding": 10,
                           "text-line-height": 1,
                           "text-optional": true,
@@ -222,7 +222,7 @@
                           "text-max-width": {
                             "stops": [[14, 5], [16, 6]]
                           },
-                          "text-field": "{les_name}\n{uch_les_name}\n{uroch_name}",
+                          "text-field": "{les}\n{uch_les}\n{uroch}",
                           "text-padding": 10,
                           "text-line-height": 1,
                           "text-optional": true,
@@ -256,7 +256,7 @@
                           "text-max-width": {
                             "stops": [[14, 5], [16, 6]]
                           },
-                          "text-field": "{les_name}\n{uch_les_name}\n{uroch_name}",
+                          "text-field": "{les}\n{uch_les}\n{uroch}",
                           "text-padding": 10,
                           "text-line-height": 1,
                           "text-optional": true,
@@ -298,19 +298,26 @@
         });
 
         map.on('click', ['contour-les', 'contour-uch-les', 'contour-uroch'], (e) => {
-            var feature = e.features[0];
-            new mapboxgl.Popup()
-            .setLngLat(e.lngLat)
-            .setHTML(
-                JSON.stringify(feature.properties).replace(/([^\n]{1,32})/g, '$1\n') + '<br>' +
-                // JSON.parse(JSON.stringify(feature.properties))['name'] + '<br>' +
-                // JSON.parse(JSON.stringify(feature.properties))['les_name'] + '<br>' +
-                // JSON.parse(JSON.stringify(feature.properties))['uch_les_name'] + '<br>' +
-                // JSON.parse(JSON.stringify(feature.properties))['uroch_name'] + '<br>' +
-                'Координаты: ' + Number((e.lngLat.lng).toFixed(6)) + ', ' + Number((e.lngLat.lat).toFixed(6)))
-            .addTo(map);
+          const feature = e.features[0];
+          
+          data = feature.properties;
+          var table = "<table>";
+          for (let key in data) {
+            table += `<tr><td>${key}</td><td>${data[key]}</td></tr>`;
+          }
+          table += "</table>";
+          new mapboxgl.Popup()
+          .setLngLat(e.lngLat)
+          .setHTML(
+            '<div>'
+              + table
+              + 'Координаты: ' + Number((e.lngLat.lng).toFixed(6)) + ', ' + Number((e.lngLat.lat).toFixed(6)) +
+            '</div>'
+            )
+          .addTo(map);
+        // }
+        
         });
-
 
         map.on('mouseenter', ['contour-les', 'contour-uch-les', 'contour-uroch'], () => {
         map.getCanvas().style.cursor = 'pointer';

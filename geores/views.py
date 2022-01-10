@@ -105,7 +105,7 @@ class FeatureTileView(MVTView, ListView):
 
 class LayerTileView(MVTView, DetailView):
     model = Layer
-    vector_tile_fields = ('id', 'name', 'type_les', 'les_name', 'uch_les_name', 'uroch_name', 'jsonb_data' )
+    vector_tile_fields = ('id', 'name', 'type_les', 'jsonb_data' )
 
     def get_vector_tile_layer_name(self):
         return self.get_object().name
