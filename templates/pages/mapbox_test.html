@@ -51,7 +51,7 @@
                         'paint': {
                             'fill-outline-color': 'red',
                             'fill-color': 'red',
-                            'fill-opacity': 0.1
+                            'fill-opacity': 0.025
                         },
                         "filter": [
                           "all",
@@ -68,7 +68,7 @@
                         'paint': {
                             'fill-outline-color': 'blue',
                             'fill-color': 'blue',
-                            'fill-opacity': 0.1
+                            'fill-opacity': 0.025
                         },
                         "filter": [
                           "all",
@@ -85,7 +85,7 @@
                         'paint': {
                             'fill-outline-color': 'green',
                             'fill-color': 'green',
-                            'fill-opacity': 0.1
+                            'fill-opacity': 0.025
                         },
                         "filter": [
                           "all",
@@ -99,9 +99,9 @@
                         'source-layer': 'les_data',
                         "paint": {
                           "line-color": "red",
-                          "line-opacity": 0.8,
+                          "line-opacity": 1,
                           "line-width": 1,
-                          "line-dasharray": [4, 4],
+                          // "line-dasharray": [4, 4],
                           "line-gap-width": 0
                         },
                         "layout": {
@@ -122,9 +122,9 @@
                         'source-layer': 'les_data',
                         "paint": {
                           "line-color": "blue",
-                          "line-opacity": 0.8,
+                          "line-opacity": 1,
                           "line-width": 1,
-                          "line-dasharray": [4, 4],
+                          // "line-dasharray": [4, 4],
                           "line-gap-width": 0
                         },
                         "layout": {
@@ -144,10 +144,10 @@
                         'source': 'forest-data',
                         'source-layer': 'les_data',
                         "paint": {
-                          "line-color": "green",
-                          "line-opacity": 0.8,
-                          "line-width": 1,
-                          "line-dasharray": [4, 4],
+                          "line-color": "#4E9A06",
+                          "line-opacity": 1,
+                          "line-width": 2,
+                          // "line-dasharray": [4, 4],
                           "line-gap-width": 0
                         },
                         "layout": {
@@ -269,8 +269,8 @@
                         'source': 'forest-data',
                         'source-layer': 'les_data',
                         'paint': {
-                          "line-color": "#FCE94F",
-                          "line-width": 3,
+                          "line-color": "#F57900",
+                          "line-width": 2.5,
                         },
                         'filter': ['in', 'id', '']
                     }
@@ -278,7 +278,9 @@
             }
         });
 
+
         map.on('click', (e) => {
+
             // Установите `bbox` как область прямоугольника 5px вокруг точки, по которой щелкнули.
             const bbox = [
             [e.point.x - 5, e.point.y - 5],
@@ -334,6 +336,7 @@
         map.addControl(scale);
         map.scrollZoom.setWheelZoomRate(1);
         scale.setUnit('metric');
+ 
 
     </script>
 {% endblock %}
