@@ -5,6 +5,7 @@
 staticsfiles/*
 node_modules/*
 data/*
+style_mvt/*
 
 *.pyc
 db.*

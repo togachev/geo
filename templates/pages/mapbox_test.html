@@ -55,7 +55,7 @@
                         },
                         "filter": [
                           "all",
-                          ["==", "type_les", 1]
+                          ["==", "type_data", 1]
                         ]
                     },
                     {
@@ -72,7 +72,7 @@
                         },
                         "filter": [
                           "all",
-                          ["==", "type_les", 2]
+                          ["==", "type_data", 2]
                         ]
                     },
                     {
@@ -89,7 +89,7 @@
                         },
                         "filter": [
                           "all",
-                          ["==", "type_les", 3]
+                          ["==", "type_data", 3]
                         ]
                     },
                     {
@@ -124,7 +124,7 @@
                         "maxzoom": 7,
                         "filter": [
                           "all",
-                          ["==", "type_les", 1]
+                          ["==", "type_data", 1]
                         ]
                     },
                     {
@@ -147,7 +147,7 @@
                         "maxzoom": 9,
                         "filter": [
                           "all",
-                          ["==", "type_les", 2]
+                          ["==", "type_data", 2]
                         ]
                     },
                     {
@@ -170,7 +170,7 @@
                         "maxzoom": 22,
                         "filter": [
                           "all",
-                          ["==", "type_les", 3]
+                          ["==", "type_data", 3]
                         ]
                     },
                     {
@@ -202,7 +202,7 @@
                         "filter": [
                           "all",
                           ["==", "name", "Лесничество"],
-                          ["==", "type_les", 1]
+                          ["==", "type_data", 1]
                         ],
                         "minzoom": 5,
                         "maxzoom": 7,
@@ -236,7 +236,7 @@
                         "filter": [
                           "all",
                           ["==", "name", "Лесничество"],
-                          ["==", "type_les", 2]
+                          ["==", "type_data", 2]
                         ],
                         "minzoom": 7,
                         "maxzoom": 9,
@@ -270,7 +270,7 @@
                         "filter": [
                           "all",
                           ["==", "name", "Лесничество"],
-                          ["==", "type_les", 3]
+                          ["==", "type_data", 3]
                         ],
                         "minzoom": 9,
                         "maxzoom": 22,
@@ -301,6 +301,7 @@
           const feature = e.features[0];
           
           data = feature.properties;
+          delete data['type_data'];
           var table = "<table>";
           for (let key in data) {
             table += `<tr><td>${key}</td><td>${data[key]}</td></tr>`;

@@ -36,7 +36,7 @@ class Feature(models.Model):
     # les_name = models.CharField(max_length=250, null=True)
     # uch_les_name = models.CharField(max_length=250, null=True)
     # uroch_name = models.CharField(max_length=250, null=True)
-    type_les = models.IntegerField(null=True)
+    type_data = models.IntegerField(null=True)
     # hstore_data = HStoreField(null=True, blank=True)
 
     layer = models.ForeignKey(Layer, on_delete=models.CASCADE, related_name='features')
