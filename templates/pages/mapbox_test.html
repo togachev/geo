@@ -93,18 +93,6 @@
                         ]
                     },
                     {
-                        'id': 'contour-data-highlighted',
-                        'type': 'fill',
-                        'source': 'forest-data',
-                        'source-layer': 'les_data',
-                        'paint': {
-                        'fill-outline-color': '#FCE94F',
-                        'fill-color': '#FCE94F',
-                        'fill-opacity': 0.5
-                        },
-                        'filter': ['in', 'id', '']
-                    },
-                    {
                         'id': 'contour-data-stroke-les',
                         'type': 'line',
                         'source': 'forest-data',
@@ -274,6 +262,17 @@
                         ],
                         "minzoom": 9,
                         "maxzoom": 22,
+                    },
+                    {
+                        'id': 'contour-data-highlighted',
+                        'type': 'line',
+                        'source': 'forest-data',
+                        'source-layer': 'les_data',
+                        'paint': {
+                          "line-color": "#FCE94F",
+                          "line-width": 3,
+                        },
+                        'filter': ['in', 'id', '']
                     }
                 ]
             }
@@ -319,7 +318,7 @@
         // }
         
         });
-
+    
         map.on('mouseenter', ['contour-les', 'contour-uch-les', 'contour-uroch'], () => {
         map.getCanvas().style.cursor = 'pointer';
         });
