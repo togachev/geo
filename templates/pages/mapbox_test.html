@@ -2,17 +2,27 @@
 {% load static %}
 {% block content %}
 
-    <div id="map"></div>
+    <div id="map">
+      <!-- Атрибуты -->
+      <!-- <a href="http://mapbox.com/about/maps" class='mapbox-logo' target="_blank">Mapbox</a>
+      <div class="mapbox-attribution-container">
+        <a href="https://www.mapbox.com/about/maps/">© Mapbox | </a>
+        <a href="http://www.openstreetmap.org/copyright">© OpenStreetMap | </a>
+        <a href="https://www.mapbox.com/map-feedback/" target="_blank"><strong>Improve this map</strong></a>
+      </div> -->
+    
+    </div>
 
 
     <script>
 
         mapboxgl.accessToken = '{{token|safe}}';
+        mapboxgl.workerCount = '{{workerCount|safe}}';
 
 
         var map = new mapboxgl.Map({
             'container': 'map',
-
+            'attributionControl': true,
             'zoom': 5,
             'center': [70.538086, 62.201629],
             'style': {
@@ -270,7 +280,7 @@
                         'source-layer': 'les_data',
                         'paint': {
                           "line-color": "#FCE94F",
-                          "line-width": 2,
+                          "line-width": 2.5,
                         },
                         'filter': ['in', 'id', '']
                     }

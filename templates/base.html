@@ -24,8 +24,15 @@
     <style>
     #map { height: calc(100% - 59px);
         width: 100%;
-        position: absolute !important; }
-
+        position: absolute; }
+    .mapbox-attribution-container {
+        bottom: 0;
+        right: 0;
+        position: absolute !important;
+        display: block;
+        margin: 0 10px 5px;
+        z-index: 1000;
+    }
     main > .container {
         padding: 43px 0px 0;
     }
@@ -89,7 +96,7 @@
         background: #60a839;
     }
     .mapboxgl-popup {
-        max-width: 400px;
+        max-width: 600px;
         font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
     }
     </style>

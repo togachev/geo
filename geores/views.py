@@ -20,6 +20,7 @@ surgut = 'Границы освещённых участков'
 surgut_lf = 'Границы освещённых участков (Leaflet)'
 maps = 'Openlayers'
 mapboxgl_accessToken = 'pk.eyJ1IjoidG9nYWNoZXYiLCJhIjoiY2pxdzkxNGppMDBqdTN4cjdneHZwMXYzYSJ9.dsqYTRrIFaX-d06mZlR1Cw'
+mapboxgl_workerCount = 8
 
 def index_page(request):
     row = Res_table.objects.all()
@@ -125,6 +126,7 @@ def mvt_kvartal(request):
         'maps_mvt': link_name,
         'count_res_table': count_res_table,
         'token': mapboxgl_accessToken,
+        'workerCount': mapboxgl_workerCount,
         }
     return render(request, 'pages/mapbox_test.html', context)
 
