@@ -31,15 +31,7 @@ class Layer(models.Model):
         return self.name
 
 class Feature(models.Model):
-    geom = models.GeometryField(srid=4326)
+    geom = models.GeometryField(null=True, srid=4326)
     name = models.CharField(max_length=250, null=True)
-    # les_name = models.CharField(max_length=250, null=True)
-    # uch_les_name = models.CharField(max_length=250, null=True)
-    # uroch_name = models.CharField(max_length=250, null=True)
-    type_data = models.IntegerField(null=True)
-    # hstore_data = HStoreField(null=True, blank=True)
-
+    jsonb_data = JSONField(null=True, blank=True, default=dict, db_index=True)
     layer = models.ForeignKey(Layer, on_delete=models.CASCADE, related_name='features')
-    def net_default():
-        return {"None": "None"}
-    jsonb_data = models.JSONField(null=True, blank=True, default=dict, db_index=True)

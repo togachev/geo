@@ -10,22 +10,28 @@
         <a href="http://www.openstreetmap.org/copyright">© OpenStreetMap | </a>
         <a href="https://www.mapbox.com/map-feedback/" target="_blank"><strong>Improve this map</strong></a>
       </div> -->
-    
+
     </div>
 
 
     <script>
 
         mapboxgl.accessToken = '{{token|safe}}';
-        mapboxgl.workerCount = '{{workerCount|safe}}';
+        // mapboxgl.workerCount = '{{workerCount|safe}}';
 
 
         var map = new mapboxgl.Map({
-            'container': 'map',
-            'attributionControl': true,
-            'zoom': 5,
-            'center': [70.538086, 62.201629],
-            'style': {
+            container: 'map',
+            antialias: 'true',
+            attributionControl: 'true',
+            zoom: 5,
+            center: [70.538086, 62.201629],
+            // 'pitch': 45,
+            // 'bearing': 90,
+            hash: 'true',
+            optimize: 'true',
+
+            style: {
                 'version': 8,
                 'sources': {
                     'carto-dark': {
@@ -36,11 +42,27 @@
                         'tileSize': 256,
                     },
                     'forest-data': {
+                        'attribution': '© Атрибуты',
+                        'description': 'generated from postgis database',
+                        'tilejson': '3.0.0',
                         'type': 'vector',
                         'tiles': [
                             'http://192.168.14.142/geo/layer/1/tile/{z}/{x}/{y}'
-                        ]
-                    }
+                        ],
+                        'optimize': 'true',
+                    },
+                    // 'forest-data': {
+                    //     'type': 'vector',
+                    //     'tiles': [
+                    //         'http://192.168.14.142/geo/layer/2/tile/{z}/{x}/{y}'
+                    //     ]
+                    // },
+                    // 'forest-data': {
+                    //     'type': 'vector',
+                    //     'tiles': [
+                    //         'http://192.168.14.142/geo/layer/3/tile/{z}/{x}/{y}'
+                    //     ]
+                    // }
                 },
                 "glyphs": "mapbox://fonts/mapbox/{fontstack}/{range}.pbf",
                 'layers': [
@@ -59,9 +81,9 @@
                         'minzoom': 0,
                         'maxzoom': 7,
                         'paint': {
-                            'fill-outline-color': 'red',
-                            'fill-color': 'red',
-                            'fill-opacity': 0.025
+                            // 'fill-outline-color': 'red',
+                            // 'fill-color': 'red',
+                            'fill-opacity': 0
                         },
                         "filter": [
                           "all",
@@ -76,9 +98,9 @@
                         'minzoom': 7,
                         'maxzoom': 9,
                         'paint': {
-                            'fill-outline-color': 'blue',
-                            'fill-color': 'blue',
-                            'fill-opacity': 0.025
+                            // 'fill-outline-color': 'blue',
+                            // 'fill-color': 'blue',
+                            'fill-opacity': 0
                         },
                         "filter": [
                           "all",
@@ -91,15 +113,49 @@
                         'source': 'forest-data',
                         'source-layer': 'les_data',
                         'minzoom': 9,
-                        'maxzoom': 22,
+                        'maxzoom': 10,
                         'paint': {
-                            'fill-outline-color': 'green',
-                            'fill-color': 'green',
-                            'fill-opacity': 0.025
+                            // 'fill-outline-color': 'green',
+                            // 'fill-color': 'green',
+                            'fill-opacity': 0
                         },
                         "filter": [
                           "all",
                           ["==", "type_data", 3]
+                        ]
+                    },
+                    {
+                        'id': 'kvartal-les',
+                        'type': 'fill',
+                        'source': 'forest-data',
+                        'source-layer': 'les_data',
+                        'minzoom': 10,
+                        'maxzoom': 12,
+                        'paint': {
+                            // 'fill-outline-color': 'red',
+                            // 'fill-color': 'red',
+                            'fill-opacity': 0
+                        },
+                        "filter": [
+                          "all",
+                          ["==", "type_data", 4]
+                        ]
+                    },
+                    {
+                        'id': 'vydel-les',
+                        'type': 'fill',
+                        'source': 'forest-data',
+                        'source-layer': 'les_data',
+                        'minzoom': 12,
+                        'maxzoom': 22,
+                        'paint': {
+                            // 'fill-outline-color': '#A40000',
+                            // 'fill-color': '#A40000',
+                            'fill-opacity': 0
+                        },
+                        "filter": [
+                          "all",
+                          ["==", "type_data", 5]
                         ]
                     },
                     {
@@ -111,7 +167,7 @@
                           "line-color": "red",
                           "line-opacity": 1,
                           "line-width": 1,
-                          // "line-dasharray": [4, 4],
+                          //"line-dasharray": [4, 4],
                           "line-gap-width": 0
                         },
                         "layout": {
@@ -134,7 +190,7 @@
                           "line-color": "blue",
                           "line-opacity": 1,
                           "line-width": 1,
-                          // "line-dasharray": [4, 4],
+                          //"line-dasharray": [4, 4],
                           "line-gap-width": 0
                         },
                         "layout": {
@@ -156,8 +212,8 @@
                         "paint": {
                           "line-color": "#4E9A06",
                           "line-opacity": 1,
-                          "line-width": 2,
-                          // "line-dasharray": [4, 4],
+                          "line-width": 1,
+                          //"line-dasharray": [4, 4],
                           "line-gap-width": 0
                         },
                         "layout": {
@@ -165,10 +221,56 @@
                           "line-join": "bevel"
                         },
                         "minzoom": 9,
-                        "maxzoom": 22,
+                        "maxzoom": 10,
                         "filter": [
                           "all",
                           ["==", "type_data", 3]
+                        ]
+                    },
+                    {
+                        'id': 'contour-data-stroke-kvartal',
+                        'type': 'line',
+                        'source': 'forest-data',
+                        'source-layer': 'les_data',
+                        "paint": {
+                          "line-color": "red",
+                          "line-opacity": 1,
+                          "line-width": 1,
+                          //"line-dasharray": [4, 4],
+                          "line-gap-width": 0
+                        },
+                        "layout": {
+                          "line-cap": "butt",
+                          "line-join": "bevel"
+                        },
+                        "minzoom": 10,
+                        "maxzoom": 12,
+                        "filter": [
+                          "all",
+                          ["==", "type_data", 4]
+                        ]
+                    },
+                    {
+                        'id': 'contour-data-stroke-vydel',
+                        'type': 'line',
+                        'source': 'forest-data',
+                        'source-layer': 'les_data',
+                        "paint": {
+                          "line-color": "#A40000",
+                          "line-opacity": 1,
+                          "line-width": 1,
+                          //"line-dasharray": [4, 4],
+                          "line-gap-width": 0
+                        },
+                        "layout": {
+                          "line-cap": "butt",
+                          "line-join": "bevel"
+                        },
+                        "minzoom": 12,
+                        "maxzoom": 22,
+                        "filter": [
+                          "all",
+                          ["==", "type_data", 5]
                         ]
                     },
                     {
@@ -186,7 +288,7 @@
                           "text-max-width": {
                             "stops": [[14, 5], [16, 6]]
                           },
-                          "text-field": "{les}\n{uch_les}\n{uroch}",
+                          "text-field": "{les}",
                           "text-padding": 10,
                           "text-line-height": 1,
                           "text-optional": true,
@@ -271,6 +373,74 @@
                           ["==", "type_data", 3]
                         ],
                         "minzoom": 9,
+                        "maxzoom": 10,
+                    },
+                    {
+                        'id': 'contour-data-label-kvartal',
+                        'type': 'symbol',
+                        'source': 'forest-data',
+                        'source-layer': 'les_data',
+                        "layout": {
+                          "text-font": [
+                            "Arial Unicode MS Regular"
+                          ],
+                          "text-size": {
+                            "stops": [[14, 12], [16, 14]]
+                          },
+                          "text-max-width": {
+                            "stops": [[14, 5], [16, 6]]
+                          },
+                          "text-field": "{les}\n{uch_les}\n{uroch}\n{kvartal}",
+                          "text-padding": 10,
+                          "text-line-height": 1,
+                          "text-optional": true,
+                          "visibility": "visible"
+                        },
+                        "paint": {
+                          "text-color": "black",
+                          "text-halo-color": "rgba(255,255,255,0.8)",
+                          "text-halo-width": 1
+                        },
+                        "filter": [
+                          "all",
+                          ["==", "name", "Лесничество"],
+                          ["==", "type_data", 4]
+                        ],
+                        "minzoom": 10,
+                        "maxzoom": 12,
+                    },
+                    {
+                        'id': 'contour-data-label-vydel',
+                        'type': 'symbol',
+                        'source': 'forest-data',
+                        'source-layer': 'les_data',
+                        "layout": {
+                          "text-font": [
+                            "Arial Unicode MS Regular"
+                          ],
+                          "text-size": {
+                            "stops": [[14, 12], [16, 14]]
+                          },
+                          "text-max-width": {
+                            "stops": [[14, 5], [16, 6]]
+                          },
+                          "text-field": "{les}\n{uch_les}\n{uroch}\n{kvartal}\n{vydel}",
+                          "text-padding": 10,
+                          "text-line-height": 1,
+                          "text-optional": true,
+                          "visibility": "visible"
+                        },
+                        "paint": {
+                          "text-color": "black",
+                          "text-halo-color": "rgba(255,255,255,0.8)",
+                          "text-halo-width": 1
+                        },
+                        "filter": [
+                          "all",
+                          ["==", "name", "Лесничество"],
+                          ["==", "type_data", 5]
+                        ],
+                        "minzoom": 12,
                         "maxzoom": 22,
                     },
                     {
@@ -298,20 +468,23 @@
             ];
             // Find features intersecting the bounding box.
             const selectedFeatures = map.queryRenderedFeatures(bbox, {
-            layers: ['contour-les', 'contour-uch-les', 'contour-uroch'] // 'id'
+            layers: ['contour-les', 'contour-uch-les', 'contour-uroch', 'kvartal-les', 'vydel-les'] // 'id'
             });
             const fips = selectedFeatures.map(
             (feature) => feature.properties.id
             );
             // Установить фильтр, соответствующий выбранным объектам по кодам FIPS
             // чтобы активировать слой 'countries-highlighted'.
-            map.setFilter('contour-data-highlighted', ['in', 'id', ...fips]);
+            map.setFilter(['contour-data-highlighted'], ['in', 'id', ...fips]);
+            // map.setFilter(['kvartal-highlighted'], ['in', 'id', ...fips]);
+            // map.setFilter(['vydel-highlighted'], ['in', 'id', ...fips]);
         });
 
-        map.on('click', ['contour-les', 'contour-uch-les', 'contour-uroch'], (e) => {
+        map.on('click', ['contour-les', 'contour-uch-les', 'contour-uroch', 'kvartal-les', 'vydel-les'], (e) => {
           const feature = e.features[0];
-          
+
           data = feature.properties;
+          delete data['id'];
           delete data['type_data'];
           var table = "<table>";
           for (let key in data) {
@@ -328,14 +501,14 @@
             )
           .addTo(map);
         // }
-        
+
         });
-    
-        map.on('mouseenter', ['contour-les', 'contour-uch-les', 'contour-uroch'], () => {
+
+        map.on('mouseenter', ['contour-les', 'contour-uch-les', 'contour-uroch', 'kvartal-les', 'vydel-les'], () => {
         map.getCanvas().style.cursor = 'pointer';
         });
 
-        map.on('mouseleave', ['contour-les', 'contour-uch-les', 'contour-uroch'], () => {
+        map.on('mouseleave', ['contour-les', 'contour-uch-les', 'contour-uroch', 'kvartal-les', 'vydel-les'], () => {
         map.getCanvas().style.cursor = '';
         });
         map.addControl(new mapboxgl.NavigationControl());
@@ -345,8 +518,8 @@
         });
         map.addControl(scale);
         map.scrollZoom.setWheelZoomRate(1);
+        map.resetNorthPitch({duration: 200});
         scale.setUnit('metric');
- 
 
     </script>
 {% endblock %}

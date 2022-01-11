@@ -14,6 +14,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='feature',
             name='jsonb_data',
-            field=models.JSONField(blank=True, default=geores.models.Feature.net_default, null=True),
+            field=models.JSONField(blank=True, default=dict, null=True),
         ),
     ]

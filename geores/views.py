@@ -20,7 +20,7 @@ surgut = 'Границы освещённых участков'
 surgut_lf = 'Границы освещённых участков (Leaflet)'
 maps = 'Openlayers'
 mapboxgl_accessToken = 'pk.eyJ1IjoidG9nYWNoZXYiLCJhIjoiY2pxdzkxNGppMDBqdTN4cjdneHZwMXYzYSJ9.dsqYTRrIFaX-d06mZlR1Cw'
-mapboxgl_workerCount = 8
+mapboxgl_workerCount = 4
 
 def index_page(request):
     row = Res_table.objects.all()
@@ -106,7 +106,16 @@ class FeatureTileView(MVTView, ListView):
 
 class LayerTileView(MVTView, DetailView):
     model = Layer
-    vector_tile_fields = ('id', 'name', 'type_data', 'jsonb_data' )
+    vector_tile_fields = ('id', 'name', 'jsonb_data' )
+    vector_tile_queryset = None
+    vector_tile_queryset_limit = None
+    # vector_tile_layer_name = None  # name for data layer in vector tile
+    vector_tile_geom_name = "geom"  # geom field to consider in qs
+    # vector_tile_fields = None  # other fields to include from qs
+    vector_tile_generation = None  # use mapbox if you installed [mapbox] subdependencies
+    vector_tile_extent = 512  # define tile extent
+    vector_tile_buffer = 64  # define buffer around tiles (intersected polygon display without borders)
+    vector_tile_clip_geom = True  # define if feature geometries should be clipped in tile
 
     def get_vector_tile_layer_name(self):
         return self.get_object().name
