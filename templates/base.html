@@ -9,13 +9,11 @@
     <link href="{% static 'images/favicon.svg' %}" rel="icon" type="image/svg+xml" />
     <title>{{ pagename }}</title>
 
-    <!-- Leaflet -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="" />
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+    <!-- webpack ol6 -->
+    <script defer="defer" src="{% static 'ol_npm/118.ad6ea5e90c5b1dbff722.js' %}"></script><script defer="defer" src="{% static 'ol_npm/ol.99a69365837f290204fa.js' %}"></script><link href="{% static 'ol_npm/ol.99a69365837f290204fa.css' %}" rel="stylesheet">
 
-    <!-- mapbox -->
-    <script src="{% static 'mapboxgl/mapbox-gl.js' %}"></script>
-    <link href="{% static 'mapboxgl/mapbox-gl.css' %}" rel='stylesheet' />
+    <script src="https://unpkg.com/elm-pep"></script><script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=fetch,requestAnimationFrame,Element.prototype.classList,TextDecoder"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/core-js/3.18.3/minified.js"></script>
+
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
@@ -25,14 +23,6 @@
     #map { height: calc(100% - 59px);
         width: 100%;
         position: absolute; }
-    .mapbox-attribution-container {
-        bottom: 0;
-        right: 0;
-        position: absolute !important;
-        display: block;
-        margin: 0 10px 5px;
-        z-index: 1000;
-    }
 
     .calculation-box {
         height: 75px;
@@ -107,11 +97,49 @@
         text-align: left;
         background: #60a839;
     }
-    .mapboxgl-popup {
-        max-width: 600px;
-        font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
-    }
+    .ol-popup {
+        position: fixed;
+        background-color: rgb(255 255 251 / 95%);
+        box-shadow: 2px 2px 3px rgb(0 60 136 / 25%);
+        padding: 10px;
+        border-radius: 2px;
+        border: 1px solid #ff0000;
+        bottom: 12px;
+        left: -50px;
+        min-width: 300px;
+      }
+      .ol-popup:after, .ol-popup:before {
+        top: 100%;
+        border: solid transparent;
+        content: " ";
+        height: 0;
+        width: 0;
+        position: absolute;
+        pointer-events: none;
+      }
+      .ol-popup:after {
+        border-top-color: rgb(255, 0, 0);
+        border-width: 10px;
+        left: 48px;
+        margin-left: -10px;
+      }
+      .ol-popup:before {
+        border-top-color: #5900ff;
+        border-width: 11px;
+        left: 48px;
+        margin-left: -11px;
+      }
+      .ol-popup-closer {
+        text-decoration: none;
+        position: absolute;
+        top: 2px;
+        right: 8px;
+      }
+      .ol-popup-closer:after {
+        content: "✖";
+      }
     </style>
+
 </head>
 
 <body class="d-flex flex-column h-100">
