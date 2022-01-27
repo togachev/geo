@@ -10,7 +10,7 @@
     <title>{{ pagename }}</title>
 
     <!-- webpack ol6 -->
-    <script defer="defer" src="{% static 'ol_npm/118.ad6ea5e90c5b1dbff722.js' %}"></script><script defer="defer" src="{% static 'ol_npm/ol.99a69365837f290204fa.js' %}"></script><link href="{% static 'ol_npm/ol.99a69365837f290204fa.css' %}" rel="stylesheet">
+    <script defer="defer" src="{% static 'ol_npm/829.3b0f7e6e6dffbced0ec9.js' %}"></script><script defer="defer" src="{% static 'ol_npm/ol.bf811c3ab85b25ccbc33.js' %}"></script><link href="{% static 'ol_npm/ol.bf811c3ab85b25ccbc33.css' %}" rel="stylesheet">
 
     <script src="https://unpkg.com/elm-pep"></script><script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=fetch,requestAnimationFrame,Element.prototype.classList,TextDecoder"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/core-js/3.18.3/minified.js"></script>
 
@@ -98,46 +98,27 @@
         background: #60a839;
     }
     .ol-popup {
-        position: fixed;
-        background-color: rgb(255 255 251 / 95%);
-        box-shadow: 2px 2px 3px rgb(0 60 136 / 25%);
-        padding: 10px;
-        border-radius: 2px;
-        border: 1px solid #ff0000;
-        bottom: 12px;
-        left: -50px;
-        min-width: 300px;
-      }
-      .ol-popup:after, .ol-popup:before {
-        top: 100%;
-        border: solid transparent;
-        content: " ";
-        height: 0;
-        width: 0;
-        position: absolute;
-        pointer-events: none;
-      }
-      .ol-popup:after {
-        border-top-color: rgb(255, 0, 0);
-        border-width: 10px;
-        left: 48px;
-        margin-left: -10px;
-      }
-      .ol-popup:before {
-        border-top-color: #5900ff;
-        border-width: 11px;
-        left: 48px;
-        margin-left: -11px;
-      }
-      .ol-popup-closer {
-        text-decoration: none;
-        position: absolute;
-        top: 2px;
-        right: 8px;
-      }
-      .ol-popup-closer:after {
-        content: "✖";
-      }
+      position: fixed;
+      background-color: rgb(255 255 251 / 95%);
+      box-shadow: 2px 2px 3px rgb(0 60 136 / 25%);
+      padding: 20px 5px 5px 5px;
+      border-radius: 2px;
+      /* border: 1px solid #ff0000; */
+      top: 71px;
+      right: 12px;
+      min-width: 20%;
+    }
+
+    .ol-popup-closer {
+      text-decoration: none;
+      position: absolute;
+      top: 0px;
+      right: 0px;
+    }
+    .ol-popup-closer:after {
+      content: "✖";
+      padding: 1px 1px 1px 1px;
+    }
     </style>
 
 </head>
