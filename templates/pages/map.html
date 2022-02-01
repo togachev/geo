@@ -1,8 +1,25 @@
 {% extends 'base.html' %}
+{% load render_bundle from webpack_loader %}
 {% load static %}
+
+
 
 {% block content %}
 
-<div id="map" class="map"></div><div id="popup" class="ol-popup"><a href="#" id="popup-closer" class="ol-popup-closer"></a><div id="popup-content"></div></div>
 
+
+
+<div id="map" class="map"></div>
+<div id="popup" class="ol-popup">
+    <div id="popup-closer" class="ol-popup-closer"></div>
+    <div id="popup-content" ></div>
+</div>
+
+<script>
+    var minzoom = [{% for x in styles %}'{{ x.minzoom|escapejs }}',{% endfor %}]
+    var maxzoom = [{% for x in styles %}'{{ x.maxzoom|escapejs }}',{% endfor %}]
+    var layer_id = [{% for x in styles %}'{{ x.layer_id|escapejs }}',{% endfor %}]
+</script>
+
+{% render_bundle 'ol' %}
 {% endblock %}

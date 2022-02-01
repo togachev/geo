@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'vectortiles',
     'django_extensions',
     'django.contrib.gis',
+    'webpack_loader',
 ]
 
 
@@ -142,3 +143,13 @@ STATIC_ROOT = BASE_DIR / "staticsfiles"
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+WEBPACK_LOADER = {
+  'DEFAULT': {
+    'BUNDLE_DIR_NAME': 'webpack_bundles/',
+    'CACHE': not DEBUG,
+    'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.json'),
+    'POLL_INTERVAL': 0.1,
+    'IGNORE': [r'.+\.hot-update.js', r'.+\.map'],
+  }
+}

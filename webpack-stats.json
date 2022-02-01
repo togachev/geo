@@ -1,0 +1,28 @@
+{
+  "status": "done",
+  "assets": {
+    "ol.css": {
+      "name": "ol.css",
+      "path": "/mnt/workdata/work/django_project/geo/statics/webpack_bundles/ol.css"
+    },
+    "ol.js": {
+      "name": "ol.js",
+      "path": "/mnt/workdata/work/django_project/geo/statics/webpack_bundles/ol.js"
+    },
+    "932.js": {
+      "name": "932.js",
+      "path": "/mnt/workdata/work/django_project/geo/statics/webpack_bundles/932.js"
+    },
+    "932.js.LICENSE.txt": {
+      "name": "932.js.LICENSE.txt",
+      "path": "/mnt/workdata/work/django_project/geo/statics/webpack_bundles/932.js.LICENSE.txt"
+    }
+  },
+  "chunks": {
+    "ol": [
+      "932.js",
+      "ol.css",
+      "ol.js"
+    ]
+  }
+}

@@ -3,7 +3,7 @@ from django.http import Http404, HttpResponse
 from django.shortcuts import render
 from django.conf import settings
 from django.conf.urls.static import static
-from geores.models import Feature, Layer
+from geores.models import Feature, Layer, style
 from django.core.serializers import serialize
 from rest_framework_mvt.views import mvt_view_factory
 
@@ -63,7 +63,9 @@ def feature_list(request):
 
 def feature_ol(request):
     row = Layer.objects.all()
+    styles = style.objects.all()
     context = {
         'rows': row,
+        'styles': styles,
     }
     return render(request, 'pages/map.html', context)

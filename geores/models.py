@@ -21,3 +21,11 @@ class Feature(models.Model):
 
     class Meta:
         ordering = ('id', )
+
+class style(models.Model):
+    minzoom = models.DecimalField(null=True, blank=True, max_digits=5, decimal_places=2)
+    maxzoom = models.DecimalField(null=True, blank=True, max_digits=5, decimal_places=2)
+    layer = models.ForeignKey(Layer, on_delete=models.CASCADE, related_name='styles')
+
+    class Meta:
+        ordering = ('id', )
