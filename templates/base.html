@@ -1,12 +1,12 @@
-<!doctype html>
 {% load static %}
-<html lang="ru" class="h-100">
+<!doctype html>
+<html itemscope="" lang="ru">
 
 <head>
-    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="-1">
@@ -14,104 +14,206 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="true">
     <meta name="MobileOptimized" content="width">
+    <meta name="description" content="test openlayers 6 MVT">
+
+    <meta name="theme-color" content="106a90">
 
     <link rel="icon" href="{% static 'images/logo.svg' %}"/>
     <link href="{% static 'images/favicon.svg' %}" rel="icon" type="image/svg+xml" />
     <title>{{ pagename }}</title>
 
     <!-- Bootstrap core CSS -->
-    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous"> -->
-    <link href="{% static 'css/bootstrap.min.css' %}" rel='stylesheet' />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+    <!-- {#<link href="{% static 'css/bootstrap.min.css' %}" rel='stylesheet' />#} -->
 
 
 
     <style>
-    #map { height: calc(100% - 59px);
-        width: 100%;
-        position: absolute; }
 
-    .calculation-box {
-        height: 75px;
-        width: 150px;
-        position: absolute;
-        bottom: 40px;
-        left: 10px;
-        background-color: rgba(255, 255, 255, 0.9);
-        padding: 15px;
-        text-align: center;
-    }
-
-    main > .container {
-        padding: 43px 0px 0;
-    }
-    .container {
-        width: 100%;
-        padding-right: 0px;
-        padding-left: 0px;
-        margin-right: 0;
-        margin-left: 0;
-    }
-    .footer {
-        background-color: #f5f5f5;
-    }
-
-    .footer > .container {
-        padding-right: 15px;
-        padding-left: 15px;
-    }
-
-    code {
-        font-size: 80%;
-    }
-
-    .table {
-        width: 100%;
-        margin-bottom: 1rem;
-        background-color: transparent;
-        text-align: center;
+    #map {
         height: 100%;
+        width: 100%;
+        position: absolute;
+        padding-top: 0px;
+        padding-bottom: 0px;
+        min-height: 300px;
+        min-width: 200px;
     }
-    p {
-        margin-top: 0;
-        margin-bottom: 1rem;
-        white-space: break-spaces;
-        display: inline-block;
+
+    body{
+        padding-top: 0px;
+        padding-bottom: 0px;
 
     }
-    .parent {
+    .logo {
+        margin: 1px 1px;
+        position: fixed;
+        left: 0.5em;
+        top: 0.5em;
+        height: 1em;
+        width: 1em;
+    }
+    .container{
         width: 100%;
-        height: 100%;
-        position: absolute;
-        top: 0;
+        margin: 0;
         left: 0;
-        overflow: auto;
-        white-space: nowrap;
-        text-align: center;
-        font-size: 0;
-        &:before {
-            height: 100%;
-            display: inline-block;
-            vertical-align: middle;
-            content: '';
-        }
+        right: 0;
     }
 
-    .block {
+    .fixed-header{
+        width: 32px;
+        height: 32px;
+        position: fixed;
+        background: #106a9000;
+        padding: 0px 0;
+        color: #fff;
+        z-index: 1030;
+    }
+    .fixed-header{
+        top: 0;
+        right: 0;
+        left: 0;
+    }
+
+    nav a{
+        color: #fff;
+        text-decoration: none;
+        padding: 0px 0px;
         display: inline-block;
-        /* white-space: normal; */
-        vertical-align: middle;
-        text-align: left;
-        background: #60a839;
-
     }
-    @media (min-width: 1280px) and (max-width: 1920px) {
+    .container p{
+        line-height: 200px;
+    }
+
+
+        @media (min-width: 180px) and (max-width: 500px) {
+            .ol-overlay-container .ol-popup {
+                /* display: none; */
+                position: fixed;
+                background-color: white;
+                padding: 25px 5px 5px 5px;
+                border: 1px solid #cccccc;
+                top: 9px;
+                right: 9px;
+                max-width: 16em;
+                overflow-y: auto;
+                max-height: 300px;
+                max-width: 250px;
+                z-index: 1;
+            }
+        }
+        .ol-overlaycontainer-stopevent .ol-attribution {
+            text-align: right;
+            bottom: 0.5em;
+            right: 0.36em;
+            max-width: calc(100% - 1.3em);
+            display: flex;
+            flex-flow: row-reverse;
+            align-items: center;
+        }
+        .ol-touch .ol-overlaycontainer-stopevent .ol-zoom {
+            top: 100px;
+            left: 5px;
+        }
+        .ol-touch .ol-overlaycontainer-stopevent .ol-zoom .ol-zoom-in {
+            top: 100px;
+            left: 5px;
+            border-radius: 5px;
+            position: fixed;
+            height: 1.5em;
+            width: 1.5em;
+        }
+        .ol-touch .ol-overlaycontainer-stopevent .ol-zoom .ol-zoom-out {
+            top: 150px;
+            left: 5px;
+            border-radius: 5px;
+            position: fixed;
+            height: 1.5em;
+            width: 1.5em;
+        }
+        .ol-touch .ol-overlaycontainer-stopevent .ol-control button {
+            display: block;
+            margin: 1px;
+            padding: 0;
+            color: #ffffff;
+            font-weight: 300;
+            text-align: center;
+            height: 1.5em;
+            width: 1.5em;
+            line-height: 0.6em;
+            background-color: #106a90d9;
+            border: none;
+            border-radius: 5px;
+            font-size: 28px;
+        }
+        .ol-touch .ol-overlaycontainer-stopevent .ol-zoom-extent{
+            top: 50px;
+            left: 5px;
+
+        }
+        .ol-touch .ol-overlaycontainer-stopevent .ol-popup-closer {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            font-weight: 900;
+            padding: 0px 0px;
+            color: gray;
+            text-decoration: none;
+        }
+
+
+        .ol-touch .ol-overlaycontainer-stopevent .ol-popup-closer:after {
+            content: "\2716";
+            width: 50px;
+        }
+
+        .ol-overlaycontainer-stopevent .ol-zoom {
+            top: 100px;
+            left: 5px;
+        }
+        .ol-overlaycontainer-stopevent .ol-zoom .ol-zoom-in {
+            top: 100px;
+            left: 5px;
+            border-radius: 5px;
+            position: fixed;
+            height: 1em;
+            width: 1em;
+        }
+        .ol-overlaycontainer-stopevent .ol-zoom .ol-zoom-out {
+            top: 135px;
+            left: 5px;
+            border-radius: 5px;
+            position: fixed;
+            height: 1em;
+            width: 1em;
+        }
+        .ol-overlaycontainer-stopevent .ol-control button {
+            display: block;
+            margin: 1px;
+            padding: 0;
+            color: #ffffff;
+            font-weight: 300;
+            text-align: center;
+            height: 1em;
+            width: 1em;
+            line-height: 0.6em;
+            background-color: #106a90d9;
+            border: none;
+            border-radius: 5px;
+            font-size: 28px;
+        }
+        .ol-overlaycontainer-stopevent .ol-zoom-extent {
+            top: 65px;
+            left: 5px;
+
+        }
         .ol-popup {
-            /* display: none; */
             position: fixed;
             background-color: white;
             padding: 25px 5px 5px 5px;
             border: 1px solid #cccccc;
-            top: 69px;
+            top: 10px;
             right: 9px;
             max-width: 25em;
             z-index: 10000;
@@ -135,108 +237,79 @@
             transition: all 0.25s;
             font-weight: bold;
         }
-    }
 
-    @media (min-width: 180px) and (max-width: 1280px) {
-        .ol-popup {
-            /* display: none; */
+        .ol-overlaycontainer-stopevent .ol-control {
+            position: absolute;
+            background-color: #ffffff1a;
+            border-radius: 5px;
+            padding: 0.01em;
+        }
+        .ol-overlaycontainer-stopevent .ol-control:hover {
+            background-color: #ffffff;
+            border-radius: 5px;
+        }
+        .filterit{
+            height: 0.8em;
+            filter: brightness(0) invert(1);
+        }
+
+        .ol-overlaycontainer-stopevent .ol-control button:hover,
+        .ol-overlaycontainer-stopevent .ol-control button:focus {
+            text-decoration: none;
+            background-color: #658fa1d9;
+            padding: 0;
+        }
+
+        .ol-overlaycontainer-stopevent .ol-attribution a {
+            color: #000000;
+            text-decoration: none;
+        }
+
+        .ol-overlaycontainer-stopevent .ol-popup-closer {
             position: fixed;
-            background-color: white;
-            padding: 25px 5px 5px 5px;
-            border: 1px solid #cccccc;
-            top: 69px;
-            right: 9px;
-            max-width: 16em;
+            top: 10px;
+            right: 12px;
+            font-size: 100%;
+            padding: 0px 0px;
+            color: gray;
+            text-decoration: none;
+        }
+
+
+        .ol-overlaycontainer-stopevent .ol-popup-closer:after {
+            content: "\2716";
+            width: 50px;
+        }
+        .ol-overlaycontainer-stopevent .ol-popup:after, .ol-popup:before {
+            top: 100%;
+            border: solid transparent;
+            /* content: ""; */
+            height: 0;
+            width: 0;
+            position: absolute;
+            pointer-events: none;
+        }
+
+        .ol-overlaycontainer-stopevent .ol-popup:after {
+            border-top-color: white;
+            border-width: 10px;
+            left: 48px;
+            margin-left: -10px;
+        }
+
+        .ol-overlaycontainer-stopevent .ol-popup:before {
+            border-top-color: #cccccc;
+            border-width: 11px;
+            left: 48px;
+            margin-left: -11px;
+        }
+
+        .ol-overlaycontainer-stopevent .ol-popup-content {
+            /* min-width: 170px; */
+            /* max-height: 100px; */
             overflow-y: auto;
-            max-height: 300px;
-            z-index: 10000;
         }
-        .ol-touch .ol-zoom {
-            top: 40%;
-            left: 0.5em;
-        }
-        .ol-touch .ol-zoom-extent {
-            top: 0.5em !important;
-        }
-        .ol-overlaycontainer-stopevent .ol-scale-line {
-            background: rgb(255 255 255 / 66%);
-            border-radius: 4px;
-            bottom: 2px;
-            left: 50%;
-            padding: 2px;
-            position: fixed;
-            transform: translate(-50%, 0);
-        }
-        .ol-overlaycontainer-stopevent .ol-scale-line-inner {
-            border: 0.17em solid #1d2124;
-            border-top: none;
-            color: #1d2124;
-            font-weight: bold;
-            font-size: 12px;
-            text-align: center;
-            margin: 1px;
-            will-change: contents, width;
-            transition: all 0.25s;
-        }
-        .ol-overlaycontainer-stopevent .ol-attribution {
-            display: none;
-            text-align: right;
-            bottom: 0.5em;
-            right: 0.5em;
-            max-width: calc(100% - 1.3em);
-            flex-flow: row-reverse;
-            align-items: center;
-        }
-    }
 
-
-
-.ol-popup:after, .ol-popup:before {
-    top: 100%;
-    border: solid transparent;
-    /* content: ""; */
-    height: 0;
-    width: 0;
-    position: absolute;
-    pointer-events: none;
-}
-
-.ol-popup:after {
-    border-top-color: white;
-    border-width: 10px;
-    left: 48px;
-    margin-left: -10px;
-}
-
-.ol-popup:before {
-    border-top-color: #cccccc;
-    border-width: 11px;
-    left: 48px;
-    margin-left: -11px;
-}
-
-.ol-popup-content {
-    min-width: 170px;
-    max-height: 100px;
-    overflow-y: auto;
-}
-
-.ol-popup-closer {
-    position: fixed;
-    top: 71px;
-    right: 12px;
-
-    font-size: 110%;
-    padding: 0px 0px;
-    color: gray;
-    text-decoration: none;
-}
-
-
-
-.ol-popup-closer:after {
-    content: "\2716";
-}
 
     .ol-scale-bar .ol-scale-text {
     position: absolute;
@@ -246,53 +319,25 @@
     color: #000000;
     text-shadow: -2px 0 #ffffff, 0 2px #ffffff, 2px 0 #ffffff, 0 -2px #ffffff;
     }
-    .ol-overlaycontainer-stopevent .ol-control {
-        position: absolute;
-        background-color: rgba(255, 0, 0, 0);
-        border-radius: 4px;
-        padding: 0px;
-    }
 
 
-    .ol-overlaycontainer-stopevent .ol-control button {
-        display: block;
-        margin: 1px;
-        padding: 0;
-        color: #ffffff;
-        font-weight: bold;
-        text-align: center;
-        height: 1.775em;
-        width: 1.775em;
-        line-height: 1.5em;
-        background-color: #106a90d9;
-        border: none;
-        border-radius: 3px;
-    }
 
-.ol-overlaycontainer-stopevent .ol-control button:hover,
-.ol-control button:focus {
-  text-decoration: none;
-  background-color: rgba(16, 106, 144, 1);
-  padding: 0;
-}
+
     </style>
 
 </head>
 
-<body class="d-flex flex-column h-100">
+<body>
 
 {% include 'inc/inc-header.html' %}
 
 <!-- Begin page content -->
-<main role="main" class="mt-3 flex-shrink-0">
-    <div class="container">
+<main>
         {% block content %}
 
         {% endblock %}
-    </div>
-
 </main>
-{% include 'inc/inc-footer.html' %}
+{#{% include 'inc/inc-footer.html' %}#}
 
 <!-- Optional JavaScript -->
 <!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>

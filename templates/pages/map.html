@@ -9,7 +9,7 @@
 
 
 
-<div id="map" class="map"></div>
+<div id="map" ></div>
 <div id="popup" class="ol-popup">
     <div id="popup-closer" class="ol-popup-closer"></div>
     <div id="popup-content" ></div>
@@ -19,6 +19,7 @@
     var minzoom = [{% for x in styles %}'{{ x.minzoom|escapejs }}',{% endfor %}]
     var maxzoom = [{% for x in styles %}'{{ x.maxzoom|escapejs }}',{% endfor %}]
     var layer_id = [{% for x in styles %}'{{ x.layer_id|escapejs }}',{% endfor %}]
+    var house_fill = `<img src="{% static 'images/house-door-fill.svg' %}" class="filterit" alt="">`
 </script>
 
 {% render_bundle 'ol' %}

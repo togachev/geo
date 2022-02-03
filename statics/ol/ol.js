@@ -12,8 +12,8 @@ import Overlay from 'ol/Overlay';
 import {ZoomToExtent, ScaleLine, defaults as defaultControls} from 'ol/control';
 
 import {Circle, Fill, Stroke, Style, Text} from 'ol/style';
-import {shared} from 'ol/style/IconImageCache';
-shared.setSize(800);
+// import {shared} from 'ol/style/IconImageCache';
+// shared.setSize(800);
 
 const container = document.getElementById('popup');
 const content = document.getElementById('popup-content');
@@ -23,7 +23,7 @@ const overlay = new Overlay({
   element: container,
   autoPan: true,
   autoPanAnimation: {
-  duration: 10,
+  duration: 250,
   },
 });
 
@@ -111,7 +111,7 @@ const map = new Map({
   layers: [].concat(base_map, layers_data),
   overlays: [overlay],
   renderer: 'webgl',
-  // moveTolerance: 10,
+  moveTolerance: 1,
   target: 'map',
   view: new View({
     center: fromLonLat([70.538086, 62.201629]),
@@ -122,7 +122,7 @@ const map = new Map({
 
 
 
-map.on('click', function(evt) {
+map.on('singleclick', function(evt) {
   const coordinate = evt.coordinate;
   const coords = transform(coordinate, 'EPSG:3857','EPSG:4326');
   const latlon = '<tr><td>coords: </td><td style = "word-break: break-all;">' + coords[0].toFixed(6) + ', ' + coords[1].toFixed(6) + '</td></tr>';
@@ -160,11 +160,11 @@ map.on('click', function(evt) {
 });
 
 var extent = map.getView().calculateExtent(map.getSize());
-var zoom = document.createElement('span');
-zoom.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-house-door-fill" viewBox="0 0 16 16"><path d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5z"/></svg>';
+const span = document.createElement('span');
+span.innerHTML = house_fill;
 const zoomToExtentControl = new ZoomToExtent({
   extent: extent,
-  label: zoom
+  label: span
 });
 
 map.addControl(zoomToExtentControl);
