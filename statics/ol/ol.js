@@ -125,7 +125,7 @@ const map = new Map({
 map.on('singleclick', function(evt) {
   const coordinate = evt.coordinate;
   const coords = transform(coordinate, 'EPSG:3857','EPSG:4326');
-  const latlon = '<tr><td>coords: </td><td style = "word-break: break-all;">' + coords[0].toFixed(6) + ', ' + coords[1].toFixed(6) + '</td></tr>';
+  const latlon = '<tr><td>Lon-Lat: </td><td class="popup-text">' + coords[0].toFixed(6) + ', ' + coords[1].toFixed(6) + '</td></tr>';
   let html = map.forEachFeatureAtPixel(evt.pixel, function(feature) {
     const data = feature.getProperties();
     var attribute = '<table>';
@@ -133,10 +133,10 @@ map.on('singleclick', function(evt) {
     for(let key in data) {
       if (typeof data[key] == 'string') {
         if (data[key].length > 0) {
-          attribute += `<tr><td>${key}</td><td style = "word-break: break-all;">${data[key]}</td></tr>`;
+          attribute += `<tr><td>${key}</td><td class="popup-text">${data[key]}</td></tr>`;
         }
       } else if (typeof data[key] === 'number') {
-        attribute += `<tr><td>${key}</td><td style = "word-break: break-all;">${data[key]}</td></tr>`;
+        attribute += `<tr><td>${key}</td><td class="popup-text">${data[key]}</td></tr>`;
       }
     }
     attribute += latlon + '</table>';
