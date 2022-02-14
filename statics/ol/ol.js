@@ -166,6 +166,7 @@ map.on('singleclick', function(evt) {
   closer.onclick = function () {
     overlay.setPosition(undefined);
     closer.blur();
+    
     return false;
   };
 });
