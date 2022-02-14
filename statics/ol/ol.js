@@ -13,9 +13,9 @@ import {ZoomToExtent, ScaleLine, defaults as defaultControls} from 'ol/control';
 
 import {Circle, Fill, Stroke, Style, Text} from 'ol/style';
 
-const container = document.getElementById('popup');
-const content = document.getElementById('popup-content');
-const closer = document.getElementById('popup-closer');
+const container = document.getElementById('geo-popup');
+const content = document.getElementById('geo-popup-content');
+const closer = document.getElementById('geo-popup-closer');
 
 const overlay = new Overlay({
   element: container,
@@ -30,7 +30,7 @@ const attributions = '© <a href="https://www.openstreetmap.org/copyright">' +
 
 const styles = (feature) => {
   const data = feature.getProperties();
-  var keys = ['les', 'uch_les', 'uroch', 'kvartal', 'vydel'];
+  var keys = ['les', 'uch_les', 'uroch', 'kvartal', 'vydel']; //поля-подписи
   var labels = "";
 
   for(let i in keys) {
@@ -136,10 +136,12 @@ map.on('singleclick', function(evt) {
   const coordinate = evt.coordinate;
   const coords = transform(coordinate, 'EPSG:3857','EPSG:4326');
   const latlon = '<tr><td>Lon-Lat: </td><td class="popup-text">' + coords[0].toFixed(6) + ', ' + coords[1].toFixed(6) + '</td></tr>';
+  const close_content = '<div id="geo-popup-closer" class="geo-popup-closer">';
   let html = map.forEachFeatureAtPixel(evt.pixel, function(feature) {
     const data = feature.getProperties();
-    var attribute = '<table>';
+    var attribute = close_content + data.layer + '</div>' + '<table>';
     // delete data.id;
+    delete data.layer;
     for(let key in data) {
       if (typeof data[key] == 'string') {
         if (data[key].length > 0) {
@@ -154,10 +156,10 @@ map.on('singleclick', function(evt) {
   })
 
   if (html) {
-    container.style.display="block";
+    // container.style.display="block";
     content.innerHTML = html; 
   } else {
-    content.innerHTML = latlon;
+    content.innerHTML = close_content + '</div>' + latlon;
   }
   
   let pos = '';
