@@ -12,8 +12,6 @@ import Overlay from 'ol/Overlay';
 import {ZoomToExtent, ScaleLine, defaults as defaultControls} from 'ol/control';
 
 import {Circle, Fill, Stroke, Style, Text} from 'ol/style';
-// import {shared} from 'ol/style/IconImageCache';
-// shared.setSize(800);
 
 const container = document.getElementById('popup');
 const content = document.getElementById('popup-content');
@@ -56,6 +54,18 @@ const styles = (feature) => {
       }),
     }),
     new Style({
+      image: new Circle({
+        radius: 5,
+        fill: new Fill({
+          color: 'black',
+        }),
+        stroke: new Stroke({
+            color: 'rgba(255,0,0,0.9)',
+            width: 3
+        })
+    })
+  }),
+    new Style({
       text: new Text({
         text: labels,
         font: '12px Calibri,sans-serif',
@@ -77,7 +87,7 @@ for(let i in layer_id) {
   layers_data.push(new VectorTileLayer({
     minZoom: minzoom[i],
     maxZoom: maxzoom[i],
-    renderBuffer: 0,
+    renderBuffer: 50,
     // renderMode: 'hybrid',
     updateWhileAnimating: true,
     source: new VectorTileSource({ 
@@ -129,7 +139,7 @@ map.on('singleclick', function(evt) {
   let html = map.forEachFeatureAtPixel(evt.pixel, function(feature) {
     const data = feature.getProperties();
     var attribute = '<table>';
-    delete data.id;
+    // delete data.id;
     for(let key in data) {
       if (typeof data[key] == 'string') {
         if (data[key].length > 0) {
