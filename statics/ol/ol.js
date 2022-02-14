@@ -136,10 +136,9 @@ map.on('singleclick', function(evt) {
   const coordinate = evt.coordinate;
   const coords = transform(coordinate, 'EPSG:3857','EPSG:4326');
   const latlon = '<tr><td>Lon-Lat: </td><td class="popup-text">' + coords[0].toFixed(6) + ', ' + coords[1].toFixed(6) + '</td></tr>';
-  const close_content = '<div id="geo-popup-closer" class="geo-popup-closer">';
   let html = map.forEachFeatureAtPixel(evt.pixel, function(feature) {
     const data = feature.getProperties();
-    var attribute = close_content + data.layer + '</div>' + '<table>';
+    var attribute = '<table>';
     // delete data.id;
     delete data.layer;
     for(let key in data) {
@@ -159,7 +158,7 @@ map.on('singleclick', function(evt) {
     // container.style.display="block";
     content.innerHTML = html; 
   } else {
-    content.innerHTML = close_content + '</div>' + latlon;
+    content.innerHTML = latlon;
   }
   
   let pos = '';
