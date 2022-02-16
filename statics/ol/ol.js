@@ -131,6 +131,7 @@ const map = new Map({
   }),
 });
 
+// Чувствительность идентификации
 const hit = 5;
 
 map.on('singleclick', function(evt) {
