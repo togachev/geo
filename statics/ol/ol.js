@@ -16,6 +16,7 @@ import {Circle, Fill, Stroke, Style, Text} from 'ol/style';
 const container = document.getElementById('geo-popup');
 const content = document.getElementById('geo-popup-content');
 const closer = document.getElementById('geo-popup-closer');
+const name_popup = document.getElementById('geo-popup-name-popup');
 
 const overlay = new Overlay({
   element: container,
@@ -88,7 +89,7 @@ for(let i in layer_id) {
     minZoom: minzoom[i],
     maxZoom: maxzoom[i],
     renderBuffer: 50,
-    // renderMode: 'hybrid',
+    renderMode: 'hybrid',
     updateWhileAnimating: true,
     source: new VectorTileSource({ 
       format: new MVT({
@@ -130,7 +131,7 @@ const map = new Map({
   }),
 });
 
-
+const hit = 5;
 
 map.on('singleclick', function(evt) {
   const coordinate = evt.coordinate;
@@ -138,26 +139,38 @@ map.on('singleclick', function(evt) {
   const latlon = '<tr><td>Lon-Lat: </td><td class="popup-text">' + coords[0].toFixed(6) + ', ' + coords[1].toFixed(6) + '</td></tr>';
   let html = map.forEachFeatureAtPixel(evt.pixel, function(feature) {
     const data = feature.getProperties();
-    var attribute = '<table>';
-    // delete data.id;
-    delete data.layer;
-    for(let key in data) {
+    var attribute = '<table class="popup-text-all">';
+    const {layer, ...rest} = data;
+    const newObj = Object.assign({}, {...rest});
+    for(let key in newObj) {
       if (typeof data[key] == 'string') {
         if (data[key].length > 0) {
-          attribute += `<tr><td>${key}</td><td class="popup-text">${data[key]}</td></tr>`;
+          attribute += '<tr><td>' + key + '</td><td class="popup-text">' + data[key] + '</td></tr>';
         }
       } else if (typeof data[key] === 'number') {
-        attribute += `<tr><td>${key}</td><td class="popup-text">${data[key]}</td></tr>`;
+        attribute += '<tr><td>' + key + '</td><td class="popup-text">' + data[key] + '</td></tr>';
       }
     }
     attribute += latlon + '</table>';
     return attribute;
+  },
+  {
+    hitTolerance: hit,
+  })
+  //название слоя для всплывающего окна
+  let lname = map.forEachFeatureAtPixel(evt.pixel, function(feature) {
+    const data = feature.getProperties();
+    return data.layer;
+  },
+  {
+    hitTolerance: hit,
   })
 
   if (html) {
-    // container.style.display="block";
+    name_popup.innerHTML = lname;
     content.innerHTML = html; 
   } else {
+    name_popup.innerHTML = null;
     content.innerHTML = latlon;
   }
   
@@ -166,7 +179,6 @@ map.on('singleclick', function(evt) {
   closer.onclick = function () {
     overlay.setPosition(undefined);
     closer.blur();
-    
     return false;
   };
 });
