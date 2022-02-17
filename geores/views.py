@@ -69,3 +69,12 @@ def feature_ol(request):
         'styles': styles,
     }
     return render(request, 'pages/map.html', context)
+
+def feature_olmap(request):
+    row = Layer.objects.all()
+    styles = style.objects.all()
+    context = {
+        'rows': row,
+        'styles': styles,
+    }
+    return render(request, 'pages/olmap.html', context)

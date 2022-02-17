@@ -11,6 +11,7 @@ module.exports = {
     mode: 'development',
     entry: {
         ol: './statics/ol/ol',
+        olmap: './statics/ol/olmap',
     },
     output: {
         filename: '[name].js',

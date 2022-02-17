@@ -13,5 +13,6 @@ urlpatterns = [
     path('layer/<int:pk>/tile/<int:z>/<int:x>/<int:y>', views.LayerTileView.as_view(), name="layer-tile"),
     path('list', views.feature_list, name="feature-list"),
     path('ol', views.feature_ol, name="feature-ol"),
+    path('olmap', views.feature_olmap, name="feature-olmap"),
 
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

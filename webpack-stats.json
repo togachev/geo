@@ -9,6 +9,14 @@
       "name": "ol.js",
       "path": "/mnt/workdata/work/django_project/geo/statics/webpack_bundles/ol.js"
     },
+    "olmap.css": {
+      "name": "olmap.css",
+      "path": "/mnt/workdata/work/django_project/geo/statics/webpack_bundles/olmap.css"
+    },
+    "olmap.js": {
+      "name": "olmap.js",
+      "path": "/mnt/workdata/work/django_project/geo/statics/webpack_bundles/olmap.js"
+    },
     "932.js": {
       "name": "932.js",
       "path": "/mnt/workdata/work/django_project/geo/statics/webpack_bundles/932.js"
@@ -23,6 +31,11 @@
       "932.js",
       "ol.css",
       "ol.js"
+    ],
+    "olmap": [
+      "932.js",
+      "olmap.css",
+      "olmap.js"
     ]
   }
 }

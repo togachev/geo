@@ -1,17 +1,16 @@
 import 'ol/ol.css';
 import MVT from 'ol/format/MVT';
 import Map from 'ol/Map';
-import { MouseWheelZoom, defaults } from "ol/interaction";
-import XYZ from 'ol/source/XYZ';
 import VectorTileLayer from 'ol/layer/VectorTile';
 import VectorTileSource from 'ol/source/VectorTile';
 import TileLayer from 'ol/layer/WebGLTile';
+import { MouseWheelZoom, defaults } from "ol/interaction";
+import XYZ from 'ol/source/XYZ';
 import View from 'ol/View';
+import {Circle, Fill, Stroke, Style, Text} from 'ol/style';
 import {fromLonLat, transform} from 'ol/proj';
 import Overlay from 'ol/Overlay';
 import {ZoomToExtent, ScaleLine, defaults as defaultControls} from 'ol/control';
-
-import {Circle, Fill, Stroke, Style, Text} from 'ol/style';
 
 const container = document.getElementById('geo-popup');
 const content = document.getElementById('geo-popup-content');
@@ -28,6 +27,9 @@ const overlay = new Overlay({
 
 const attributions = '© <a href="https://www.openstreetmap.org/copyright">' +
 'OpenStreetMap contributors</a>';
+
+// lookup for selection objects
+let selection = {};
 
 const styles = (feature) => {
   const data = feature.getProperties();
@@ -83,24 +85,36 @@ const styles = (feature) => {
   ]
 };
 
-const layers_data = [];
+const selectedCountry = new Style({
+  stroke: new Stroke({
+    color: 'rgba(200,20,20,0.8)',
+    width: 2,
+  }),
+  fill: new Fill({
+    color: 'rgba(200,20,20,0.4)',
+  }),
+});
+
+const vtLayer = [];
 for(let i in layer_id) {
-  layers_data.push(new VectorTileLayer({
-    minZoom: minzoom[i],
-    maxZoom: maxzoom[i],
-    renderBuffer: 10,
-    // renderMode: 'vector',
-    updateWhileAnimating: false,
-    source: new VectorTileSource({ 
-      format: new MVT({
+  vtLayer.push(new VectorTileLayer({
+  declutter: true,
+  minZoom: minzoom[i],
+  maxZoom: maxzoom[i],
+  renderBuffer: 50,
+  renderMode: 'hybrid',
+  updateWhileAnimating: false,
+  source: new VectorTileSource({
+    format: new MVT({
     }),
-      url:
+    url:
         'http://192.168.14.142/geo/layer/' + layer_id[i] + '/tile/{z}/{x}/{y}',
-    }),
-    style: styles,
-    declutter: true,
-  }));
+  }),
+  style: styles,
+}));
 }
+
+
 
 const base_map = [new TileLayer({
   source: new XYZ({
@@ -108,6 +122,7 @@ const base_map = [new TileLayer({
     url: 'https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png'
   }),
 })];
+
 
 
 const map = new Map({
@@ -120,7 +135,7 @@ const map = new Map({
     new ScaleLine(),
   ]),
   renderer: 'webgl',
-  layers: [].concat(base_map, layers_data),
+  layers: [].concat(base_map, vtLayer),
   overlays: [overlay],
   moveTolerance: 10,
   target: 'map',
@@ -129,59 +144,6 @@ const map = new Map({
     enableRotation: false,
     zoom: 6,
   }),
-});
-
-// Чувствительность идентификации
-var hit = 10;
-
-map.on('singleclick', function(evt) {
-  const coordinate = evt.coordinate;
-  const coords = transform(coordinate, 'EPSG:3857','EPSG:4326');
-  const latlon = '<tr><td>Lon-Lat: </td><td class="popup-text">' + coords[0].toFixed(6) + ', ' + coords[1].toFixed(6) + '</td></tr>';
-  let html = map.forEachFeatureAtPixel(evt.pixel, function(feature) {
-    const data = feature.getProperties();
-    var attribute = '<table class="popup-text-all">';
-    const {layer, ...rest} = data;
-    const newObj = Object.assign({}, {...rest});
-    for(let key in newObj) {
-      if (typeof data[key] == 'string') {
-        if (data[key].length > 0) {
-          attribute += '<tr><td>' + key + '</td><td class="popup-text">' + data[key] + '</td></tr>';
-        }
-      } else if (typeof data[key] === 'number') {
-        attribute += '<tr><td>' + key + '</td><td class="popup-text">' + data[key] + '</td></tr>';
-      }
-    }
-    attribute += latlon + '</table>';
-    return attribute;
-  },
-  {
-    hitTolerance: hit,
-  })
-  //название слоя для всплывающего окна
-  let lname = map.forEachFeatureAtPixel(evt.pixel, function(feature) {
-    const data = feature.getProperties();
-    return data.layer;
-  },
-  {
-    hitTolerance: hit,
-  })
-
-  if (html) {
-    name_popup.innerHTML = lname;
-    content.innerHTML = html; 
-  } else {
-    name_popup.innerHTML = null;
-    content.innerHTML = latlon;
-  }
-  
-  let pos = '';
-  overlay.setPosition([pos[0], (pos[3]-pos[1])/2]);
-  closer.onclick = function () {
-    overlay.setPosition(undefined);
-    closer.blur();
-    return false;
-  };
 });
 
 var extent = map.getView().calculateExtent(map.getSize());
@@ -194,10 +156,52 @@ const zoomToExtentControl = new ZoomToExtent({
 
 map.addControl(zoomToExtentControl);
 
-map.on('pointermove', function(evt) {
-  map.getTargetElement().style.cursor = map.hasFeatureAtPixel(evt.pixel,
-    {
-      hitTolerance: hit,
+// Selection
+
+const selectionLayer = new VectorTileLayer({
+  map: map,
+  renderMode: 'vector',
+  source: vtLayer.getSource(),
+  style: function (feature) {
+    if (feature.getId() in selection) {
+      return selectedCountry;
     }
-    ) ? 'pointer' : '';
+  },
 });
+
+
+
+const selectElement = document.getElementById('type');
+
+map.on(['click', 'pointermove'], function (event) {
+  if (
+    (selectElement.value === 'singleselect-hover' &&
+      event.type !== 'pointermove') ||
+    (selectElement.value !== 'singleselect-hover' &&
+      event.type === 'pointermove')
+  ) {
+    return;
+  }
+  vtLayer.getFeatures(event.pixel).then(function (features) {
+    if (!features.length) {
+      selection = {};
+      selectionLayer.changed();
+      return;
+    }
+    const feature = features[0];
+    if (!feature) {
+      return;
+    }
+    const fid = feature.getId();
+
+    if (selectElement.value.indexOf('singleselect') === 0) {
+      selection = {};
+    }
+    // add selected feature to lookup
+    selection[fid] = feature;
+
+    selectionLayer.changed();
+  });
+});
+
+
