@@ -12,6 +12,7 @@ module.exports = {
     entry: {
         ol: './statics/ol/ol',
         olmap: './statics/ol/olmap',
+        olmap_a: './statics/ol/olmap_a',
     },
     output: {
         filename: '[name].js',

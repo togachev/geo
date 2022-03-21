@@ -30,6 +30,19 @@
 
 
     <style>
+        
+      #info {
+        z-index: 1;
+        opacity: 0;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        margin: 0;
+        background: rgba(0,60,136,0.7);
+        color: white;
+        border: 0;
+        transition: opacity 100ms ease-in;
+      }
 
     #map {
         height: 100%;
@@ -77,11 +90,17 @@
         left: 0;
         right: 0;
     }
+    .ol-touch .popup-text-all {
+        min-width: 74vw;
+    }
+    .popup-text-all {
+        width: 100%;
+    }
     .popup-text {
         word-break: break-all;
         padding: 0px 5px 0px 5px;
         /* text-align: center; */
-        font-style: italic;        
+        font-style: italic;
     }
     .popup-text-all, .popup-text, table, td, tr {
         padding: 0px 4px 0px 4px;
@@ -143,6 +162,7 @@
         color: rgb(37, 35, 35);
         max-height: 75vh;
         max-width: 75vw;
+        min-width: 75vw;
         overflow-y: auto;
         padding: 42px 0px 0px 2px;
     }
@@ -151,9 +171,19 @@
         background-color: rgba(16, 106, 144, 0);
         color: rgb(37, 35, 35);
         max-width: 350px;
+        min-width: 350px;
         max-height: 75vh;
         overflow-y: auto;
         padding: 24px 0px 0px 2px;
+    }
+    .geo-popup-coords_data {
+        background-color: rgba(16, 106, 144, 0);
+        color: rgb(37, 35, 35);
+        max-width: 350px;
+        min-width: 350px;
+        max-height: 75vh;
+        overflow-y: auto;
+        padding: 1px 1px 1px 1px;
     }
 
     .ol-touch .geo-popup-name-popup {

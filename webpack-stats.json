@@ -17,25 +17,44 @@
       "name": "olmap.js",
       "path": "/mnt/workdata/work/django_project/geo/statics/webpack_bundles/olmap.js"
     },
-    "932.js": {
-      "name": "932.js",
-      "path": "/mnt/workdata/work/django_project/geo/statics/webpack_bundles/932.js"
+    "olmap_a.css": {
+      "name": "olmap_a.css",
+      "path": "/mnt/workdata/work/django_project/geo/statics/webpack_bundles/olmap_a.css"
     },
-    "932.js.LICENSE.txt": {
-      "name": "932.js.LICENSE.txt",
-      "path": "/mnt/workdata/work/django_project/geo/statics/webpack_bundles/932.js.LICENSE.txt"
+    "olmap_a.js": {
+      "name": "olmap_a.js",
+      "path": "/mnt/workdata/work/django_project/geo/statics/webpack_bundles/olmap_a.js"
+    },
+    "23.js": {
+      "name": "23.js",
+      "path": "/mnt/workdata/work/django_project/geo/statics/webpack_bundles/23.js"
+    },
+    "617.js": {
+      "name": "617.js",
+      "path": "/mnt/workdata/work/django_project/geo/statics/webpack_bundles/617.js"
+    },
+    "23.js.LICENSE.txt": {
+      "name": "23.js.LICENSE.txt",
+      "path": "/mnt/workdata/work/django_project/geo/statics/webpack_bundles/23.js.LICENSE.txt"
     }
   },
   "chunks": {
     "ol": [
-      "932.js",
+      "23.js",
+      "617.js",
       "ol.css",
       "ol.js"
     ],
     "olmap": [
-      "932.js",
+      "23.js",
+      "617.js",
       "olmap.css",
       "olmap.js"
+    ],
+    "olmap_a": [
+      "23.js",
+      "olmap_a.css",
+      "olmap_a.js"
     ]
   }
 }

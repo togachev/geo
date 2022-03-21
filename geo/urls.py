@@ -14,5 +14,5 @@ urlpatterns = [
     path('list', views.feature_list, name="feature-list"),
     path('ol', views.feature_ol, name="feature-ol"),
     path('olmap', views.feature_olmap, name="feature-olmap"),
-
+    path('olmap_a', views.feature_olmap_a, name="feature-olmap_a"),
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

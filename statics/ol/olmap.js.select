@@ -1,0 +1,183 @@
+import 'ol/ol.css';
+import GeoJSON from 'ol/format/GeoJSON';
+import MVT from 'ol/format/MVT';
+import Map from 'ol/Map';
+import VectorTileLayer from 'ol/layer/VectorTile';
+import VectorTileSource from 'ol/source/VectorTile';
+import OSM from 'ol/source/OSM';
+import Select from 'ol/interaction/Select';
+import VectorSource from 'ol/source/Vector';
+import View from 'ol/View';
+import Feature from 'ol/Feature';
+import {Circle, Fill, Stroke, Style, Text} from 'ol/style';
+import {Tile as TileLayer, Vector as VectorLayer} from 'ol/layer';
+import {altKeyOnly, click, pointerMove} from 'ol/events/condition';
+import {fromLonLat, transform} from 'ol/proj';
+
+var raster = new TileLayer({
+  source: new OSM(),
+});
+
+const styles = (feature) => {
+    const data = feature.getProperties();
+    var keys = ['les', 'uch_les', 'uroch', 'kvartal', 'vydel', 'term_p_num']; //поля-подписи
+    var labels = "";
+
+    for(let i in keys) {
+      if (typeof data[keys[i]] == 'string') {
+        if (data[keys[i]].length > 0) {
+          labels += `${data[keys[i]]}\n`;
+        }
+      } else if (typeof data[keys[i]] === 'number') {
+        labels += `${data[keys[i]]}\n`;
+      }
+    }
+
+    return [
+      new Style({
+        stroke: new Stroke({
+          color: 'rgba(255, 0, 0, 1)',
+          width: 0.5,
+          }),
+        fill: new Fill({
+          color: 'rgba(255, 255, 255, 0.5)',
+        }),
+      }),
+      new Style({
+        image: new Circle({
+          radius: 5,
+          fill: new Fill({
+            color: 'black',
+          }),
+          stroke: new Stroke({
+              color: 'rgba(255,0,0,0.9)',
+              width: 1
+          })
+        })
+      }),
+      new Style({
+        text: new Text({
+          text: labels,
+          font: '12px Calibri,sans-serif',
+          overflow: true,
+          fill: new Fill({
+            color: '#000',
+          }),
+          stroke: new Stroke({
+            color: '#fff',
+            width: 3,
+          }),
+        }),
+      })
+    ]
+  };
+const vtLayer = [];
+for(let i in layer_id) {
+  vtLayer.push(new VectorTileLayer({
+  declutter: true,
+  minZoom: minzoom[i],
+  maxZoom: maxzoom[i],
+  renderBuffer: 50,
+  renderMode: 'vector',
+  updateWhileAnimating: false,
+  source: new VectorTileSource({
+    format: new MVT({featureClass: Feature}),
+    url:
+        'http://192.168.14.142/geo/layer/' + layer_id[i] + '/tile/{z}/{x}/{y}',
+  }),
+  style: styles,
+}));
+}
+
+
+var map = new Map({
+  layers: [].concat(raster, vtLayer),
+  target: 'map',
+  view: new View({
+    center: fromLonLat([70.538086, 62.201629]),
+    enableRotation: false,
+    zoom: 6,
+    multiWorld: true,
+  }),
+});
+
+var select = null; // ref to currently selected interaction
+
+// select interaction working on "singleclick"
+var selectSingleClick = new Select();
+
+const selectedCountry = new Style({
+  stroke: new Stroke({
+    color: 'rgba(245,121,0,1)',
+    width: 2,
+  }),
+  fill: new Fill({
+    color: 'rgba(245,121,0,0.1)',
+  }),
+  image: new Circle({
+    radius: 5,
+    fill: new Fill({
+      color: 'black',
+    }),
+    stroke: new Stroke({
+        color: 'rgba(16,106,144,0.5)',
+        width: 10
+    })
+  })
+});
+
+// select interaction working on "click"
+var selectClick = new Select({
+  style: selectedCountry,
+  condition: click,
+});
+
+// select interaction working on "pointermove"
+var selectPointerMove = new Select({
+  condition: pointerMove,
+});
+
+var selectAltClick = new Select({
+  condition: function (mapBrowserEvent) {
+    return click(mapBrowserEvent) && altKeyOnly(mapBrowserEvent);
+  },
+});
+
+var selectElement = document.getElementById('type');
+
+var changeInteraction = function () {
+  if (select !== null) {
+    map.removeInteraction(select);
+  }
+  var value = selectElement.value;
+  if (value == 'singleclick') {
+    select = selectSingleClick;
+  } else if (value == 'click') {
+    select = selectClick;
+  } else if (value == 'pointermove') {
+    select = selectPointerMove;
+  } else if (value == 'altclick') {
+    select = selectAltClick;
+  } else {
+    select = null;
+  }
+  if (select !== null) {
+    map.addInteraction(select);
+    select.on('select', function (e) {
+      document.getElementById('status').innerHTML =
+        '&nbsp;' +
+        e.target.getFeatures().getLength() +
+        ' selected features (last operation selected ' +
+        e.selected.length +
+        ' and deselected ' +
+        e.deselected.length +
+        ' features)';
+    });
+  }
+};
+
+/**
+ * onchange callback on the select element.
+ */
+selectElement.onchange = changeInteraction;
+changeInteraction();

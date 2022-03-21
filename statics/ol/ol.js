@@ -29,6 +29,7 @@ const overlay = new Overlay({
 const attributions = '© <a href="https://www.openstreetmap.org/copyright">' +
 'OpenStreetMap contributors</a>';
 
+
 const styles = (feature) => {
   const data = feature.getProperties();
   var keys = ['les', 'uch_les', 'uroch', 'kvartal', 'vydel', 'term_p_num']; //поля-подписи
@@ -47,11 +48,11 @@ const styles = (feature) => {
   return [
     new Style({
       stroke: new Stroke({
-        color: 'rgba(255, 0, 0, 1)',
+        color: 'rgba(0, 134, 255, 1)',
         width: 0.5,
         }),
       fill: new Fill({
-        color: 'rgba(255, 255, 255, 0.5)',
+        color: 'rgba(255, 255, 255, 0.8)',
       }),
     }),
     new Style({
@@ -61,7 +62,7 @@ const styles = (feature) => {
           color: 'black',
         }),
         stroke: new Stroke({
-            color: 'rgba(255,0,0,0.9)',
+            color: 'rgba(0,134,255,0.9)',
             width: 1
         })
     })

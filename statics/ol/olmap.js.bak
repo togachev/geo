@@ -17,7 +17,6 @@ import {pointerMove} from 'ol/events/condition';
 
 const container = document.getElementById('geo-popup');
 const content = document.getElementById('geo-popup-content');
-const coords_data = document.getElementById('geo-popup-coords_data');
 const closer = document.getElementById('geo-popup-closer');
 const name_popup = document.getElementById('geo-popup-name-popup');
 
@@ -32,7 +31,7 @@ const overlay = new Overlay({
 const attributions = '© <a href="https://www.openstreetmap.org/copyright">' + 'OpenStreetMap contributors</a>';
 
 // lookup for selection objects
-
+let selection = {};
 
 const styles = (feature) => {
   const data = feature.getProperties();
@@ -61,7 +60,6 @@ const styles = (feature) => {
     }),
     new Style({
       image: new Circle({
-        anchor: [0.5, 0.5],
         radius: 5,
         fill: new Fill({
           color: 'black',
@@ -117,15 +115,11 @@ for(let i in layer_id) {
       declutter: true,
       minZoom: minzoom[i],
       maxZoom: maxzoom[i],
-      minResolution: 0,
-      maxResolution: 10000,
       renderBuffer: 50,
       renderMode: 'vector',
       updateWhileAnimating: false,
       source: new VectorTileSource({
-        format: new MVT({
-          featureClass: Feature,
-        }),
+        format: new MVT({featureClass: Feature}),
         url: 'http://192.168.14.142/geo/layer/' + layer_id[i] + '/tile/{z}/{x}/{y}',
       }),
       style: styles,
@@ -162,21 +156,6 @@ const map = new Map({
   }),
 });
 
-var res_id = 0;
-const selectionLayer = new VectorTileLayer({
-  declutter: true,
-  map: map,
-  renderBuffer: 50,
-  renderMode: 'vector',
-  updateWhileAnimating: false,
-  source: vtLayer[res_id].getSource(),
-  style: function (feature) {
-    if (feature.get('id') in selection) {
-      return selectedCountry;
-    }
-  },
-});
-
 var extent = map.getView().calculateExtent(map.getSize());
 const span = document.createElement('span');
 span.innerHTML = house_fill;
@@ -193,65 +172,139 @@ map.addControl(zoomToExtentControl);
 // Чувствительность идентификации
 var hit = 5;
 
-let selection = {};
+// var selectionLayer = new VectorTileLayer({
+//   map: map,
+//   renderMode: 'vector',
+//   source: vtLayer[0].getSource(),
+//   style: function (feature) {
+//     if (feature.get('id') in selection) {
+//       // console.log(vtLayer);
+//       return selectedCountry;
+//     }
+//   },
+// });
 
-var displayFeatureInfo = function(pixel, coordinate) {
+// var getResId = function (pixel) {
+//   const res_id = map.forEachFeatureAtPixel(pixel, function(feature) {
+//     const lname = feature.getProperties().layer;
+//     for(let i in layer_id) {
+//       if (lname == layer_name[i]){
+//         console.log(i);
+//         return i;
+//       }
+//     }
+//   });
+// };
+
+const selectVT = function (pixel) {
+  
+  var res_id = map.forEachFeatureAtPixel(pixel, function(feature) {
+    const lname = feature.getProperties().layer;
+    for(let i in layer_id) {
+      if (lname == layer_name[i]){
+        
+        console.log(i);
+        return i;
+      }
+    }
+  });
+  
+// --------------настроить одиночное выделение---------------
+vtLayer[i].getSource().clear();
+// -----------------------------
+  if (res_id) {
+    
+    var selectionLayer = new VectorTileLayer({
+      map: map,
+      renderMode: 'vector',
+      source: vtLayer[res_id].getSource(),
+      style: function (feature) {
+        if (feature.get('id') in selection) {
+          // console.log(vtLayer);
+          return selectedCountry;
+        }
+      },
+    })
+  
+    vtLayer[res_id].getFeatures(pixel).then(function (features) {
+  
+      if (!features.length) {
+        selection = {};
+        selectionLayer.changed();
+        return;
+      }
+      const feature = features[0];
+      if (!feature) {
+        return;
+      }
+      const fid = feature.get('id');
+  
+      selection = {};
+      selection[fid] = feature;
+  
+      selectionLayer.changed();
+    },
+    {
+      hitTolerance: 50,
+    });
+    
+  }
+
+};
+
+map.on('click', function(evt) {
+  console.log(evt);
+  
+  selectVT(evt.pixel);
+  const coordinate = evt.coordinate;
   const coords = transform(coordinate, 'EPSG:3857','EPSG:4326');
   const latlon = '<tr><td>Lon-Lat: </td><td class="popup-text">' + coords[0].toFixed(6) + ', ' + coords[1].toFixed(6) + '</td></tr>';
-  var feature = map.forEachFeatureAtPixel(pixel, function(feature) {
-    return feature;
+  let html = map.forEachFeatureAtPixel(evt.pixel, function(features) {
+    const data = features.getProperties();
+    var attribute = '<table class="popup-text-all">';
+    const {layer, ...rest} = data;
+    const newObj = Object.assign({}, {...rest});
+    for(let key in newObj) {
+      if (typeof data[key] == 'string') {
+        if (data[key].length > 0) {
+          attribute += '<tr><td>' + key + '</td><td class="popup-text">' + data[key] + '</td></tr>';
+        }
+      } else if (typeof data[key] === 'number') {
+        attribute += '<tr><td>' + key + '</td><td class="popup-text">' + data[key] + '</td></tr>';
+      }
+    }
+    attribute += latlon + '</table>';
+    return attribute;
+  },
+  {
+    hitTolerance: hit,
+  });
+  //название слоя для всплывающего окна
+  let lname = map.forEachFeatureAtPixel(evt.pixel, function(features) {
+    const data = features.getProperties();
+    return data.layer;
   },
   {
     hitTolerance: hit,
   });
 
-  if (feature) {
-    name_popup.innerHTML = feature.getProperties().layer;
-    content.innerHTML = feature.get('id');
-    coords_data.innerHTML = latlon;
+  if (html) {
+    name_popup.innerHTML = lname;
+    content.innerHTML = html; 
   } else {
     name_popup.innerHTML = null;
-    content.innerHTML = null;
-    coords_data.innerHTML = latlon;
+    content.innerHTML = latlon;
   }
-
-  if (feature) {
-    for(let i in layer_id) {
-      if (feature.getProperties().layer == layer_name[i]){
-        var res_id = i;
-      }
-    }
-  }
-
-  if (feature) {
-    var fid = feature.get('id');
-    if (feature !== selection) {
-      selection = {};
-      selection[fid] = feature;
-      selectionLayer.setSource(vtLayer[res_id].getSource());
-      selectionLayer.changed();
-      // console.log(feature, 'test1', fid, res_id, selection);
-    }
-  } else {
-    selection = {};
-    selectionLayer.changed();
-    return;
-  }
-};
-
-
-map.on('click', function(evt) {
-  if ((evt.type === 'pointermove')) {
-    return;
-  }
-  displayFeatureInfo(evt.pixel, evt.coordinate);
-
+  
   let pos = '';
   overlay.setPosition([pos[0], (pos[3]-pos[1])/2]);
   closer.onclick = function () {
     overlay.setPosition(undefined);
     closer.blur();
     return false;
-  }
-
+  };
+},
+{
+    hitTolerance: hit,
 });
+
