@@ -23,6 +23,8 @@ class Feature(models.Model):
         ordering = ('id', )
 
 class style(models.Model):
+    minScale = models.DecimalField(null=True, blank=True, max_digits=100, decimal_places=10)
+    maxScale = models.DecimalField(null=True, blank=True, max_digits=100, decimal_places=10)
     minzoom = models.DecimalField(null=True, blank=True, max_digits=5, decimal_places=2)
     maxzoom = models.DecimalField(null=True, blank=True, max_digits=5, decimal_places=2)
     layer = models.ForeignKey(Layer, on_delete=models.CASCADE, related_name='styles')

@@ -8,32 +8,36 @@
 
 
 <div id="map" >
-  <pre id="info"/>
+
 </div>
-<!-- <form class="form-inline" style="z-index: 1;">
-  <label for="type" style="z-index: 1;">Action type &nbsp;</label>
-  <select id="type" class="form-control" style="z-index: 1;">
-    <option value="click" selected>Click</option>
-    <option value="singleclick">Single-click</option>
-    <option value="pointermove">Hover</option>
-    <option value="altclick">Alt+Click</option>
-    <option value="none">None</option>
-  </select>
-  <span id="status" style="z-index: 1;">&nbsp;0 selected features</span>
-</form> -->
+
 <div id="geo-popup" class="geo-popup">
-  <div id="geo-popup-name-popup" class="geo-popup-name-popup" alt="text"></div>
-  <div id="geo-popup-closer" class="geo-popup-closer"></div>
+  <div id="geo-name-popup" class="geo-name-popup">
+    <div id="geo-popup-name-popup" class="geo-popup-name-popup" alt="text"></div>
+    <div id="geo-popup-closer" class="geo-popup-closer"></div>
+  </div>
   <div id="geo-popup-content" class="geo-popup-content"></div>
   <div id="geo-popup-coords_data" class="geo-popup-coords_data"></div>
 </div>
 
-  <script>
-    var minzoom = [{% for x in styles %}'{{ x.minzoom|escapejs }}',{% endfor %}]
-    var maxzoom = [{% for x in styles %}'{{ x.maxzoom|escapejs }}',{% endfor %}]
-    var layer_id = [{% for x in styles %}'{{ x.layer_id|escapejs }}',{% endfor %}]
-    var house_fill = `<img src="{% static 'images/house-door-fill.svg' %}" class="filterit" alt="">`
-    var layer_name = [{% for x in rows %}'{{ x.name|escapejs }}',{% endfor %}]
+<div id="geo-layer-panel" class="geo-layer-panel" style="display:none">
+  <div id="geo-name-panel" class="geo-name-panel">
+    <div id="geo-layer-name-panel" class="geo-layer-name-panel" >Слои</div>
+    <div id="geo-layer-closer" class="geo-layer-closer"></div>
+  </div>
+  <div id="geo-layer" class="geo-layer" alt="text"></div>
+</div>
+
+<script>
+  var minzoom = [{% for x in styles %}'{{ x.minzoom|escapejs }}',{% endfor %}]
+  var maxzoom = [{% for x in styles %}'{{ x.maxzoom|escapejs }}',{% endfor %}]
+  var minScale = [{% for x in styles %}'{{ x.minScale|escapejs }}',{% endfor %}]
+  var maxScale = [{% for x in styles %}'{{ x.maxScale|escapejs }}',{% endfor %}]
+  var layer_id = [{% for x in styles %}'{{ x.layer_id|escapejs }}',{% endfor %}]
+  var house_fill = `<img src="{% static 'images/house-door-fill.svg' %}" class="filterit" alt="">`
+  var layer_fill = `<img src="{% static 'images/layer-data.svg' %}" class="layer-data" alt="">`
+  var close_button = `<img src="{% static 'images/x.svg' %}" class="x" alt="">`
+  var layer_name = [{% for x in rows %}'{{ x.name|escapejs }}',{% endfor %}]
 </script>
 {% render_bundle 'olmap' %}
 {% endblock %}

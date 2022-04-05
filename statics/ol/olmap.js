@@ -6,33 +6,46 @@ import VectorTileLayer from 'ol/layer/VectorTile';
 import VectorTileSource from 'ol/source/VectorTile';
 import TileLayer from 'ol/layer/WebGLTile';
 import { MouseWheelZoom, defaults } from "ol/interaction";
-import XYZ from 'ol/source/XYZ';
+import OSM from 'ol/source/OSM';
 import View from 'ol/View';
 import {Circle, Fill, Stroke, Style, Text} from 'ol/style';
 import {fromLonLat, transform} from 'ol/proj';
+import { METERS_PER_UNIT } from 'ol/proj/Units';
 import Overlay from 'ol/Overlay';
-import {ZoomToExtent, ScaleLine, defaults as defaultControls} from 'ol/control';
+import {Attribution, Control, ZoomToExtent, ScaleLine, defaults as defaultControls} from 'ol/control';
 
 import {pointerMove} from 'ol/events/condition';
 
 const container = document.getElementById('geo-popup');
+container.style.display = (container.style.display == 'block') ? 'none' : 'block';
 const content = document.getElementById('geo-popup-content');
 const coords_data = document.getElementById('geo-popup-coords_data');
-const closer = document.getElementById('geo-popup-closer');
+const closer_popup = document.getElementById('geo-popup-closer');
+const name_p = document.getElementById('geo-name-popup');
 const name_popup = document.getElementById('geo-popup-name-popup');
+
+
+const LPanel = document.getElementById('geo-layer-panel');
+const nameLPanel = document.getElementById('geo-layer-name-panel');
+const contentLPanel = document.getElementById('geo-layer');
+const closerLPanel = document.getElementById('geo-layer-closer');
+
+
+var CLbutton = document.createElement('button');
+CLbutton.className = 'button';
+CLbutton.innerHTML = close_button;
+closer_popup.appendChild(CLbutton);
 
 const overlay = new Overlay({
   element: container,
   autoPan: true,
   autoPanAnimation: {
   duration: 250,
+  stopEvent: false,
   },
 });
 
-const attributions = '© <a href="https://www.openstreetmap.org/copyright">' + 'OpenStreetMap contributors</a>';
-
-// lookup for selection objects
-
+// const attributions = '© <a href="https://www.openstreetmap.org/copyright">' + 'OpenStreetMap contributors</a>';
 
 const styles = (feature) => {
   const data = feature.getProperties();
@@ -52,16 +65,15 @@ const styles = (feature) => {
   return [
     new Style({
       stroke: new Stroke({
-        color: 'rgba(0, 134, 255, 1)',
+        color: 'rgba(255, 0, 0, 1)',
         width: 0.5,
         }),
       fill: new Fill({
-        color: 'rgba(255, 255, 255, 0.8)',
+        color: 'rgba(255, 255, 255, 0)',
       }),
     }),
     new Style({
       image: new Circle({
-        anchor: [0.5, 0.5],
         radius: 5,
         fill: new Fill({
           color: 'black',
@@ -82,7 +94,7 @@ const styles = (feature) => {
         }),
         stroke: new Stroke({
           color: '#fff',
-          width: 3,
+          width: 2,
         }),
       }),
     })
@@ -91,25 +103,25 @@ const styles = (feature) => {
 
 const selectedCountry = new Style({
   stroke: new Stroke({
-    color: 'rgba(245,121,0,1)',
-    width: 2,
+    color: 'rgba(255,255,0,1)',
+    width: 1.5,
   }),
   fill: new Fill({
-    color: 'rgba(245,121,0,0.1)',
+    color: 'rgba(255,203,153,0)',
   }),
   image: new Circle({
-    radius: 5,
+    radius: 7,
     fill: new Fill({
-      color: 'black',
+      color: 'rgba(255,255,0,0.5)',
     }),
     stroke: new Stroke({
-      color: 'rgba(16,106,144,0.5)',
-      width: 10
+      color: 'rgba(255,255,0,1)',
+      width: 2
     })
   })
 });
 
-const vtLayer = [];
+var vtLayer = [];
 
 for(let i in layer_id) {
   vtLayer.push(
@@ -117,11 +129,11 @@ for(let i in layer_id) {
       declutter: true,
       minZoom: minzoom[i],
       maxZoom: maxzoom[i],
-      minResolution: 0,
-      maxResolution: 10000,
-      renderBuffer: 50,
+      renderBuffer: 10,
       renderMode: 'vector',
       updateWhileAnimating: false,
+      // updateWhileAnimating: true,
+      // updateWhileInteracting: true,
       source: new VectorTileSource({
         format: new MVT({
           featureClass: Feature,
@@ -134,39 +146,93 @@ for(let i in layer_id) {
 }
 
 const base_map = new TileLayer({
-  source: new XYZ({
-    attributions: attributions,
-    url: 'https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png'
-  }),
+  source: new OSM(),
 });
 
-const map = new Map({
+var layer_list = '<table class="popup-text-all">';
+for(let i in layer_id) {
+  layer_list += '<tr><td>' + i + '</td><td class="popup-text">' + layer_name[i] + '</td></tr>';
+}
+layer_list += '</table>';
+
+
+function LayerPanelControl() {
+
+  const button = document.createElement('button');
+  button.innerHTML = layer_fill;
+
+  const element = document.createElement('div');
+  element.className = 'ol-layer-data ol-unselectable ol-control';
+  element.appendChild(button);
+  element.appendChild(LPanel);
+
+  const control = new Control({element: element});
+
+  const CLbutton = document.createElement('button');
+  CLbutton.className = 'button';
+  CLbutton.innerHTML = close_button;
+  closerLPanel.appendChild(CLbutton);
+
+  contentLPanel.innerHTML = layer_list;
+  
+  
+  button.addEventListener('click', e => {
+    console.log(LPanel.scrollHeight)
+    LPanel.style.display = (LPanel.style.display == 'block') ? 'none' : 'block';
+    LPanel.style.maxHeight = LPanel.scrollHeight + 'px';
+
+  });
+
+  closerLPanel.addEventListener('click', e => {
+    LPanel.style.display = 'none';
+  });
+
+  return control;
+}
+
+const attribution = new Attribution({
+  collapsible: false,
+});
+
+var map = new Map({
   interactions: defaults({mouseWheelZoom: false}).extend([
     new MouseWheelZoom({
       constrainResolution: true // force zooming to a integer zoom
     })
   ]),
-  controls: defaultControls().extend([
-    new ScaleLine(),
+  controls: defaultControls({attribution: false}).extend([
+    new LayerPanelControl(),
+    attribution,
   ]),
   renderer: 'webgl',
+  // layers: [base_map],
   layers: [].concat(base_map, vtLayer),
   overlays: [overlay],
   moveTolerance: 10,
   target: 'map',
   view: new View({
     center: fromLonLat([70.538086, 62.201629]),
-    enableRotation: false,
+    // enableRotation: false,
+    maxZoom: 18,
     zoom: 6,
     multiWorld: true,
   }),
 });
 
+function checkSize() {
+  const small = map.getSize()[0] < 600;
+  attribution.setCollapsible(small);
+  attribution.setCollapsed(small);
+}
+
+window.addEventListener('resize', checkSize);
+checkSize();
+
 var res_id = 0;
 const selectionLayer = new VectorTileLayer({
   declutter: true,
   map: map,
-  renderBuffer: 50,
+  renderBuffer: 10,
   renderMode: 'vector',
   updateWhileAnimating: false,
   source: vtLayer[res_id].getSource(),
@@ -185,73 +251,144 @@ const zoomToExtentControl = new ZoomToExtent({
   label: span
 });
 
+const ScaleLineControl = new ScaleLine({
+  units: 'metric',
+  bar: true,
+  steps: 2,
+  text: true,
+  // minWidth: 100,
+  dpi: 96,
+});
+
+
+
+// function mapRatioScale({ map, toRound = true }) {
+//   var dpi = 96;
+//   var units = map.getView().getProjection().getUnits();
+//   var mpu = METERS_PER_UNIT[units];
+//   var INCHES_PER_METRE = 39.3701;
+//   let scale = map.getView().getResolution()*(mpu * INCHES_PER_METRE * dpi);
+//   return toRound ? Math.round(scale) : scale;
+// }
+
 map.addControl(zoomToExtentControl);
+map.addControl(ScaleLineControl);
+
 
 // Selection
-
-
 // Чувствительность идентификации
-var hit = 5;
+var hit = 10;
 
 let selection = {};
 
 var displayFeatureInfo = function(pixel, coordinate) {
+
+  // const scale = mapRatioScale({ map });
+  // console.log(scale);
+
   const coords = transform(coordinate, 'EPSG:3857','EPSG:4326');
-  const latlon = '<tr><td>Lon-Lat: </td><td class="popup-text">' + coords[0].toFixed(6) + ', ' + coords[1].toFixed(6) + '</td></tr>';
+  const latlon = '<td class="popup-text">' + coords[0].toFixed(6) + ', ' + coords[1].toFixed(6) + '</td></tr>';
   var feature = map.forEachFeatureAtPixel(pixel, function(feature) {
     return feature;
   },
   {
     hitTolerance: hit,
   });
-
+  
   if (feature) {
+    content.style.display = 'block';
+    const data = feature.getProperties();
+    var attribute = '<table class="popup-text-all">';
+    const {layer, ...rest} = data;
+    const newObj = Object.assign({}, {...rest});
+    for(let key in newObj) {
+      if (typeof data[key] == 'string') {
+        if (data[key].length > 0) {
+          attribute += '<tr><td>' + key + '</td><td class="popup-text">' + data[key] + '</td></tr>';
+        }
+      } else if (typeof data[key] === 'number') {
+        attribute += '<tr><td>' + key + '</td><td class="popup-text">' + data[key] + '</td></tr>';
+      }
+    }
+    attribute += '</table>';
     name_popup.innerHTML = feature.getProperties().layer;
-    content.innerHTML = feature.get('id');
+    
+    content.innerHTML = attribute;
     coords_data.innerHTML = latlon;
-  } else {
-    name_popup.innerHTML = null;
-    content.innerHTML = null;
-    coords_data.innerHTML = latlon;
-  }
+    // LPanel.style.display = 'none';
 
-  if (feature) {
     for(let i in layer_id) {
       if (feature.getProperties().layer == layer_name[i]){
         var res_id = i;
       }
     }
-  }
 
-  if (feature) {
     var fid = feature.get('id');
     if (feature !== selection) {
       selection = {};
       selection[fid] = feature;
       selectionLayer.setSource(vtLayer[res_id].getSource());
       selectionLayer.changed();
-      // console.log(feature, 'test1', fid, res_id, selection);
     }
-  } else {
+
+
+  } 
+  else {
+    name_popup.innerHTML = 'Координаты';
+    content.style.display = 'none';
+    coords_data.innerHTML = latlon;
+
+    // LPanel.style.display = 'none';
     selection = {};
     selectionLayer.changed();
     return;
   }
-};
 
+  // if (feature) {
+  //   for(let i in layer_id) {
+  //     if (feature.getProperties().layer == layer_name[i]){
+  //       var res_id = i;
+  //     }
+  //   }
+  // }
+
+  // if (feature) {
+    
+  //   var fid = feature.get('id');
+  //   if (feature !== selection) {
+  //     selection = {};
+  //     selection[fid] = feature;
+  //     selectionLayer.setSource(vtLayer[res_id].getSource());
+  //     selectionLayer.changed();
+  //   }
+  // } else {
+    
+  //   LPanel.style.display = 'none';
+  //   selection = {};
+  //   selectionLayer.changed();
+  //   return;
+  // }
+};
 
 map.on('click', function(evt) {
   if ((evt.type === 'pointermove')) {
     return;
   }
   displayFeatureInfo(evt.pixel, evt.coordinate);
-
+  
   let pos = '';
+
   overlay.setPosition([pos[0], (pos[3]-pos[1])/2]);
-  closer.onclick = function () {
+  closer_popup.onclick = function () {
     overlay.setPosition(undefined);
-    closer.blur();
+    selection = {};
+    selectionLayer.changed();
+    closer_popup.blur();
     return false;
   }
-
+},
+{
+  hitTolerance: hit,
 });
+
+

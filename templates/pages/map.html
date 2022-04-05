@@ -19,6 +19,8 @@
 <script>
     var minzoom = [{% for x in styles %}'{{ x.minzoom|escapejs }}',{% endfor %}]
     var maxzoom = [{% for x in styles %}'{{ x.maxzoom|escapejs }}',{% endfor %}]
+    var minScale = [{% for x in styles %}'{{ x.minScale|escapejs }}',{% endfor %}]
+    var maxScale = [{% for x in styles %}'{{ x.maxScale|escapejs }}',{% endfor %}]
     var layer_id = [{% for x in styles %}'{{ x.layer_id|escapejs }}',{% endfor %}]
     var house_fill = `<img src="{% static 'images/house-door-fill.svg' %}" class="filterit" alt="">`
 </script>
