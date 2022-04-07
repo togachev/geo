@@ -131,9 +131,8 @@ for(let i in layer_id) {
       maxZoom: maxzoom[i],
       renderBuffer: 10,
       renderMode: 'vector',
-      updateWhileAnimating: false,
-      // updateWhileAnimating: true,
-      // updateWhileInteracting: true,
+      preload: 0,
+      useInterimTilesOnError: false,
       source: new VectorTileSource({
         format: new MVT({
           featureClass: Feature,
@@ -144,6 +143,9 @@ for(let i in layer_id) {
     })
   );
 }
+
+// https://basemaps.arcgis.com/arcgis/rest/services/OpenStreetMap_v2/VectorTileServer/tile/{z}/{y}/{x}.pbf
+// https://www.arcgis.com/sharing/rest/content/items/3e1a00aeae81496587988075fe529f71/resources/styles/root.json?f=pjson
 
 const base_map = new TileLayer({
   source: new OSM(),
@@ -157,6 +159,7 @@ layer_list += '</table>';
 
 
 function LayerPanelControl() {
+  
 
   const button = document.createElement('button');
   button.innerHTML = layer_fill;
@@ -177,9 +180,11 @@ function LayerPanelControl() {
   
   
   button.addEventListener('click', e => {
+    container.style.display = (container.style.display == 'none') ? 'block' : 'none';
     console.log(LPanel.scrollHeight)
     LPanel.style.display = (LPanel.style.display == 'block') ? 'none' : 'block';
     LPanel.style.maxHeight = LPanel.scrollHeight + 'px';
+    
 
   });
 
@@ -210,6 +215,8 @@ var map = new Map({
   overlays: [overlay],
   moveTolerance: 10,
   target: 'map',
+  loadTilesWhileAnimating: true,
+  loadTilesWhileInteracting: true,
   view: new View({
     center: fromLonLat([70.538086, 62.201629]),
     // enableRotation: false,
@@ -253,9 +260,9 @@ const zoomToExtentControl = new ZoomToExtent({
 
 const ScaleLineControl = new ScaleLine({
   units: 'metric',
-  bar: true,
+  // bar: true,
   steps: 2,
-  text: true,
+  // text: true,
   // minWidth: 100,
   dpi: 96,
 });
@@ -285,7 +292,7 @@ var displayFeatureInfo = function(pixel, coordinate) {
 
   // const scale = mapRatioScale({ map });
   // console.log(scale);
-
+  container.style.display = 'block';
   const coords = transform(coordinate, 'EPSG:3857','EPSG:4326');
   const latlon = '<td class="popup-text">' + coords[0].toFixed(6) + ', ' + coords[1].toFixed(6) + '</td></tr>';
   var feature = map.forEachFeatureAtPixel(pixel, function(feature) {
@@ -315,7 +322,7 @@ var displayFeatureInfo = function(pixel, coordinate) {
     
     content.innerHTML = attribute;
     coords_data.innerHTML = latlon;
-    // LPanel.style.display = 'none';
+    LPanel.style.display = 'none';
 
     for(let i in layer_id) {
       if (feature.getProperties().layer == layer_name[i]){
@@ -338,7 +345,7 @@ var displayFeatureInfo = function(pixel, coordinate) {
     content.style.display = 'none';
     coords_data.innerHTML = latlon;
 
-    // LPanel.style.display = 'none';
+    LPanel.style.display = 'none';
     selection = {};
     selectionLayer.changed();
     return;
