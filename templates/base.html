@@ -80,16 +80,6 @@
         }
     }
 
-    .ol-touch .ol-attribution {
-        text-align: right;
-        bottom: 5px;
-        right: 5px;
-        max-width: calc(100% - 1.3em);
-        display: flex;
-        flex-flow: row-reverse;
-        align-items: center;
-    }
-
     .filterit{
         height: 0.8em;
         filter: brightness(0) invert(1);
@@ -167,7 +157,6 @@
             }
         }
     }
-
 
     nav a{
         color: #fff;
@@ -420,8 +409,6 @@
         
     }
 
-
-
     .ol-touch .geo-popup-name-popup {
         height: 42px;
         width: calc(100% - 42px);
@@ -432,8 +419,6 @@
         justify-content: center;
         border-radius: 5px 0px 0px 0px;
     }
-
-
 
     .geo-popup-name-popup {
         height: 28px;
@@ -527,9 +512,6 @@
         height: 42px;
         width: 42px;
     }
-
-
-
 
     @media screen and (orientation: portrait) {
         .ol-touch .ol-overlaycontainer-stopevent .ol-zoom-extent{
@@ -701,6 +683,79 @@
         bottom: 25px;
         color: #000000;
         text-shadow: -2px 0 #ffffff, 0 2px #ffffff, 2px 0 #ffffff, 0 -2px #ffffff;
+    }
+
+    .ol-overlaycontainer-stopevent .ol-attribution {
+        text-align: right;
+        bottom: 5px;
+        right: 5px;
+        max-width: calc(100% - 1.3em);
+        display: flex;
+        flex-flow: row-reverse;
+        align-items: center;
+    }
+    @media (pointer: coarse) {
+        .ol-overlaycontainer-stopevent .ol-attribution {
+            text-align: right;
+            bottom: 5px;
+            right: 5px;
+            max-width: calc(100% - 1.3em);
+            display: flex;
+            flex-flow: row-reverse;
+            align-items: center;
+        }
+    }
+
+    .ol-overlaycontainer-stopevent .ol-attribution a {
+        color: rgba(0,60,136,0.7);
+        text-decoration: none;
+    }
+    .ol-overlaycontainer-stopevent .ol-attribution ul {
+        margin: 0;
+        padding: 1px .5em;
+        color: #000;
+        text-shadow: 0 0 2px #fff;
+        font-size: 12px;
+    }
+    .ol-overlaycontainer-stopevent .ol-attribution li {
+        display: inline;
+        list-style: none;
+    }
+    .ol-overlaycontainer-stopevent .ol-attribution li:not(:last-child):after {
+        content: " ";
+    }
+    .ol-overlaycontainer-stopevent .ol-attribution img {
+        max-height: 2em;
+        max-width: inherit;
+        vertical-align: middle;
+    }
+    .ol-overlaycontainer-stopevent .ol-attribution button {
+        flex-shrink: 0;
+    }
+    .ol-overlaycontainer-stopevent .ol-attribution.ol-collapsed ul {
+        display: none;
+    }
+    .ol-overlaycontainer-stopevent .ol-attribution:not(.ol-collapsed) {
+        background: rgba(255,255,255,0.8);
+    }
+    .ol-overlaycontainer-stopevent .ol-attribution.ol-uncollapsible {
+        bottom: 0px;
+        right: 0px;
+        border-radius: 4px 0 0;
+    }
+    @media (pointer: coarse) {
+        .ol-overlaycontainer-stopevent .ol-attribution.ol-uncollapsible {
+            bottom: 0px;
+            right: 0px;
+            border-radius: 4px 0 0;
+        }
+    }
+    .ol-overlaycontainer-stopevent .ol-attribution.ol-uncollapsible img {
+        margin-top: -.2em;
+        max-height: 1.6em;
+    }
+    .ol-overlaycontainer-stopevent .ol-attribution.ol-uncollapsible button {
+        display: none;
     }
 
     </style>

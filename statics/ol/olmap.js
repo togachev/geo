@@ -262,7 +262,7 @@ const ScaleLineControl = new ScaleLine({
   units: 'metric',
   // bar: true,
   steps: 2,
-  // text: true,
+  text: true,
   // minWidth: 100,
   dpi: 96,
 });
