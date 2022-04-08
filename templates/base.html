@@ -642,25 +642,7 @@
         position: fixed;
     }
 
-    .ol-overlaycontainer-stopevent .ol-scale-line {
-        background: rgb(255 255 255 / 66%);
-        border-radius: 4px;
-        bottom: 2px;
-        left: 2px;
-        padding: 2px;
-        position: fixed;
-    }
-    .ol-overlaycontainer-stopevent .ol-scale-line-inner {
-        border: 0.15em solid #1d2124;
-        border-top: none;
-        color: #1d2124;
-        font-size: 12px;
-        text-align: center;
-        margin: 1px;
-        will-change: contents, width;
-        transition: all 0.25s;
-        font-weight: bold;
-    }
+
 
     .ol-overlaycontainer-stopevent .ol-control {
         position: fixed;
@@ -676,14 +658,7 @@
 
 
 
-    .ol-scale-bar .ol-scale-text {
-        position: absolute;
-        font-size: 14px;
-        text-align: left;
-        bottom: 25px;
-        color: #000000;
-        text-shadow: -2px 0 #ffffff, 0 2px #ffffff, 2px 0 #ffffff, 0 -2px #ffffff;
-    }
+
 
     .ol-overlaycontainer-stopevent .ol-attribution {
         text-align: right;
@@ -703,6 +678,7 @@
             display: flex;
             flex-flow: row-reverse;
             align-items: center;
+            z-index: 1;
         }
     }
 
@@ -756,6 +732,148 @@
     }
     .ol-overlaycontainer-stopevent .ol-attribution.ol-uncollapsible button {
         display: none;
+    }
+
+    .ol-overlaycontainer-stopevent .ol-scale-line {
+        background: rgb(255 255 255 / 66%);
+        border-radius: 4px;
+        bottom: 5px;
+        left: 2px;
+        padding: 2px;
+        position: fixed;
+        pointer-events: none !important;
+        
+    }
+
+
+
+    @media screen and (orientation: portrait) {
+        .ol-touch .ol-overlaycontainer-stopevent .ol-scale-line {
+            background: rgb(255 255 255 / 0%);
+            border-radius: 4px;
+            top: 98%;
+            left: 5px;
+            padding: 2px;
+            position: relative;
+            /* transform: rotate(270deg); */
+            /* writing-mode: tb; */
+            height: 0px !important;
+        }
+        .ol-touch .ol-overlaycontainer-stopevent .ol-scale-line-inner {
+            border: 0.15em solid #000000;
+            border-top: none;
+            color: #000000;
+            font-size: 16px;
+            text-align: center;
+            margin: 1px;
+            /* will-change: contents, width; */
+            transition: all 0.25s;
+            font-weight: bold;
+            position: absolute;
+            height: 4px !important;
+            white-space: nowrap;
+            display: flex;
+            align-items: flex-end;
+            left: 50%;
+            transform: translate(-50%, 0);
+            justify-content: space-around;
+        }
+    }
+
+    @media screen and (orientation: landscape) {
+        .ol-touch .ol-overlaycontainer-stopevent .ol-scale-line {
+            background: rgba(255, 255, 255, 0);
+            border-radius: 4px;
+            bottom: 5px;
+            left: 50%;
+            transform: translate(-50%, 0);
+            padding: 2px;
+            position: fixed;
+            height: 8px !important;
+            
+        }
+        .ol-touch .ol-overlaycontainer-stopevent .ol-scale-line-inner {
+            border: 0.15em solid #000000;
+            border-top: none;
+            /* color: #ff0000; */
+            font-size: 16px;
+            text-align: center;
+            margin: 1px;
+            will-change: contents, width;
+            transition: all 0.25s;
+            font-weight: bold;
+            /* position: absolute; */
+            height: 4px !important;
+            white-space: nowrap;
+            display: flex;
+            flex-direction: column-reverse;
+            -webkit-text-stroke: 0.07em #c3c3c3;
+            -webkit-text-fill-color: black;
+            font-weight: 900;
+            /* text-shadow: #106a90 0px 0 5px; */
+        }
+    }
+
+
+
+    .ol-overlaycontainer-stopevent .ol-scale-line-inner {
+        border: 0.15em solid #1d2124;
+        border-top: none;
+        color: #1d2124;
+        font-size: 12px;
+        text-align: center;
+        margin: 1px;
+        will-change: contents, width;
+        /* transition: all 0.25s; */
+        font-weight: bold;
+
+    }
+
+    .ol-overlaycontainer-stopevent .ol-scale-bar .ol-scale-text {
+        position: absolute;
+        font-size: 14px;
+        text-align: left;
+        bottom: 25px;
+        color: #000000;
+        text-shadow: -2px 0 #ffffff, 0 2px #ffffff, 2px 0 #ffffff, 0 -2px #ffffff;
+        
+        
+    }
+
+    .ol-overlaycontainer-stopevent .ol-scale-bar {
+        position: absolute;
+        bottom: 8px;
+        left: 8px;
+    }
+    .ol-overlaycontainer-stopevent .ol-scale-step-marker {
+        width: 1px;
+        height: 15px;
+        background-color: #000000;
+        float: right;
+        z-Index: 10;
+    }
+    .ol-overlaycontainer-stopevent .ol-scale-step-text {
+        position: absolute;
+        bottom: -5px;
+        font-size: 12px;
+        z-Index: 11;
+        color: #000000;
+        text-shadow: -2px 0 #FFFFFF, 0 2px #FFFFFF, 2px 0 #FFFFFF, 0 -2px #FFFFFF;
+    }
+    .ol-overlaycontainer-stopevent .ol-scale-text {
+        position: absolute;
+        font-size: 14px;
+        text-align: center;
+        bottom: 25px;
+        color: #000000;
+        text-shadow: -2px 0 #FFFFFF, 0 2px #FFFFFF, 2px 0 #FFFFFF, 0 -2px #FFFFFF;
+    }
+    .ol-overlaycontainer-stopevent .ol-scale-singlebar {
+        position: relative;
+        height: 10px;
+        z-Index: 9;
+        box-sizing: border-box;
+        border: 1px solid black;
     }
 
     </style>

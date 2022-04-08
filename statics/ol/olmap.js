@@ -239,7 +239,7 @@ var res_id = 0;
 const selectionLayer = new VectorTileLayer({
   declutter: true,
   map: map,
-  renderBuffer: 10,
+  renderBuffer: 50,
   renderMode: 'vector',
   updateWhileAnimating: false,
   source: vtLayer[res_id].getSource(),
@@ -262,7 +262,7 @@ const ScaleLineControl = new ScaleLine({
   units: 'metric',
   // bar: true,
   steps: 2,
-  text: true,
+  // text: true,
   // minWidth: 100,
   dpi: 96,
 });
@@ -378,6 +378,11 @@ var displayFeatureInfo = function(pixel, coordinate) {
 };
 
 map.on('click', function(evt) {
+  let test = map.getFeaturesAtPixel(evt.pixel, function(feature) {
+    // для нескольких слоев!
+    return feature;
+  });
+  console.log(test);
   if ((evt.type === 'pointermove')) {
     return;
   }
