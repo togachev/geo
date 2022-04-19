@@ -111,9 +111,6 @@ const selectedCountry = new Style({
     color: 'rgba(245,121,0,1)',
     width: 2,
   }),
-  fill: new Fill({
-    color: 'rgba(245,121,0,0.1)',
-  }),
   image: new Circle({
     radius: 5,
     fill: new Fill({
