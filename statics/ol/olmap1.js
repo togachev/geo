@@ -280,43 +280,79 @@ var selectionFeatureInfo = function(evt) {
     hitTolerance: hit,
   });
   var feature = features[0];
-  ;
   
-  popupData(features);
+  popupData();
   
-  CreateOptionSelect();
+  document.getElementById("geo-select-list").addEventListener("change", SelectFeatureObj);
 
-  SelectFeature();
+  function SelectFeatureObj(){
+    const obj = JSON.parse(this.value);
+    for(let i in layer_id) {
+      if (obj.values_.layer == layer_name[i]){
+        var res_id = i;
+        const fiDD = obj.values_.id;
+        console.log(fiDD, this.text);
+        selection = {};
+        selection[fiDD] = feature;
+        selectionLayer.setSource(vtLayer[res_id].getSource());
+        selectionLayer.setStyle(function (feature) {
+          if (feature.get('id') in selection) {
+            return selectedCountry;
+          }
+        });
+        selectionLayer.changed();
 
-  document.getElementById('geo-select-list').addEventListener('change', function() {
-    console.log('Выбор по списку: ' + this.value);
-  });
-
-  function CreateOptionSelect() {
-    for (let i of features) {
-      ObjSelectList.options.add(new Option(i.getProperties().layer, i.getProperties().id));
+        container.style.display = 'block';
+        const coords = transform(evt.coordinate, 'EPSG:3857','EPSG:4326');
+        const latlon = '<td class="popup-text">' + coords[0].toFixed(6) + ', ' + coords[1].toFixed(6) + '</td></tr>';
+        coords_data.innerHTML = latlon;
+        ObjList.style.display = 'block';
+        // ObjSelectList.options.length = 0;
+        // CreateOptionSelect();
+    
+        content.style.display = 'block';
+        const data = obj.values_;
+        var attribute = '<table class="popup-text-all">';
+        const {layer, ...rest} = data;
+        const newObj = Object.assign({}, {...rest});
+        for(let key in newObj) {
+          if (typeof data[key] == 'string') {
+            if (data[key].length > 0) {
+              attribute += '<tr><td>' + key + '</td><td class="popup-text">' + data[key] + '</td></tr>';
+            }
+          } else if (typeof data[key] === 'number') {
+            attribute += '<tr><td>' + key + '</td><td class="popup-text">' + data[key] + '</td></tr>';
+          }
+        }
+        attribute += '</table>';
+        name_popup.innerHTML = data.layer;
+        content.innerHTML = attribute;
+        coords_data.innerHTML = latlon;
+      }
     }
   }
-  
 
-  function GetOptionSelect() {
-    let fid = document.getElementById('geo-select-list').value;
-  }
-
-
-  function popupData(features) {
+  function popupData() {
     container.style.display = 'block';
     const coords = transform(evt.coordinate, 'EPSG:3857','EPSG:4326');
     const latlon = '<td class="popup-text">' + coords[0].toFixed(6) + ', ' + coords[1].toFixed(6) + '</td></tr>';
-    name_popup.innerHTML = 'Координаты';
-    ObjList.style.display = 'none';
-    content.style.display = 'none';
-    coords_data.innerHTML = latlon;
-    LPanel.style.display = 'none';
+
+    if (!features.length){
+      name_popup.innerHTML = 'Координаты';
+      ObjList.style.display = 'none';
+      content.style.display = 'none';
+      coords_data.innerHTML = latlon;
+  
+      LPanel.style.display = 'none';
+      selection = {};
+      selectionLayer.changed();
+      return;
+    }
     
     if (features.length > 0) {
       ObjList.style.display = 'block';
       ObjSelectList.options.length = 0;
+      CreateOptionSelect();
 
       content.style.display = 'block';
       const data = feature.getProperties();
@@ -334,21 +370,25 @@ var selectionFeatureInfo = function(evt) {
       }
       attribute += '</table>';
       name_popup.innerHTML = data.layer;
-      
       content.innerHTML = attribute;
-      coords_data.innerHTML = latlon;      
+      coords_data.innerHTML = latlon;
+      SelectFeature();
     } 
+
   }
 
+  function CreateOptionSelect() {
+    for (let i of features) {
+      ObjSelectList.options.add(new Option(i.getProperties().layer, JSON.stringify(i)));
+    }
+  }
 
   function SelectFeature(){
     for(let i in layer_id) {
       if (feature.getProperties().layer == layer_name[i]){
         var res_id = i;
-        // const fid = ObjSelectList.options[ObjSelectList.selectedIndex].value;
-        // console.log(ObjSelectList.options[ObjSelectList.selectedIndex].value);
         const fid = feature.get('id');
-        console.log(fid);
+        // console.log(fid);
 
         selection = {};
         selection[fid] = feature;
@@ -362,9 +402,11 @@ var selectionFeatureInfo = function(evt) {
       }
     }
   }
+
+
 };
 
-map.on(['click'], function(evt) {
+map.on(['singleclick'], function(evt) {
   if ((evt.type === 'pointermove')) {
     return;
   }
