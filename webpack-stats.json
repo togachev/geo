@@ -17,44 +17,58 @@
       "name": "olmap.js",
       "path": "/mnt/workdata/work/django_project/geo/statics/webpack_bundles/olmap.js"
     },
-    "olmap_a.css": {
-      "name": "olmap_a.css",
-      "path": "/mnt/workdata/work/django_project/geo/statics/webpack_bundles/olmap_a.css"
-    },
     "olmap_a.js": {
       "name": "olmap_a.js",
       "path": "/mnt/workdata/work/django_project/geo/statics/webpack_bundles/olmap_a.js"
     },
-    "23.js": {
-      "name": "23.js",
-      "path": "/mnt/workdata/work/django_project/geo/statics/webpack_bundles/23.js"
+    "olmap1.css": {
+      "name": "olmap1.css",
+      "path": "/mnt/workdata/work/django_project/geo/statics/webpack_bundles/olmap1.css"
     },
-    "617.js": {
-      "name": "617.js",
-      "path": "/mnt/workdata/work/django_project/geo/statics/webpack_bundles/617.js"
+    "olmap1.js": {
+      "name": "olmap1.js",
+      "path": "/mnt/workdata/work/django_project/geo/statics/webpack_bundles/olmap1.js"
     },
-    "23.js.LICENSE.txt": {
-      "name": "23.js.LICENSE.txt",
-      "path": "/mnt/workdata/work/django_project/geo/statics/webpack_bundles/23.js.LICENSE.txt"
+    "299.js": {
+      "name": "299.js",
+      "path": "/mnt/workdata/work/django_project/geo/statics/webpack_bundles/299.js"
+    },
+    "978.js": {
+      "name": "978.js",
+      "path": "/mnt/workdata/work/django_project/geo/statics/webpack_bundles/978.js"
+    },
+    "269.js": {
+      "name": "269.js",
+      "path": "/mnt/workdata/work/django_project/geo/statics/webpack_bundles/269.js"
+    },
+    "299.js.LICENSE.txt": {
+      "name": "299.js.LICENSE.txt",
+      "path": "/mnt/workdata/work/django_project/geo/statics/webpack_bundles/299.js.LICENSE.txt"
     }
   },
   "chunks": {
     "ol": [
-      "23.js",
-      "617.js",
+      "299.js",
+      "978.js",
       "ol.css",
       "ol.js"
     ],
     "olmap": [
-      "23.js",
-      "617.js",
+      "299.js",
+      "978.js",
       "olmap.css",
       "olmap.js"
     ],
     "olmap_a": [
-      "23.js",
-      "olmap_a.css",
+      "299.js",
+      "269.js",
       "olmap_a.js"
+    ],
+    "olmap1": [
+      "299.js",
+      "978.js",
+      "olmap1.css",
+      "olmap1.js"
     ]
   }
 }

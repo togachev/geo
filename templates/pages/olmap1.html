@@ -10,67 +10,17 @@
 <div id="map" >
 
 </div>
-<div id="layertree" class="layertree">
-  <h5>Click on layer nodes below to change their properties.</h5>
-  <ul>
-    <li><span>OSM layer</span>
-      <fieldset id="layer0">
-        <label class="checkbox" for="visible0">
-          visible <input id="visible0" class="visible" type="checkbox"/>
-        </label>
-        <label>
-          opacity <input class="opacity" type="range" min="0" max="1" step="0.01"/>
-        </label>
-      </fieldset>
-    </li>
-    <li>
-      <span>Layer group</span>
-      <fieldset id="layer1">
-        <label class="checkbox" for="visible1">
-          visible <input id="visible1" class="visible" type="checkbox"/>
-        </label>
-        <label>
-          opacity <input class="opacity" type="range" min="0" max="1" step="0.01"/>
-        </label>
-      </fieldset>
-      <ul>
-        <li>
-          <span>Food insecurity layer</span>
-          <fieldset id="layer10">
-            <label class="checkbox" for="visible10">
-              visible <input id="visible10" class="visible" type="checkbox"/>
-            </label>
-            <label>
-              opacity <input class="opacity" type="range" min="0" max="1" step="0.01"/>
-            </label>
-          </fieldset>
-        </li>
-        <li>
-          <span>World borders layer</span>
-          <fieldset id="layer11">
-            <label class="checkbox" for="visible11">
-              visible <input id="visible11" class="visible" type="checkbox"/>
-            </label>
-            <label>
-              opacity <input class="opacity" type="range" min="0" max="1" step="0.01"/>
-            </label>
-          </fieldset>
-        </li>
-      </ul>
-    </li>
-  </ul>
-</div>
+
 <div id="selection_object" class="selection_object">
   <div id="selection_object_id" class="selection_object_id"></div>
 </div>
 
-<div id="geo-popup" class="geo-popup">
+<div id="geo-popup" class="geo-popup" style="display:'none';">
   <div id="geo-name-popup" class="geo-name-popup">
     <div id="geo-popup-name-popup" class="geo-popup-name-popup" alt="text"></div>
     <div id="geo-popup-closer" class="geo-popup-closer"></div>
   </div>
   <div id="geo-obj-list" class="geo-obj-list">
-    <select id="geo-select-list" class="geo-select-list"></select>
   </div>
   <div id="geo-popup-content" class="geo-popup-content"></div>
   <div id="geo-popup-coords_data" class="geo-popup-coords_data"></div>
@@ -95,5 +45,5 @@
   var close_button = `<img src="{% static 'images/x.svg' %}" class="x" alt="">`
   var layer_name = [{% for x in rows %}'{{ x.name|escapejs }}',{% endfor %}]
 </script>
-{% render_bundle 'olmap' %}
+{% render_bundle 'olmap1' %}
 {% endblock %}

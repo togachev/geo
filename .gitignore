@@ -14,3 +14,4 @@ geo.log
 dist/
 .Trash-1000/*
 .vscode/*
+install_postgresql/*

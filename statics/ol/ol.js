@@ -96,7 +96,7 @@ for(let i in layer_id) {
       format: new MVT({
     }),
       url:
-        'http://192.168.14.142/geo/layer/' + layer_id[i] + '/tile/{z}/{x}/{y}',
+        '/geo/layer/' + layer_id[i] + '/tile/{z}/{x}/{y}',
     }),
     style: styles,
     declutter: true,

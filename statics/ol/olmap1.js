@@ -30,7 +30,6 @@ const name_popup = document.getElementById('geo-popup-name-popup');
 const ObjList = document.getElementById('geo-obj-list');
 const ObjSelectList = document.getElementById('geo-select-list');
 
-
 const LPanel = document.getElementById('geo-layer-panel');
 const nameLPanel = document.getElementById('geo-layer-name-panel');
 const contentLPanel = document.getElementById('geo-layer');
@@ -113,9 +112,9 @@ const selectedCountry = new Style({
     color: 'rgba(255,255,0,1)',
     width: 1.5,
   }),
-  fill: new Fill({
-    color: 'rgba(255,203,153,0)',
-  }),
+  // fill: new Fill({
+  //   color: 'rgba(255,203,153,0)',
+  // }),
   image: new Circle({
     radius: 7,
     fill: new Fill({
@@ -125,7 +124,7 @@ const selectedCountry = new Style({
       color: 'rgba(255,255,0,1)',
       width: 2
     })
-  })
+  }),
 });
 
 var vtLayer = [];
@@ -141,6 +140,7 @@ for(let i in layer_id) {
       renderMode: 'vector',
       preload: 0,
       useInterimTilesOnError: false,
+      updateWhileAnimating: true,
       source: new VectorTileSource({
         format: new MVT({
           featureClass: Feature,
@@ -148,41 +148,13 @@ for(let i in layer_id) {
         url: '/geo/layer/' + layer_id[i] + '/tile/{z}/{x}/{y}',
       }),
       style: styles,
-      // style: function(feature) {
-      //   var selected = !!selection[feature.get('id')];
-      //   return new Style({
-      //     stroke: new Stroke({
-      //       color: selected ? 'rgba(200,20,20,0.8)' : 'gray',
-      //       width: selected ? 2 : 1
-      //     }),
-      //     fill: new Fill({
-      //       color: selected ? 'rgba(200,20,20,0.2)' : 'rgba(20,20,20,0.9)'
-      //     }),
-      //     image: new Circle({
-      //       radius: 7,
-      //       fill: new Fill({
-      //         color: selected ? 'rgba(200,20,20,0.2)' : 'rgba(20,20,20,0.9)',
-      //       }),
-      //       stroke: new Stroke({
-      //         color: selected ? 'rgba(200,20,20,0.8)' : 'gray',
-      //         width: selected ? 2 : 1
-      //       })
-      //     })
-      //   });
-      // }
-
     })
   );
 }
 
-// https://basemaps.arcgis.com/arcgis/rest/services/OpenStreetMap_v2/VectorTileServer/tile/{z}/{y}/{x}.pbf
-// https://www.arcgis.com/sharing/rest/content/items/3e1a00aeae81496587988075fe529f71/resources/styles/root.json?f=pjson
-
 const base_map = new TileLayer({
   source: new OSM(),
 });
-
-
 
 const attribution = new Attribution({
   collapsible: false,
@@ -258,41 +230,6 @@ var map = new Map({
   }),
 });
 
-
-
-function bindInputs(layerid, layer) {
-  const visibilityInput = $(layerid + ' input.visible');
-  visibilityInput.on('change', function () {
-    layer.setVisible(this.checked);
-    
-  });
-  visibilityInput.prop('checked', layer.getVisible());
-
-  const opacityInput = $(layerid + ' input.opacity');
-  opacityInput.on('input change', function () {
-    layer.setOpacity(parseFloat(this.value));
-  });
-  opacityInput.val(String(layer.getOpacity()));
-}
-function setup(id, group) {
-  group.getLayers().forEach(function (layer, i) {
-    console.log(id, i);
-    const layerid = id + i;
-    bindInputs(layerid, layer);
-    if (layer instanceof LayerGroup) {
-      setup(layerid, layer);
-    }
-  });
-}
-setup('#layer', map.getLayerGroup());
-
-$('#layertree li > span')
-  .click(function () {
-    $(this).siblings('fieldset').toggle();
-  })
-  .siblings('fieldset')
-  .hide();
-
 function checkSize() {
   const small = map.getSize()[0] < 600;
   attribution.setCollapsible(small);
@@ -301,7 +238,6 @@ function checkSize() {
 
 window.addEventListener('resize', checkSize);
 checkSize();
-
 
 var extent = map.getView().calculateExtent(map.getSize());
 const span = document.createElement('span');
@@ -323,15 +259,11 @@ const ScaleLineControl = new ScaleLine({
 map.addControl(zoomToExtentControl);
 map.addControl(ScaleLineControl);
 
-
 // Selection
 // Чувствительность идентификации
 var hit = 10;
 
 var res_id;
-
-
-
 
 const selectionLayer = new VectorTileLayer({
   map: map,
@@ -341,51 +273,76 @@ const selectionLayer = new VectorTileLayer({
   renderMode: 'vector',
   preload: 0,
   useInterimTilesOnError: false,
+  updateWhileAnimating: true
 });
 
+var selectionFeatureInfo = function(evt) {
 
-var displayFeatureInfo = function(pixel, coordinate) {
-  // https://openlayers.org/en/latest/examples/vector-tile-selection.html?q=tile
-
-  container.style.display = 'block';
-  const coords = transform(coordinate, 'EPSG:3857','EPSG:4326');
-  const latlon = '<td class="popup-text">' + coords[0].toFixed(6) + ', ' + coords[1].toFixed(6) + '</td></tr>';
-
-  var features = map.getFeaturesAtPixel(pixel, function(feature) {},
+  var features = map.getFeaturesAtPixel(evt.pixel, function(feature) {},
   {
     hitTolerance: hit,
   });
-
   var feature = features[0];
+
+  popupData();
+
+  function popupData() {
+    container.style.display = 'block';
+    const coords = transform(evt.coordinate, 'EPSG:3857','EPSG:4326');
+    const latlon = '<td class="popup-text">' + coords[0].toFixed(6) + ', ' + coords[1].toFixed(6) + '</td></tr>';
+    name_popup.innerHTML = 'Координаты';
+    ObjList.style.display = 'none';
+    content.style.display = 'none';
+    coords_data.innerHTML = latlon;
+    LPanel.style.display = 'none';
+    
+    if (features.length > 0) {
+      ObjList.style.display = 'block';
+      content.style.display = 'block';
+      const data = feature.getProperties();
+      var attribute = '<table class="popup-text-all">';
+      const {layer, ...rest} = data;
+      const newObj = Object.assign({}, {...rest});
+      for(let key in newObj) {
+        if (typeof data[key] == 'string') {
+          if (data[key].length > 0) {
+            attribute += '<tr><td>' + key + '</td><td class="popup-text">' + data[key] + '</td></tr>';
+          }
+        } else if (typeof data[key] === 'number') {
+          attribute += '<tr><td>' + key + '</td><td class="popup-text">' + data[key] + '</td></tr>';
+        }
+      }
+      attribute += '</table>';
+      name_popup.innerHTML = data.layer;
+      
+      content.innerHTML = attribute;
+      coords_data.innerHTML = latlon;
+      LPanel.style.display = 'none';
+    } 
+  }
 
   
   if (features.length > 0) {
     for(let i in layer_id) {
       if (feature.getProperties().layer == layer_name[i]){
         var res_id = i;
-        myFunc(res_id, feature, features);
-        popupData(features);
+        
+        myFunc(res_id, feature);
       }
     }
   } 
 
   if (!features.length){
-    name_popup.innerHTML = 'Координаты';
-    content.style.display = 'none';
-    coords_data.innerHTML = latlon;
-
-    LPanel.style.display = 'none';
     selection = {};
     selectionLayer.changed();
     return;
   }
 
-  function myFunc(res_id, feature, features){
-    popupData(features);
+  function myFunc(res_id, feature){
     const fid = feature.get('id');
     selection = {};
     selection[fid] = feature;
-
+  
     selectionLayer.setSource(vtLayer[res_id].getSource());
     selectionLayer.setStyle(function (feature) {
       if (feature.get('id') in selection) {
@@ -393,59 +350,23 @@ var displayFeatureInfo = function(pixel, coordinate) {
       }
     });
     selectionLayer.changed();
-  }
-  
-  function popupData(features){
-    var OldSelectOption = document.getElementById('geo-select-list-option');
-    function removeAll(selectBox) {
-      while (ObjSelectList.options.length > 0) {
-        ObjSelectList.remove(0);
-      }
-    }
-    if (OldSelectOption) {
-      console.log(OldSelectOption);
-      removeAll();
-    }
     
-    for (let i of features) {
-      var option = document.createElement("option");
-      option.id = 'geo-select-list-option'
-      option.value = i.getProperties().id;
-      option.text = i.getProperties().layer;
-      ObjSelectList.appendChild(option);
-    }
+  }
 
-    
-    content.style.display = 'block';
-    const data = feature.getProperties();
-    var attribute = '<table class="popup-text-all">';
-    const {layer, ...rest} = data;
-    const newObj = Object.assign({}, {...rest});
-    for(let key in newObj) {
-      if (typeof data[key] == 'string') {
-        if (data[key].length > 0) {
-          attribute += '<tr><td>' + key + '</td><td class="popup-text">' + data[key] + '</td></tr>';
-        }
-      } else if (typeof data[key] === 'number') {
-        attribute += '<tr><td>' + key + '</td><td class="popup-text">' + data[key] + '</td></tr>';
-      }
-    }
-    attribute += '</table>';
-    name_popup.innerHTML = data.layer;
-    
-    content.innerHTML = attribute;
-    coords_data.innerHTML = latlon;
-    LPanel.style.display = 'none';
-  }
+  
+  
+
 };
+
 
 
 map.on(['click'], function(evt) {
   if ((evt.type === 'pointermove')) {
     return;
   }
-
-  displayFeatureInfo(evt.pixel, evt.coordinate);
+  
+  selectionFeatureInfo(evt);
+  
 
   let pos = '';
 
@@ -459,33 +380,3 @@ map.on(['click'], function(evt) {
   }
 
 });
-
-// map.on('singleclick', function(event) {
-
-//   var features = map.getFeaturesAtPixel(event.pixel);
-//   // console.log(!selection[features[0].get('id')]);
-//   if (features.length > 0) {
-//     for(let i in layer_id) {
-//       if (features[0].getProperties().layer == layer_name[i]){
-//         var res_id = i;
-//       }
-//     }
-//     var feature = features[0];
-//     var fid = feature.get('id');
-  
-//     selection = {};
-//     selection[fid] = feature;
-  
-//     vtLayer[res_id].setStyle(vtLayer[res_id].getStyle());
-//   }
-//   if (features.length == 0) {
-    
-//     for(let i in layer_id) {
-//       // console.log(i);
-//       selection = {};
-//       vtLayer[i].setStyle(vtLayer[i].getStyle());
-//     }
-
-//   }
-
-// });

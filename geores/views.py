@@ -87,3 +87,12 @@ def feature_olmap_a(request):
         'styles': styles,
     }
     return render(request, 'pages/olmap_a.html', context)
+
+def feature_olmap1(request):
+    row = Layer.objects.all()
+    styles = style.objects.all()
+    context = {
+        'rows': row,
+        'styles': styles,
+    }
+    return render(request, 'pages/olmap1.html', context)

@@ -1,56 +1,67 @@
-import 'ol/ol.css';
-import Feature from 'ol/Feature';
-import MVT from 'ol/format/MVT';
-import Map from 'ol/Map';
-import VectorTileLayer from 'ol/layer/VectorTile';
-import VectorTileSource from 'ol/source/VectorTile';
-import TileLayer from 'ol/layer/WebGLTile';
-import XYZ from 'ol/source/XYZ';
-import View from 'ol/View';
-import {Fill, Stroke, Style} from 'ol/style';
-import {fromLonLat, transform} from 'ol/proj';
+import Map from 'ol/Map.js';
+import View from 'ol/View.js';
+import MVT from 'ol/format/MVT.js';
+import VectorTileLayer from 'ol/layer/VectorTile.js';
+import VectorTileSource from 'ol/source/VectorTile.js';
+import {Fill, Stroke, Style} from 'ol/style.js';
 
-const country = new Style({
-  stroke: new Stroke({
-    color: 'gray',
-    width: 1,
+// lookup for selection objects
+var selection = {};
+// feature property to act as identifier
+var idProp = 'iso_a3';
+
+var vtLayer = new VectorTileLayer({
+  declutter: true,
+  renderMode: 'vector',
+  source: new VectorTileSource({
+    format: new MVT(),
+    url: 'https://ahocevar.com/geoserver/gwc/service/tms/1.0.0/' +
+      'ne:ne_10m_admin_0_countries@EPSG%3A900913@pbf/{z}/{x}/{-y}.pbf'
   }),
-  fill: new Fill({
-    color: '#106a9080',
-  }),
+  style: function(feature) {
+    var selected = !!selection[feature.get(idProp)];
+    return new Style({
+      stroke: new Stroke({
+        color: selected ? 'rgba(200,20,20,0.8)' : 'gray',
+        width: selected ? 2 : 1
+      }),
+      fill: new Fill({
+        color: selected ? 'rgba(200,20,20,0.2)' : 'rgba(20,20,20,0.9)'
+      })
+    });
+  }
 });
 
-const base_map = new TileLayer({
-  source: new XYZ({
-    url: 'https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png'
-  }),
+var map = new Map({
+  layers: [
+    vtLayer
+  ],
+  target: 'map',
+  view: new View({
+    center: [0, 0],
+    zoom: 2
+  })
 });
 
-const vtLayer = [];
-for(let i in layer_id) {
-    vtLayer.push(new VectorTileLayer({
-        declutter: true,
-        minZoom: minzoom[i],
-        maxZoom: maxzoom[i],
-        renderBuffer: 50,
-        renderMode: 'vector',
-        updateWhileAnimating: false,
-        source: new VectorTileSource({
-            format: new MVT({featureClass: Feature}),
-            url:
-                'http://192.168.14.142/geo/layer/' + layer_id[i] + '/tile/{z}/{x}/{y}',
-        }),
-        style: country,
-    }));
-}
+var selectElement = document.getElementById('type');
 
-const map = new Map({
-    layers: [].concat(base_map, vtLayer),
-    target: 'map',
-    view: new View({
-        center: fromLonLat([70.538086, 62.201629]),
-        enableRotation: false,
-        zoom: 6,
-        multiWorld: true,
-    }),
+map.on('click', function(event) {
+  var features = map.getFeaturesAtPixel(event.pixel);
+  if (!features) {
+    selection = {};
+    // force redraw of layer style
+    vtLayer.setStyle(vtLayer.getStyle());
+    return;
+  }
+  var feature = features[0];
+  var fid = feature.get(idProp);
+
+  // if (selectElement.value === 'singleselect') {
+    selection = {};
+  // }
+  // add selected feature to lookup
+  selection[fid] = feature;
+
+  // force redraw of layer style
+  vtLayer.setStyle(vtLayer.getStyle());
 });

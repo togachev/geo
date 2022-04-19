@@ -91,8 +91,9 @@ WSGI_APPLICATION = 'geo.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'HOST': '192.168.14.225',
-        'NAME': 'dbgeo',
+        'HOST': '127.0.0.1',
+        'PORT': '5433',
+        'NAME': 'db_geo',
         'USER': 'visadmin',
         'PASSWORD': '12345678',
     }
