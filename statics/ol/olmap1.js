@@ -281,16 +281,26 @@ var selectionFeatureInfo = function(evt) {
   });
   var feature = features[0];
   ;
+  
   popupData(features);
+  
+  CreateOptionSelect();
 
+  SelectFeature();
+
+  document.getElementById('geo-select-list').addEventListener('change', function() {
+    console.log('Выбор по списку: ' + this.value);
+  });
 
   function CreateOptionSelect() {
     for (let i of features) {
       ObjSelectList.options.add(new Option(i.getProperties().layer, i.getProperties().id));
     }
   }
+  
+
   function GetOptionSelect() {
-    return document.getElementById('geo-select-list').value;
+    let fid = document.getElementById('geo-select-list').value;
   }
 
 
@@ -306,9 +316,7 @@ var selectionFeatureInfo = function(evt) {
     
     if (features.length > 0) {
       ObjList.style.display = 'block';
-
       ObjSelectList.options.length = 0;
-      CreateOptionSelect();
 
       content.style.display = 'block';
       const data = feature.getProperties();
@@ -328,25 +336,19 @@ var selectionFeatureInfo = function(evt) {
       name_popup.innerHTML = data.layer;
       
       content.innerHTML = attribute;
-      coords_data.innerHTML = latlon;
-      
-      SelectFeature();
+      coords_data.innerHTML = latlon;      
     } 
   }
 
-  if (!features.length){
-    selection = {};
-    selectionLayer.changed();
-    return;
-  }
 
   function SelectFeature(){
     for(let i in layer_id) {
       if (feature.getProperties().layer == layer_name[i]){
         var res_id = i;
+        // const fid = ObjSelectList.options[ObjSelectList.selectedIndex].value;
+        // console.log(ObjSelectList.options[ObjSelectList.selectedIndex].value);
         const fid = feature.get('id');
-        console.log(GetOptionSelect());
-
+        console.log(fid);
 
         selection = {};
         selection[fid] = feature;
