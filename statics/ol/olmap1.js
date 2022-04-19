@@ -280,10 +280,21 @@ var selectionFeatureInfo = function(evt) {
     hitTolerance: hit,
   });
   var feature = features[0];
+  ;
+  popupData(features);
 
-  popupData();
 
-  function popupData() {
+  function CreateOptionSelect() {
+    for (let i of features) {
+      ObjSelectList.options.add(new Option(i.getProperties().layer, i.getProperties().id));
+    }
+  }
+  function GetOptionSelect() {
+    return document.getElementById('geo-select-list').value;
+  }
+
+
+  function popupData(features) {
     container.style.display = 'block';
     const coords = transform(evt.coordinate, 'EPSG:3857','EPSG:4326');
     const latlon = '<td class="popup-text">' + coords[0].toFixed(6) + ', ' + coords[1].toFixed(6) + '</td></tr>';
@@ -295,6 +306,10 @@ var selectionFeatureInfo = function(evt) {
     
     if (features.length > 0) {
       ObjList.style.display = 'block';
+
+      ObjSelectList.options.length = 0;
+      CreateOptionSelect();
+
       content.style.display = 'block';
       const data = feature.getProperties();
       var attribute = '<table class="popup-text-all">';
@@ -314,20 +329,10 @@ var selectionFeatureInfo = function(evt) {
       
       content.innerHTML = attribute;
       coords_data.innerHTML = latlon;
-      LPanel.style.display = 'none';
+      
+      SelectFeature();
     } 
   }
-
-  
-  if (features.length > 0) {
-    for(let i in layer_id) {
-      if (feature.getProperties().layer == layer_name[i]){
-        var res_id = i;
-        
-        myFunc(res_id, feature);
-      }
-    }
-  } 
 
   if (!features.length){
     selection = {};
@@ -335,27 +340,27 @@ var selectionFeatureInfo = function(evt) {
     return;
   }
 
-  function myFunc(res_id, feature){
-    const fid = feature.get('id');
-    selection = {};
-    selection[fid] = feature;
-  
-    selectionLayer.setSource(vtLayer[res_id].getSource());
-    selectionLayer.setStyle(function (feature) {
-      if (feature.get('id') in selection) {
-        return selectedCountry;
+  function SelectFeature(){
+    for(let i in layer_id) {
+      if (feature.getProperties().layer == layer_name[i]){
+        var res_id = i;
+        const fid = feature.get('id');
+        console.log(GetOptionSelect());
+
+
+        selection = {};
+        selection[fid] = feature;
+        selectionLayer.setSource(vtLayer[res_id].getSource());
+        selectionLayer.setStyle(function (feature) {
+          if (feature.get('id') in selection) {
+            return selectedCountry;
+          }
+        });
+        selectionLayer.changed();
       }
-    });
-    selectionLayer.changed();
-    
+    }
   }
-
-  
-  
-
 };
-
-
 
 map.on(['click'], function(evt) {
   if ((evt.type === 'pointermove')) {
@@ -364,9 +369,7 @@ map.on(['click'], function(evt) {
   
   selectionFeatureInfo(evt);
   
-
   let pos = '';
-
   overlay.setPosition([pos[0], (pos[3]-pos[1])/2]);
   closer_popup.onclick = function () {
     overlay.setPosition(undefined);

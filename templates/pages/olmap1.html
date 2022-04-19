@@ -20,7 +20,9 @@
     <div id="geo-popup-name-popup" class="geo-popup-name-popup" alt="text"></div>
     <div id="geo-popup-closer" class="geo-popup-closer"></div>
   </div>
-  <div id="geo-obj-list" class="geo-obj-list">Список объектов
+  <div id="geo-obj-list" class="geo-obj-list">
+    <select id="geo-select-list" class="geo-select-list">
+    </select>
   </div>
   <div id="geo-popup-content" class="geo-popup-content"></div>
   <div id="geo-popup-coords_data" class="geo-popup-coords_data"></div>
@@ -45,5 +47,6 @@
   var close_button = `<img src="{% static 'images/x.svg' %}" class="x" alt="">`
   var layer_name = [{% for x in rows %}'{{ x.name|escapejs }}',{% endfor %}]
 </script>
+
 {% render_bundle 'olmap1' %}
 {% endblock %}
