@@ -101,7 +101,6 @@
       }
 
 
-
     /* @media (pointer: coarse) { */
         .selection_object {
             display: block;
@@ -256,19 +255,60 @@
         }
     }
 
-    .inputForm {
-        position: fixed;
-        z-index: 1;
-        left: 38px;
-        top: 5px;
-        height: 28px;
-        width: auto;
-        pointer-events: auto;
-        display: none;
+
+    .inputForm-coords, input  {
+        width: 15ch;
     }
-    .ol-zoom-coords {
-        top: 197px;
-        left: 5px;
+
+    @media (pointer: fine) {
+        .inputForm {
+            position: fixed;
+            z-index: 1;
+            left: 38px;
+            right: 38px;
+            top: 5px;
+            height: 28px;
+            width: 100%;
+            pointer-events: auto;
+            display: none;
+        }
+    }
+    @media (pointer: coarse) {
+        .inputForm {
+            position: fixed;
+            z-index: 1;
+            left: 52px;
+            right: 52px;
+            top: 5px;
+            height: 28px;
+            pointer-events: auto;
+            display: none;
+        }
+    }
+
+    @media (pointer: fine) {
+        .ol-zoom-coords {
+            top: 197px;
+            left: 5px;
+        }
+    }
+
+    @media screen and (orientation: landscape) {
+        @media (pointer: coarse) {
+            .ol-zoom-coords {
+                top: 5px;
+                right: 5px;
+            }
+        }
+    }
+
+    @media screen and (orientation: portrait) {
+        @media (pointer: coarse) {
+            .ol-zoom-coords {
+                top: 5px;
+                right: 5px;
+            }
+        }
     }
 
     @media screen and (orientation: landscape) {
@@ -283,8 +323,8 @@
         .ol-touch .ol-layer-data {
             /* transform: translate(0, -50%); */
             /* top: 84px; */
-            top: 5px;
-            left: calc(100% - 47px);
+            top: 52px;
+            left: 5px;
         }
     }
 
@@ -303,9 +343,10 @@
                 z-index: 1;
                 box-shadow: 0px 0px 4px #106a9073;
                 border-radius: 5px;
+                left: 52px;
                 right: 52px;
                 top: 5px;
-                width: 70vw;
+                /* width: 70vw; */
                 background-color: rgb(255, 255, 255, 0.88);
                 padding: 0px 0px 0px 0px;
                 -webkit-user-select: text;
@@ -323,13 +364,15 @@
             box-shadow: 0px 0px 4px #106a9073;
             border-radius: 5px;
             left: 52px;
+            right: 52px;
             /* transform: translate(0, -50%); */
             top: 5px;
-            width: 70vw;
+            /* width: 70vw; */
             background-color: rgb(255, 255, 255, 0.88);
             padding: 0px 0px 0px 0px;
             -webkit-user-select: text;
             border: 0.005em solid #106a90;
+            z-index: 2;
         }
     }
     @media (pointer: fine) {
@@ -432,13 +475,15 @@
             z-index: 1;
             box-shadow: 0px 0px 4px #106a9073;
             border-radius: 5px;
+            left: 52px;
             right: 52px;
             top: 5px;
-            width: 70vw;
+            /* width: 70vw; */
             background-color: rgb(255, 255, 255);
             padding: 0px 0px 0px 0px;
             -webkit-user-select: text;
             border: 0.005em solid #106a90;
+            z-index: 1;
         }
     }
 
@@ -450,12 +495,14 @@
             box-shadow: 0px 0px 4px #106a9073;
             border-radius: 5px;
             left: 52px;
+            right: 52px;
             top: 5px;
-            width: 70vw;
+            /* width: 70vw; */
             background-color: rgb(255, 255, 255);
             padding: 0px 0px 0px 0px;
             -webkit-user-select: text;
             border: 0.005em solid #106a90;
+            z-index: 1;
         }
     }
 
@@ -475,6 +522,7 @@
             padding: 0px 0px 0px 0px;
             -webkit-user-select: text;
             border: 0.005em solid #106a90;
+            z-index: 1;
         }
     }
 
@@ -488,6 +536,7 @@
     }
 
     .ol-touch .geo-popup-name-popup {
+        padding: 5px;
         height: 42px;
         width: calc(100% - 42px);
         background-color: #106a9015;
@@ -572,7 +621,7 @@
         /* overflow: hidden; */
         display: inline-block;
         margin: 0 auto;
-        min-width: 69vw;
+        /* min-width: 69vw; */
         box-shadow: inset 0px 2px 5px 0px #106a903f, inset 0 -30px 5px -28px #106a903f;
     }
 
@@ -625,16 +674,16 @@
         .ol-touch .ol-overlaycontainer-stopevent .ol-zoom-extent{
             /* transform: translate(0, -50%); */
             /* top: 36%; */
-            top: 52px;
-            left: calc(100% - 47px);
+            top: 99px;
+            left: 5px;
             position: fixed;
         }
     }
 
     @media screen and (orientation: landscape) {
         .ol-touch .ol-overlaycontainer-stopevent .ol-zoom-extent{
-            transform: translate(0, -50%);
-            top: 50%;
+            /* transform: translate(0, -50%); */
+            top: 99px;
             left: 5px;
             position: fixed;
         }
@@ -845,80 +894,60 @@
     .ol-overlaycontainer-stopevent .ol-scale-line {
         background: rgb(255 255 255 / 66%);
         border-radius: 4px;
-        bottom: 5px;
-        left: 2px;
+        bottom: 28px;
+        left: 5px;
         padding: 2px;
         position: fixed;
         pointer-events: none !important;
-
     }
 
 
 
     @media screen and (orientation: portrait) {
         .ol-touch .ol-overlaycontainer-stopevent .ol-scale-line {
-            background: rgb(255 255 255 / 0%);
+            background: rgb(255 255 255 / 66%);
             border-radius: 4px;
-            top: 98%;
+            bottom: 28px;
             left: 5px;
             padding: 2px;
-            position: relative;
-            /* transform: rotate(270deg); */
-            /* writing-mode: tb; */
-            height: 0px !important;
+            position: fixed;
+            pointer-events: none !important;
+            z-index: -1;
         }
         .ol-touch .ol-overlaycontainer-stopevent .ol-scale-line-inner {
-            border: 0.15em solid #000000;
+            border: 0.15em solid #1d2124;
             border-top: none;
-            color: #000000;
-            font-size: 16px;
+            color: #1d2124;
+            font-size: 12px;
             text-align: center;
             margin: 1px;
-            /* will-change: contents, width; */
-            transition: all 0.25s;
+            will-change: contents, width;
+            /* transition: all 0.25s; */
             font-weight: bold;
-            position: absolute;
-            height: 4px !important;
-            white-space: nowrap;
-            display: flex;
-            align-items: flex-end;
-            left: 50%;
-            transform: translate(-50%, 0);
-            justify-content: space-around;
         }
     }
 
     @media screen and (orientation: landscape) {
         .ol-touch .ol-overlaycontainer-stopevent .ol-scale-line {
-            background: rgba(255, 255, 255, 0);
+            background: rgb(255 255 255 / 66%);
             border-radius: 4px;
-            bottom: 5px;
-            left: 50%;
-            transform: translate(-50%, 0);
+            bottom: 28px;
+            left: 5px;
             padding: 2px;
             position: fixed;
-            height: 8px !important;
-
+            pointer-events: none !important;
+            z-index: -1;
         }
         .ol-touch .ol-overlaycontainer-stopevent .ol-scale-line-inner {
-            border: 0.15em solid #000000;
+            border: 0.15em solid #1d2124;
             border-top: none;
-            /* color: #ff0000; */
-            font-size: 16px;
+            color: #1d2124;
+            font-size: 12px;
             text-align: center;
             margin: 1px;
             will-change: contents, width;
-            transition: all 0.25s;
+            /* transition: all 0.25s; */
             font-weight: bold;
-            /* position: absolute; */
-            height: 4px !important;
-            white-space: nowrap;
-            display: flex;
-            flex-direction: column-reverse;
-            -webkit-text-stroke: 0.07em #c3c3c3;
-            -webkit-text-fill-color: black;
-            font-weight: 900;
-            /* text-shadow: #106a90 0px 0 5px; */
         }
     }
 
@@ -983,21 +1012,54 @@
         box-sizing: border-box;
         border: 1px solid black;
     }
-    /* @media (pointer: coarse) { */
-        .geo-map-center {
-            width: auto;
-            position: fixed;
-            bottom: 18px;
-            left: 50%;
-            margin-right: -50%;
-            transform: translate(-50%, -50%);
-            background-color: #106a902e;
-            z-index: 1;
-            border-radius: 5px;
-            padding: 0px 5px 0px 5px;
-            word-wrap: break-word;
+
+    .geo-map-center {
+        width: auto;
+        position: fixed;
+        bottom: 0px;
+        left: 0px;
+        background-color: #ffffff82;
+        z-index: 1;
+        border-top-right-radius: 5px;
+        padding: 0px 5px 0px 5px;
+        word-wrap: break-word;
+        pointer-events: auto;
+    }
+
+
+    @media screen and (orientation: portrait) {
+        @media (pointer: coarse) {
+            .geo-map-center {
+                width: auto;
+                position: fixed;
+                bottom: 0px;
+                left: 0px;
+                background-color: rgb(255 255 255 / 66%);
+                z-index: 1;
+                border-top-right-radius: 5px;
+                padding: 0px 5px 0px 5px;
+                word-wrap: break-word;
+                pointer-events: none;
+            }
         }
-    /* } */
+    }
+
+    @media screen and (orientation: landscape) {
+        @media (pointer: coarse) {
+            .geo-map-center {
+                width: auto;
+                position: fixed;
+                bottom: 0px;
+                left: 0px;
+                background-color: rgb(255 255 255 / 66%);
+                z-index: 1;
+                border-top-right-radius: 5px;
+                padding: 0px 5px 0px 5px;
+                word-wrap: break-word;
+                pointer-events: none;
+            }
+        }
+    }
 
     </style>
 
