@@ -1,9 +1,12 @@
 import 'ol/ol.css';
 import Feature from 'ol/Feature';
+import Point from 'ol/geom/Point';
 import MVT from 'ol/format/MVT';
 import Map from 'ol/Map';
 import VectorTileLayer from 'ol/layer/VectorTile';
 import VectorTileSource from 'ol/source/VectorTile';
+import VectorLayer from 'ol/layer/Vector';
+import VectorSource from 'ol/source/Vector';
 import {Group as LayerGroup} from 'ol/layer';
 import TileLayer from 'ol/layer/WebGLTile';
 import { MouseWheelZoom, defaults } from "ol/interaction";
@@ -35,7 +38,13 @@ const nameLPanel = document.getElementById('geo-layer-name-panel');
 const contentLPanel = document.getElementById('geo-layer');
 const closerLPanel = document.getElementById('geo-layer-closer');
 
+const inputForm = document.getElementById('inputForm');
+
 let selection = {};
+let default_latitude = 62.201629;
+let default_longitude = 70.538086;
+let default_zoom = 6;
+let default_zoom_set_coords = 8;
 
 var CLbutton = document.createElement('button');
 CLbutton.className = 'button';
@@ -52,6 +61,26 @@ const overlay = new Overlay({
 });
 
 // const attributions = '© <a href="https://www.openstreetmap.org/copyright">' + 'OpenStreetMap contributors</a>';
+
+const fillStyle = new Fill({
+  color: [255, 255, 255, 0]
+})
+
+const strokeStyle = new Stroke({
+  color: [255, 0, 0, 1],
+  width: 0.5,
+})
+
+const circleStyle = new Circle({
+  radius: 5,
+  fill: new Fill({
+    color: [0, 0, 0, 1],
+  }),
+  stroke: new Stroke({
+      color: [0,134,255,0.9],
+      width: 1
+  })
+})
 
 const styles = (feature) => {
   const data = feature.getProperties();
@@ -134,7 +163,7 @@ for(let i in layer_id) {
       maxZoom: maxzoom[i],
       renderBuffer: 200,
       renderOrder: null,
-      renderMode: 'vector',
+      renderMode: 'hybrid',
       preload: 0,
       useInterimTilesOnError: false,
       updateWhileAnimating: true,
@@ -144,7 +173,12 @@ for(let i in layer_id) {
         }),
         url: '/geo/layer/' + layer_id[i] + '/tile/{z}/{x}/{y}',
       }),
-      style: styles,
+      // style: styles,
+      style: new Style({
+        fill: fillStyle,
+        stroke: strokeStyle,
+        image: circleStyle
+      }),
     })
   );
 }
@@ -198,6 +232,29 @@ function LayerPanelControl() {
   return control;
 }
 
+function ZoomCoordsControl() {
+
+  const button = document.createElement('button');
+  button.innerHTML = zoom_coords;
+
+  const element = document.createElement('div');
+  element.className = 'ol-zoom-coords ol-unselectable ol-control';
+  element.title = 'Поиск по координатам'
+  element.appendChild(button);
+  element.appendChild(inputForm);
+
+  const control = new Control({element: element});
+
+  button.addEventListener('click', e => {
+    inputForm.style.display = (inputForm.style.display == 'block') ? 'none' : 'block';
+  });
+
+
+
+  return control;
+}
+
+
 var map = new Map({
   interactions: defaults({mouseWheelZoom: false}).extend([
     new MouseWheelZoom({
@@ -206,6 +263,7 @@ var map = new Map({
   ]),
   controls: defaultControls({attribution: false}).extend([
     new LayerPanelControl(),
+    new ZoomCoordsControl(),
     attribution,
   ]),
   renderer: 'webgl',
@@ -219,13 +277,15 @@ var map = new Map({
   loadTilesWhileAnimating: true,
   loadTilesWhileInteracting: true,
   view: new View({
-    center: fromLonLat([70.538086, 62.201629]),
-    // enableRotation: false,
+    center: fromLonLat([default_longitude, default_latitude]),
+    enableRotation: false,
     maxZoom: 18,
-    zoom: 6,
+    zoom: default_zoom,
     multiWorld: true,
   }),
 });
+
+
 
 function checkSize() {
   const small = map.getSize()[0] < 600;
@@ -252,6 +312,41 @@ const ScaleLineControl = new ScaleLine({
   // minWidth: 100,
   dpi: 96,
 });
+
+//значения координат по умолчанию 
+// document.getElementById("latitude").defaultValue = default_latitude;
+// document.getElementById("longitude").defaultValue = default_longitude;
+
+document.getElementById('btn_addmarker').addEventListener('click', function() {
+  var lat = document.getElementById('latitude').value;
+  var long = document.getElementById('longitude').value;
+  console.log(long, lat);
+  // markerVectorLayer.setSource(null);
+  map.removeLayer(markerVectorLayer);
+  add_marker(long, lat);
+});
+
+var markerVectorLayer = new VectorLayer();
+
+function add_marker(longitude, latitude) {
+  var marker = new Feature({
+    geometry: new Point(transform([longitude, latitude], 'EPSG:4326', 'EPSG:3857')),
+  });
+  var markers = new VectorSource({
+    features: [marker]
+  });
+  
+  markerVectorLayer.setSource(markers);
+  markerVectorLayer.setStyle(selectedCountry);
+
+  map.addLayer(markerVectorLayer);
+
+  map.getView().setCenter(transform([longitude, latitude], 'EPSG:4326', 'EPSG:3857'));
+  map.getView().setZoom(default_zoom_set_coords);
+
+}
+
+
 
 map.addControl(zoomToExtentControl);
 map.addControl(ScaleLineControl);
@@ -282,6 +377,8 @@ var selectionFeatureInfo = function(evt) {
   var feature = features[0];
   
   popupData();
+  CreateOptionSelect();
+  SelectFeature();
   
   document.getElementById("geo-select-list").addEventListener("change", SelectFeatureObj);
 
@@ -344,6 +441,7 @@ var selectionFeatureInfo = function(evt) {
       coords_data.innerHTML = latlon;
   
       LPanel.style.display = 'none';
+      inputForm.style.display = 'none'
       selection = {};
       selectionLayer.changed();
       return;
@@ -351,7 +449,7 @@ var selectionFeatureInfo = function(evt) {
     
     if (features.length > 0) {
       ObjList.style.display = 'block';
-      ObjSelectList.options.length = 0;
+      inputForm.style.display = 'none'
       CreateOptionSelect();
 
       content.style.display = 'block';
@@ -372,33 +470,38 @@ var selectionFeatureInfo = function(evt) {
       name_popup.innerHTML = data.layer;
       content.innerHTML = attribute;
       coords_data.innerHTML = latlon;
-      SelectFeature();
+      // SelectFeature();
     } 
 
   }
 
   function CreateOptionSelect() {
-    for (let i of features) {
-      ObjSelectList.options.add(new Option(i.getProperties().layer, JSON.stringify(i)));
+    if (features.length > 0) {
+      ObjSelectList.options.length = 0;
+      for (let i of features) {
+        ObjSelectList.options.add(new Option(i.getProperties().layer, JSON.stringify(i)));
+      }
     }
   }
 
   function SelectFeature(){
-    for(let i in layer_id) {
-      if (feature.getProperties().layer == layer_name[i]){
-        var res_id = i;
-        const fid = feature.get('id');
-        // console.log(fid);
+    if (features.length > 0) {
+      for(let i in layer_id) {
+        if (feature.getProperties().layer == layer_name[i]){
+          var res_id = i;
+          const fid = feature.get('id');
+          // console.log(fid);
 
-        selection = {};
-        selection[fid] = feature;
-        selectionLayer.setSource(vtLayer[res_id].getSource());
-        selectionLayer.setStyle(function (feature) {
-          if (feature.get('id') in selection) {
-            return selectedCountry;
-          }
-        });
-        selectionLayer.changed();
+          selection = {};
+          selection[fid] = feature;
+          selectionLayer.setSource(vtLayer[res_id].getSource());
+          selectionLayer.setStyle(function (feature) {
+            if (feature.get('id') in selection) {
+              return selectedCountry;
+            }
+          });
+          selectionLayer.changed();
+        }
       }
     }
   }
@@ -406,11 +509,25 @@ var selectionFeatureInfo = function(evt) {
 
 };
 
-map.on(['singleclick'], function(evt) {
-  if ((evt.type === 'pointermove')) {
-    return;
+map.on('moveend', function(evt) {
+  var extent = map.getView().calculateExtent(map.getSize());
+
+  function getCenterOfExtent(extent){
+    var X = extent[0] + (extent[2]-extent[0])/2;
+    var Y = extent[1] + (extent[3]-extent[1])/2;
+    const coords = transform([X, Y], 'EPSG:3857','EPSG:4326');
+    return coords[0].toFixed(6) + ', ' + coords[1].toFixed(6);
   }
   
+  const element = document.getElementById("geo-map-center");
+  element.innerHTML = getCenterOfExtent(extent);
+
+});
+
+
+map.on('singleclick', function(evt) {
+  map.removeLayer(markerVectorLayer);
+
   selectionFeatureInfo(evt);
   
   let pos = '';

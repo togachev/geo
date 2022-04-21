@@ -34,6 +34,9 @@
   </div>
   <div id="geo-layer" class="geo-layer" alt="text"></div>
 </div>
+<div id="geo-map-center" class="geo-map-center"></div>
+
+
 
 <script>
   var minzoom = [{% for x in styles %}'{{ x.minzoom|escapejs }}',{% endfor %}]
@@ -44,6 +47,7 @@
   var house_fill = `<img src="{% static 'images/house-door-fill.svg' %}" class="filterit" alt="">`
   var layer_fill = `<img src="{% static 'images/layer-data.svg' %}" class="layer-data" alt="">`
   var close_button = `<img src="{% static 'images/x.svg' %}" class="x" alt="">`
+  var zoom_coords = `<img src="{% static 'images/zoom_coords.svg' %}" class="x" alt="Zoom to coordinate">`
   var layer_name = [{% for x in rows %}'{{ x.name|escapejs }}',{% endfor %}]
 </script>
 

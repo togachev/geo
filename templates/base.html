@@ -4,7 +4,7 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-=no">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -32,7 +32,7 @@
 
 
     <style>
-        
+
       #info {
         z-index: 1;
         opacity: 0;
@@ -100,7 +100,9 @@
         display: block;
       }
 
-    @media (pointer: coarse) {
+
+
+    /* @media (pointer: coarse) { */
         .selection_object {
             display: block;
             width: 42px;
@@ -125,9 +127,9 @@
         }
         .selection_object_id:after {
             content: '\002B';
-            font-size: medium;
+            font-size: 100%;
         }
-    }
+    /* } */
 
     .filterit{
         height: 0.8em;
@@ -140,6 +142,18 @@
         left: 0;
         right: 0;
     }
+
+    select {
+        margin: 0px;
+        width: 100%;
+        padding: 0px 2px 0px 2px;
+        border: 0.005em solid #106a9060;
+        background-color: #106a9013;
+        height: 28px;
+        outline: none;
+        -moz-appearance: none;
+    }
+
     .ol-touch .popup-text-all {
         /* min-width: 74vw; */
         width: 100%;
@@ -240,6 +254,21 @@
             /* border-top: 1px solid #106a90; */
             font-size: 20px;
         }
+    }
+
+    .inputForm {
+        position: fixed;
+        z-index: 1;
+        left: 38px;
+        top: 5px;
+        height: 28px;
+        width: auto;
+        pointer-events: auto;
+        display: none;
+    }
+    .ol-zoom-coords {
+        top: 197px;
+        left: 5px;
     }
 
     @media screen and (orientation: landscape) {
@@ -455,7 +484,7 @@
 
     .geo-name-popup {
         height: 27px;
-        
+
     }
 
     .ol-touch .geo-popup-name-popup {
@@ -496,7 +525,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        border-radius: 5px 0px 0px 0px;
+        border-radius: 0px 0px 0px 0px;
     }
 
     .geo-obj-list {
@@ -507,7 +536,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        border-radius: 5px 0px 0px 0px;
+        border-radius: 0px 0px 0px 0px;
     }
 
     .ol-touch .geo-popup-closer {
@@ -517,10 +546,10 @@
         padding: 0px 0px 0px 0px;
         margin: 0px;
         right: 0px;
-        background-color: white;
+        background-color: #ebf3f6;
         float: left;
         position: absolute;
-        border-radius: 5px;
+        border-top-right-radius: 5px;
     }
 
     .geo-popup-closer {
@@ -530,10 +559,10 @@
         padding: 0px 0px 0px 0px;
         margin: 0px;
         right: 0px;
-        background-color: white;
+        background-color: #ebf3f6;
         float: left;
         position: absolute;
-        border-radius: 5px;
+        border-top-right-radius: 5px;
     }
 
 
@@ -821,7 +850,7 @@
         padding: 2px;
         position: fixed;
         pointer-events: none !important;
-        
+
     }
 
 
@@ -869,7 +898,7 @@
             padding: 2px;
             position: fixed;
             height: 8px !important;
-            
+
         }
         .ol-touch .ol-overlaycontainer-stopevent .ol-scale-line-inner {
             border: 0.15em solid #000000;
@@ -915,8 +944,8 @@
         bottom: 25px;
         color: #000000;
         text-shadow: -2px 0 #ffffff, 0 2px #ffffff, 2px 0 #ffffff, 0 -2px #ffffff;
-        
-        
+
+
     }
 
     .ol-overlaycontainer-stopevent .ol-scale-bar {
@@ -954,6 +983,21 @@
         box-sizing: border-box;
         border: 1px solid black;
     }
+    /* @media (pointer: coarse) { */
+        .geo-map-center {
+            width: auto;
+            position: fixed;
+            bottom: 18px;
+            left: 50%;
+            margin-right: -50%;
+            transform: translate(-50%, -50%);
+            background-color: #106a902e;
+            z-index: 1;
+            border-radius: 5px;
+            padding: 0px 5px 0px 5px;
+            word-wrap: break-word;
+        }
+    /* } */
 
     </style>
 
