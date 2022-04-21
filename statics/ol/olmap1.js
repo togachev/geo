@@ -94,7 +94,7 @@ const styles = (feature) => {
       }
     } else if (typeof data[keys[i]] === 'number') {
       labels += `${data[keys[i]]}\n`;
-    } 
+    }
   }
 
   return [
@@ -173,12 +173,12 @@ for(let i in layer_id) {
         }),
         url: '/geo/layer/' + layer_id[i] + '/tile/{z}/{x}/{y}',
       }),
-      // style: styles,
-      style: new Style({
-        fill: fillStyle,
-        stroke: strokeStyle,
-        image: circleStyle
-      }),
+      style: styles,
+      // style: new Style({
+      //   fill: fillStyle,
+      //   stroke: strokeStyle,
+      //   image: circleStyle
+      // }),
     })
   );
 }
@@ -215,7 +215,7 @@ function LayerPanelControl() {
   closerLPanel.appendChild(CLbutton);
 
   contentLPanel.innerHTML = layer_list;
-  
+
   button.addEventListener('click', e => {
     container.style.display = (container.style.display == 'none') ? 'block' : 'none';
     console.log(LPanel.scrollHeight)
@@ -268,7 +268,7 @@ var map = new Map({
   ]),
   renderer: 'webgl',
   // layers: [base_map],
-  layers: [base_map, 
+  layers: [base_map,
     new LayerGroup({layers: vtLayer})
   ],
   overlays: [overlay],
@@ -313,7 +313,7 @@ const ScaleLineControl = new ScaleLine({
   dpi: 96,
 });
 
-//значения координат по умолчанию 
+//значения координат по умолчанию
 // document.getElementById("latitude").defaultValue = default_latitude;
 // document.getElementById("longitude").defaultValue = default_longitude;
 
@@ -335,7 +335,7 @@ function add_marker(longitude, latitude) {
   var markers = new VectorSource({
     features: [marker]
   });
-  
+
   markerVectorLayer.setSource(markers);
   markerVectorLayer.setStyle(selectedCountry);
 
@@ -375,11 +375,11 @@ var selectionFeatureInfo = function(evt) {
     hitTolerance: hit,
   });
   var feature = features[0];
-  
+
   popupData();
   CreateOptionSelect();
   SelectFeature();
-  
+
   document.getElementById("geo-select-list").addEventListener("change", SelectFeatureObj);
 
   function SelectFeatureObj(){
@@ -406,7 +406,7 @@ var selectionFeatureInfo = function(evt) {
         ObjList.style.display = 'block';
         // ObjSelectList.options.length = 0;
         // CreateOptionSelect();
-    
+
         content.style.display = 'block';
         const data = obj.values_;
         var attribute = '<table class="popup-text-all">';
@@ -439,14 +439,14 @@ var selectionFeatureInfo = function(evt) {
       ObjList.style.display = 'none';
       content.style.display = 'none';
       coords_data.innerHTML = latlon;
-  
+
       LPanel.style.display = 'none';
       inputForm.style.display = 'none'
       selection = {};
       selectionLayer.changed();
       return;
     }
-    
+
     if (features.length > 0) {
       ObjList.style.display = 'block';
       inputForm.style.display = 'none'
@@ -471,7 +471,7 @@ var selectionFeatureInfo = function(evt) {
       content.innerHTML = attribute;
       coords_data.innerHTML = latlon;
       // SelectFeature();
-    } 
+    }
 
   }
 
@@ -518,7 +518,7 @@ map.on('moveend', function(evt) {
     const coords = transform([X, Y], 'EPSG:3857','EPSG:4326');
     return coords[0].toFixed(6) + ', ' + coords[1].toFixed(6);
   }
-  
+
   const element = document.getElementById("geo-map-center");
   element.innerHTML = getCenterOfExtent(extent);
 
@@ -529,7 +529,7 @@ map.on('singleclick', function(evt) {
   map.removeLayer(markerVectorLayer);
 
   selectionFeatureInfo(evt);
-  
+
   let pos = '';
   overlay.setPosition([pos[0], (pos[3]-pos[1])/2]);
   closer_popup.onclick = function () {

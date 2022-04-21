@@ -33,17 +33,17 @@
       "name": "760.js",
       "path": "/mnt/workdata/work/django_project/geo/statics/webpack_bundles/760.js"
     },
-    "358.js": {
-      "name": "358.js",
-      "path": "/mnt/workdata/work/django_project/geo/statics/webpack_bundles/358.js"
+    "39.js": {
+      "name": "39.js",
+      "path": "/mnt/workdata/work/django_project/geo/statics/webpack_bundles/39.js"
     },
     "546.js": {
       "name": "546.js",
       "path": "/mnt/workdata/work/django_project/geo/statics/webpack_bundles/546.js"
     },
-    "342.js": {
-      "name": "342.js",
-      "path": "/mnt/workdata/work/django_project/geo/statics/webpack_bundles/342.js"
+    "965.js": {
+      "name": "965.js",
+      "path": "/mnt/workdata/work/django_project/geo/statics/webpack_bundles/965.js"
     },
     "461.js": {
       "name": "461.js",
@@ -61,17 +61,17 @@
   "chunks": {
     "ol": [
       "760.js",
-      "358.js",
+      "39.js",
       "546.js",
-      "342.js",
+      "965.js",
       "ol.css",
       "ol.js"
     ],
     "olmap": [
       "760.js",
-      "358.js",
+      "39.js",
       "546.js",
-      "342.js",
+      "965.js",
       "olmap.css",
       "olmap.js"
     ],
@@ -83,7 +83,7 @@
     ],
     "olmap1": [
       "760.js",
-      "358.js",
+      "39.js",
       "461.js",
       "olmap1.css",
       "olmap1.js"
